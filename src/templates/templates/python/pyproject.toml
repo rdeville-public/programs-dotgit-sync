@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+# build-backend = "setuptools.bulid_meta"
+
+[project]
+name = "{{ name }}"
+description = "{{ description }}"
+authors = [
+{%- if "authors" in extra %}
+{%- for author in extra.authors %}
+  { "name" = "{{ author.name }}", "email" = "{{ author.mail }}"}
+{%- endfor %}
+{%- else %}
+{%- for maintainer in maintainers %}
+  { "name" = "{{ maintainer.name }}", "email" = "{{ maintainer.mail }}"}
+{%- endfor %}
+{%- endif %}
+]
+maintainers = [
+{%- for maintainer in maintainers %}
+  { "name" = "{{ maintainer.name }}", "email" = "{{ maintainer.mail }}"}
+{%- endfor %}
+]
+requires-python = ">=3.10"
+readme = "README.md"

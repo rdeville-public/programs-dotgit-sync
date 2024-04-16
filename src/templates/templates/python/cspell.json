@@ -1,0 +1,15 @@
+{
+  "dictionaries": [
+    "project-python"
+  ],
+  "dictionaryDefinitions": [
+    {
+      "name": "project-python",
+      "path": ".cspell/python.txt"
+    }
+  ],
+  "ignorePaths": [
+    "requirements.*",
+    "pyproject.toml"
+  ]
+}

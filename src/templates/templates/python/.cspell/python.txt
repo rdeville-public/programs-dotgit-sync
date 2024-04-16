@@ -1,0 +1,5 @@
+# Python related word present in all my project
+pyproject
+PYTHONPATH
+virtenv
+VENV

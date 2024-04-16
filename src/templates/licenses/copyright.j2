@@ -1,0 +1,14 @@
+{%- macro copyright_header(name, description, date, copyright) -%}
+{%- if description -%}
+{{- name }} - {{ description }}
+{%- else %}
+{{- name }}
+{%- endif %}
+{%- if date.first_year == date.current_year %}
+
+Copyright © {{ date.current_year }} {{ licenses.copyright.owner }}
+{%- else %}
+
+Copyright © {{ date.first_year }} - {{ date.current_year }} {{ licenses.copyright.owner }}
+{%- endif %}
+{%- endmacro %}

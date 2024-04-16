@@ -1,0 +1,5 @@
+{
+  "include": [
+    "github:rdeville-public/programs.devbox-plugins/main?dir=python"
+  ]
+}
