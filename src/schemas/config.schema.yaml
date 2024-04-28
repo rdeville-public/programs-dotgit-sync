@@ -1,0 +1,18 @@
+---
+map:
+  name:
+    include: required_str
+  description:
+    include: required_str
+  maintainers:
+    include: maintainers
+  licenses:
+    include: licenses
+  statics:
+    include: list_str
+  templates:
+    include: list_str
+  gitignore:
+    include: gitignore
+  regex;(.*):
+    type: any

@@ -1,0 +1,47 @@
+{{#if compareUrl}} ## [v{{nextRelease.version}}]({{compareUrl}}) ({{datetime "UTC:yyyy-mm-dd"}})
+{{else}}
+## v{{nextRelease.version}} ({{datetime "UTC:yyyy-mm-dd"}})
+{{/if}}
+
+{{commitlist commits}}
+{{#with commits}}
+{{#if major}}
+### Major
+
+{{#each major}}
+{{#if body}}
+  * {{> commitTemplateDetails}}
+{{/if }}
+{{^body}}
+  * {{> commitTemplate}}
+{{/body}}
+{{/each}}
+{{/if}}
+
+
+{{#if minor}}
+### Minor
+
+{{#each minor}}
+  * {{> commitTemplate}}
+{{/each}}
+{{/if}}
+
+
+{{#if patch}}
+### Patch
+
+{{#each patch}}
+  * {{> commitTemplate}}
+{{/each}}
+{{/if}}
+
+
+{{#if others}}
+### Others
+
+{{#each others}}
+  * {{> commitTemplate}}
+{{/each}}
+{{/if}}
+{{/with}}

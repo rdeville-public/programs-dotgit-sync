@@ -1,0 +1,19 @@
+---
+# GLOBAL CONFIGURATION
+# =============================================================================
+# Define base workflow
+# https://docs.gitlab.com/ee/ci/yaml/README.html#workflow
+# workflow:
+#   rules:
+#     # Do not run CI when commit title have following chars anywhere
+#     # WIP, NO-CI or 🚧 (gitmoji for "work in progress", aka :construction:)
+#     - if: $CI_COMMIT_TITLE =~ /.*(wip|WIP|NO-CI|🚧|:construction:).*/
+#       when: never
+
+stages:
+  - build
+
+dumb-job:
+  stage: build
+  script:
+    - echo "Dumb Job"

@@ -1,0 +1,44 @@
+argparser
+Deville
+direnv
+dotenv
+dotgit
+endfor
+extjs
+jsonnet
+jupyternotebooks
+loopcontrols
+nextjs
+nohup
+nuxtjs
+prestashop
+pykwalify
+pylibmagic
+pythonvanilla
+rdeville
+Romain
+storybookjs
+tplpath
+toptal
+Toptal
+vuejs
+WORKDIR
+# BEGIN DOTGIT-SYNC MANAGED BLOCK
+# Common word present in all my project
+autofix
+blockquote
+commitlint
+commitlintrc
+commitlist
+datetime
+devbox
+endmacro
+filesystems
+Framagit
+gitmoji
+gitmojis
+parseable
+Refactorize
+releaserc
+SCRIPTPATH
+# END DOTGIT-SYNC MANAGED BLOCK

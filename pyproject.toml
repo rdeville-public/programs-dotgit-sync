@@ -1,0 +1,62 @@
+# BEGIN DOTGIT-SYNC MANAGED BLOCK
+[build-system]
+requires = ["setuptools", "wheel"]
+# build-backend = "setuptools.bulid_meta"
+
+[project]
+name = "dotgit-sync"
+description = "Program to sync git repos 'dotfiles' configuration."
+authors = [
+  { "name" = "Romain Deville", "email" = "code+dotgit-sync@romaindeville.fr"}
+]
+maintainers = [
+  { "name" = "Romain Deville", "email" = "code+dotgit-sync@romaindeville.fr"}
+]
+requires-python = ">=3.10"
+readme = "README.md"
+# END DOTGIT-SYNC MANAGED BLOCK
+
+# https://pypi.org/classifiers/
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.10",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+]
+keywords = [
+  ""
+]
+
+dynamic = [
+  "version"
+]
+
+dependencies = [
+  "gitpython",
+  "jinja2",
+  "pykwalify",
+  "pylibmagic",
+  "python-magic",
+  "pyyaml",
+  "requests"
+]
+
+[project.urls]
+homepage = "https://framagit.org/rdeville-public/programs/dotgit-sync/"
+repository = "https://framagit.org/rdeville-public/programs/dotgit-sync/"
+issues = "https://framagit.org/rdeville-public/programs/dotgit-sync/-/issues"
+
+[project.scripts]
+dotgit-sync = "main:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.package-data]
+"*" = [
+  "*",
+]

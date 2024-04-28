@@ -1,0 +1,14 @@
+---
+schema;gitignore:
+  map:
+    query:
+      seq:
+        - type: str
+    templates:
+      seq:
+        - type: str
+          enum:
+            - base
+            - python
+            - javascript
+            - jsonnet

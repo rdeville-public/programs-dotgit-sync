@@ -1,0 +1,24 @@
+---
+schema;licenses:
+  required: true
+  map:
+    copyright:
+      required: true
+      map:
+        owner:
+          required: true
+          type: str
+        email:
+          include: required_email
+    main:
+      required: true
+      type: str
+      # Currently supported licenses
+      enum: &supported_licenses
+        - MIT
+        - BEERWARE
+    others:
+      seq:
+        - type: str
+          # Currently supported licenses
+          enum: *supported_licenses

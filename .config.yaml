@@ -1,0 +1,18 @@
+---
+name: dotgit-sync
+description: "Program to sync git repos 'dotfiles' configuration."
+maintainers:
+  - name: Romain Deville
+    mail: code+dotgit-sync@romaindeville.fr
+common:
+  code_of_conduct:
+    abuse: abuse+dotgit-sync@romaindeville.fr
+licenses:
+  copyright:
+    owner: Romain Deville
+    email: code@romaindeville.fr
+  main: MIT
+  others:
+    - BEERWARE
+languages:
+  - python
