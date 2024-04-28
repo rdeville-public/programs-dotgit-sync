@@ -34,7 +34,6 @@ def _get_schema_files() -> list:
 def _validate_config(config_file: os.path) -> None:
     log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
     try:
-        print(_get_schema_files())
         data = core.Core(
             source_file=config_file, schema_files=_get_schema_files()
         ).validate(raise_exception=True)
