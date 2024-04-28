@@ -9,7 +9,9 @@ import os
 import sys
 
 import git
-import pykwalify
+
+# import pykwalify
+from pykwalify import core, errors
 
 import const
 
@@ -33,11 +35,11 @@ def _validate_config(config_file: os.path) -> None:
     log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
     try:
         print(_get_schema_files())
-        data = pykwalify.core.Core(
+        data = core.Core(
             source_file=config_file, schema_files=_get_schema_files()
         ).validate(raise_exception=True)
         return data
-    except pykwalify.errors.SchemaError as error:
+    except errors.SchemaError as error:
         log.error(error.msg)
         sys.exit(errno.ENOENT)
     except FileNotFoundError as error:
