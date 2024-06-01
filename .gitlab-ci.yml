@@ -1,19 +1,50 @@
+# BEGIN DOTGIT-SYNC MANAGED BLOCK
 ---
 # GLOBAL CONFIGURATION
 # =============================================================================
 # Define base workflow
 # https://docs.gitlab.com/ee/ci/yaml/README.html#workflow
-# workflow:
-#   rules:
-#     # Do not run CI when commit title have following chars anywhere
-#     # WIP, NO-CI or 🚧 (gitmoji for "work in progress", aka :construction:)
-#     - if: $CI_COMMIT_TITLE =~ /.*(wip|WIP|NO-CI|🚧|:construction:).*/
-#       when: never
+workflow:
+  rules:
+    # Do not run CI when commit title have following chars anywhere
+    # WIP, NO-CI or 🚧 (gitmoji for "work in progress", aka :construction:)
+    - if: $CI_COMMIT_MESSAGE =~ /(wip|WIP|NO-CI|🚧|:construction:)/
+      when: never
+    - if: $CI_MERGE_REQUEST_TITLE =~ /^(D|d)raft:/
+      when: never
+    - when: always
+
+variables:
+  # Set CI Feature Flag
+  FF_SCRIPT_SECTIONS: true
 
 stages:
-  - build
+  - &pre-ci pre-ci
+  - &pre-build pre-build
+  - &build build
+  - &post-build post-build
+  - &pre-test pretest
+  - &test test
+  - &post-test post-test
+  - &pre-release pre-release
+  - &release release
+  - &post-release post-release
+  - &pre-deploy pre-deploy
+  - &deploy deploy
+  - &post-deploy post-deploy
+  - &post-ci post-ci
 
-dumb-job:
-  stage: build
+# Fake jobs that simply exit 0 to enable CI
+exit-0:
+  image: alpine:latest
+  stage: *pre-ci
   script:
-    - echo "Dumb Job"
+    - exit 0
+  rules:
+    - when: always
+
+include:
+  - .gitlab/*.yml
+  - .gitlab/*.yaml
+
+# END DOTGIT-SYNC MANAGED BLOCK

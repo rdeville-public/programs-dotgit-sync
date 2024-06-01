@@ -24,6 +24,7 @@ _MARK_COMMENT_TYPE = {
     "XML": {_BEGIN: "<!--", _END: "-->"},
     "DOUBLE_SLASH": {_BEGIN: "//", _END: ""},
     "SLASH_STAR": {_BEGIN: "/*", _END: "*/"},
+    "CURLY_HASHTAG": {_BEGIN: "{#-", _END: "-#}"},
 }
 _MARK_COMMENT_FILETYPE = {
     "HASHTAG": [
@@ -40,6 +41,7 @@ _MARK_COMMENT_FILETYPE = {
     "XML": [
         "markdown",
     ],
+    "CURLY_HASHTAG": ["jinja2"],
 }
 
 
@@ -59,19 +61,22 @@ def _init_jinja_env(tpl_dir: str) -> jinja2.Environment:
     return jinja_env
 
 
-def _extract_context(dest: str, marks: dict) -> dict:
+def _extract_context(dest: str) -> dict:
     log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
     context = {_BEFORE: "", _AFTER: ""}
     curr_context = _BEFORE
+    marks = {}
+    marks[_BEGIN] = f"{_BEGIN} {_MARK}"
+    marks[_END] = f"{_END} {_MARK}"
 
     if os.path.exists(dest):
         with open(dest, "r", encoding="utf-8") as file:
             for line in file:
-                if re.match(f"{marks[_BEGIN]}", line):
+                if re.search(f"{marks[_BEGIN]}", line):
                     curr_context = "template"
                 if curr_context in context:
                     context[curr_context] += line
-                if re.match(f"{marks[_END]}", line):
+                if re.search(f"{marks[_END]}", line):
                     curr_context = _AFTER
     return context
 
@@ -84,7 +89,7 @@ def _create_dest_dir(dst: os.path) -> None:
         os.makedirs(os.path.dirname(dst))
 
 
-def _get_mark_comment(ft: str) -> [str, str]:
+def _get_mark_comment(ft: str) -> [[str, str], [str, str]]:
     log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
     marks = {}
     for type_key, type_val in _MARK_COMMENT_FILETYPE.items():
@@ -115,7 +120,7 @@ def render_file(
     context = {}
     if ft not in _FULL_FILE_TYPE:
         marks = _get_mark_comment(ft)
-        context = _extract_context(dst, marks)
+        context = _extract_context(dst)
 
     log.debug("Render %s", dst)
     with open(dst, "w", encoding="utf-8") as file:
