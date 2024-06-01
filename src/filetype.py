@@ -19,6 +19,8 @@ _TYPE = {
     "yaml": [".yml", ".yaml"],
     "editorconfig": [".editorconfig"],
     "toml": [".toml"],
+    "jinja2": [".j2"],
+    "python": [".py"],
 }
 
 

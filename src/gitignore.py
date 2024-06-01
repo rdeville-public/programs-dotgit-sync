@@ -79,7 +79,8 @@ def process(config: dict) -> None:
     # Remove trailing tabs
     tpl = re.sub(r"[\t]+$", "", tpl, flags=re.MULTILINE)
     # Remove comment lines not followed by patterns
-    tpl = re.sub(r"(^#[^###].+\n)+\n", "", tpl, flags=re.MULTILINE)
+    tpl = re.sub(r"(^#.+\n)+\n", "", tpl, flags=re.MULTILINE)
+    tpl = re.sub(r"(^###.+\n)+\n", "", tpl, flags=re.MULTILINE)
     tpl = url + "\n\n" + tpl
     dst = os.path.join(repo.get_git_dir(os.getcwd()), f".{GITIGNORE}")
 
