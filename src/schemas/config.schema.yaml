@@ -1,5 +1,7 @@
 ---
 map:
+  source:
+    include: source
   name:
     include: required_str
   description:

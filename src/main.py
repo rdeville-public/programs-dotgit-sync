@@ -60,12 +60,25 @@ def main():
 
     config = repo.get_config(os.getcwd())
     config["git_root"] = repo.get_git_dir(os.getcwd())
+
+    # Git or Path config passed as args override .config.yaml
+    if "source" not in config:
+        config["source"] = {}
+
     if args.source_git:
-        config["source"] = {}
-        utils.clone_template_repo(config, args.source_git)
+        config["source"]["git"] = {}
+        config["source"]["git"]["url"] = args.source_git
     elif args.source_dir:
-        config["source"] = {}
         config["source"]["path"] = os.path.join(os.getcwd(), args.source_dir)
+
+    if "git" in config["source"] and "path" in config["source"]:
+        raise ValueError(
+            "Keys `source.git` and `source.path` can't be used together in `.config.yaml` !"
+        )
+
+    if "git" in config["source"]:
+        utils.clone_template_repo(config)
+
     log.debug(config)
 
     licenses.process(config)

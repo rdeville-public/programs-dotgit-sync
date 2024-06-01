@@ -64,10 +64,17 @@ def merge_json_list(src: list, update):
     return src
 
 
-def clone_template_repo(config: dict, git_url: str) -> None:
+def clone_template_repo(config: dict) -> None:
     log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
     config["source"]["path"] = tempfile.mkdtemp()
-    git.Repo.clone_from(git_url, config["source"]["path"])
+    git_url = config["source"]["git"]["url"]
+
+    log.debug("Cloning template source from %s", git_url)
+    repo = git.Repo.clone_from(git_url, config["source"]["path"])
+
+    if "ref" in config["source"]["git"]:
+        log.debug("Checkout to ref :%s", config["source"]["git"]["ref"])
+        repo.git.checkout(config["source"]["git"]["ref"])
 
 
 def merge_json_content(content, update):
