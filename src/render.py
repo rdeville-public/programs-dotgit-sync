@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import inspect
+import io
 import json
 import logging
 import os
@@ -18,7 +19,10 @@ _BEFORE = "before"
 _AFTER = "after"
 _BEGIN = "BEGIN"
 _END = "END"
-_MARK = "DOTGIT-SYNC MANAGED BLOCK"
+_TEMPLATE = "template"
+_MARK = "DOTGIT-SYNC BLOCK"
+_MANAGED = "MANAGED"
+_EXCLUDED = "EXCLUDED"
 _MARK_COMMENT_TYPE = {
     "HASHTAG": {_BEGIN: "#", _END: ""},
     "XML": {_BEGIN: "<!--", _END: "-->"},
@@ -45,7 +49,7 @@ _MARK_COMMENT_FILETYPE = {
 }
 
 
-def _init_jinja_env(tpl_dir: str) -> jinja2.Environment:
+def _init_jinja_env(tpl_dir: str or None = None) -> jinja2.Environment:
     log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
     jinja_env = jinja2.Environment(
         extensions=[
@@ -55,30 +59,76 @@ def _init_jinja_env(tpl_dir: str) -> jinja2.Environment:
         keep_trailing_newline=True,
         trim_blocks=False,
         autoescape=False,
-        loader=jinja2.FileSystemLoader(tpl_dir),
     )
+    if tpl_dir:
+        jinja_env.loader = jinja2.FileSystemLoader(tpl_dir)
+    else:
+        jinja_env.loader = jinja2.BaseLoader()
 
     return jinja_env
 
 
+def _extract_content(content: str) -> dict:
+    log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
+    contexts = {}
+    curr_context = f"{_TEMPLATE}{_BEFORE}"
+    contexts[curr_context] = ""
+    begin = f"{_BEGIN} {_MARK}"
+    end = f"{_END} {_MARK}"
+
+    for line in content.splitlines():
+
+        if re.search(f"{begin} {_EXCLUDED} (\w+)", line):
+            context_name = re.search(f"{begin} {_EXCLUDED} (\w+)", line).groups()[0]
+            curr_context = context_name
+            contexts[curr_context] = ""
+
+        if re.search(f"{end} {_EXCLUDED} {curr_context}", line):
+            curr_context = f"{_TEMPLATE}{curr_context}"
+            contexts[curr_context] = ""
+
+        if not re.search(f"{_MARK}", line):
+            contexts[curr_context] += f"""{line}\n"""
+
+    return contexts
+
+
 def _extract_context(dest: str) -> dict:
     log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
-    context = {_BEFORE: "", _AFTER: ""}
+    contexts = {}
     curr_context = _BEFORE
-    marks = {}
-    marks[_BEGIN] = f"{_BEGIN} {_MARK}"
-    marks[_END] = f"{_END} {_MARK}"
+    begin = f"{_BEGIN} {_MARK}"
+    end = f"{_END} {_MARK}"
 
-    if os.path.exists(dest):
-        with open(dest, "r", encoding="utf-8") as file:
-            for line in file:
-                if re.search(f"{marks[_BEGIN]}", line):
-                    curr_context = "template"
-                if curr_context in context:
-                    context[curr_context] += line
-                if re.search(f"{marks[_END]}", line):
-                    curr_context = _AFTER
-    return context
+    if not os.path.exists(dest):
+        return contexts
+
+    contexts[curr_context] = ""
+    with open(dest, "r", encoding="utf-8") as file:
+        for line in file:
+
+            if re.search(f"{begin} {_EXCLUDED} (\w+)", line):
+                context_name = re.search(f"{begin} {_EXCLUDED} (\w+)", line).groups()[0]
+                curr_context = f"{context_name}"
+                contexts[curr_context] = ""
+            elif re.search(f"{begin}", line):
+                curr_context = f"{_TEMPLATE}{curr_context}"
+                contexts[curr_context] = ""
+
+            if re.search(f"{end} {_EXCLUDED} (\w+)", line):
+                curr_context = f"{_TEMPLATE}{curr_context}"
+                contexts[curr_context] = ""
+            elif re.search(f"{end}", line):
+                curr_context = _AFTER
+                contexts[curr_context] = ""
+
+            if not re.search(f"{_MARK}", line):
+                contexts[curr_context] += line
+
+    # Remove empty contexts
+    final_contexts = {key: val for key, val in contexts.items() if val != ""}
+
+    return final_contexts
 
 
 def _create_dest_dir(dst: os.path) -> None:
@@ -98,10 +148,18 @@ def _get_mark_comment(ft: str) -> [[str, str], [str, str]]:
             end = _MARK_COMMENT_TYPE[type_key][_END]
             if end != "":
                 end = f" {end}"
-            marks[_BEGIN] = f"{begin} {_BEGIN} {_MARK}{end}"
-            marks[_END] = f"{begin} {_END} {_MARK}{end}"
+            marks[_BEGIN] = f"{begin}"
+            marks[_END] = f"{end}"
             return marks
     return None, None
+
+
+def _merge_context_content(contexts: dict, content: dict) -> dict:
+    for key, _ in content.items():
+        if key.startswith(_TEMPLATE):
+            contexts[key] = content[key]
+        if not key.startswith(_TEMPLATE) and key not in contexts:
+            contexts[key] = content[key]
 
 
 def render_file(
@@ -109,41 +167,53 @@ def render_file(
     dst: str,
     content: str,
     ft: str,
+    tpl_dir: os.path = False,
     is_static: bool = False,
 ):
     log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
-    log.info("Start processing %s of filetype %s", os.path.basename(dst), ft)
+    log.info("Processing %s", dst.replace(f"{config["git_root"]}/", ""))
 
     _create_dest_dir(os.path.join(config["git_root"], dst))
 
-    marks = {}
-    context = {}
     if ft not in _FULL_FILE_TYPE:
         marks = _get_mark_comment(ft)
-        context = _extract_context(dst)
+        contexts = _extract_context(dst)
 
-    log.debug("Render %s", dst)
+    content = _extract_content(content)
+    _merge_context_content(contexts, content)
+
+    log.debug("Render %s", dst.replace(os.path.expandvars("${HOME}"), "~"))
     with open(dst, "w", encoding="utf-8") as file:
-        if context is not None and _BEFORE in context and context[_BEFORE]:
-            file.write(context[_BEFORE])
-            file.write("\n")
-        if marks is not None and _BEGIN in marks and marks[_BEGIN]:
-            file.write(marks[_BEGIN])
-            file.write("\n")
-
-        if is_static:
-            file.write(content)
-            file.write("\n")
-        else:
-            file.write(jinja2.Template(content).render(config))
-            file.write("\n")
-
-        if marks is not None and _END in marks and marks[_END]:
-            file.write(marks[_END])
-            file.write("\n")
-        if context is not None and _AFTER in context and context[_AFTER]:
-            file.write(context[_AFTER])
-            file.write("\n")
+        keys = list(contexts.keys())
+        for idx, key in enumerate(keys):
+            begin = f"{marks[_BEGIN]} {_BEGIN} {_MARK}"
+            end = f"{marks[_BEGIN]} {_END} {_MARK}"
+            if is_static:
+                begin += f" {_MANAGED}{marks[_END]}"
+                end += f" {_MANAGED}{marks[_END]}"
+                file.write(f"{begin}\n{contexts[key]}{end}")
+            elif _TEMPLATE not in key:
+                if key not in [_BEFORE, _AFTER]:
+                    begin += f" {_EXCLUDED} {key}{marks[_END]}"
+                    end += f" {_EXCLUDED} {key}{marks[_END]}"
+                    file.write(f"{begin}\n{contexts[key]}{end}")
+                else:
+                    file.write(contexts[key])
+            else:
+                begin += f" {_MANAGED}{marks[_END]}"
+                if key == f"{_TEMPLATE}{_BEFORE}":
+                    file.write(f"{begin}\n")
+                file.write(
+                    _init_jinja_env(tpl_dir).from_string(content[key]).render(config)
+                )
+                file.write("\n")
+                if idx == len(keys) - 1:
+                    end += f" {_MANAGED}{marks[_END]}"
+                elif keys[idx + 1] == _AFTER:
+                    end += f" {_MANAGED}{marks[_END]}\n"
+                else:
+                    end = ""
+                file.write(end)
 
 
 def render_json(config: dict, dst: os.path, update) -> None:
