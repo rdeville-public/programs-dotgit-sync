@@ -36,8 +36,15 @@ def _render_license(
     with open(tpl_src, "r", encoding="utf-8") as file:
         content = file.read()
 
-    log.info("Render license %s to %s", license_name, dest)
-    render.render_file(config, dest, content, "license", is_static=True)
+    log.debug("Render license %s", license_name)
+    render.render_file(
+        config,
+        dest,
+        content,
+        "license",
+        tpl_dir=os.path.dirname(tpl_src),
+        is_static=False,
+    )
     return
 
 
