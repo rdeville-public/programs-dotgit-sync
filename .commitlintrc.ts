@@ -1,4 +1,4 @@
-// commitlintrc.ts
+/* BEGIN DOTGIT-SYNC BLOCK MANAGED */
 // @ts-ignore
 import { gitmojis } from "gitmojis";
 
@@ -68,7 +68,6 @@ const Configuration = {
     {
       rules: {
         "header-match-pattern": (parsed: any) => {
-          console.log(parsed);
           return headerMatchPattern(parsed);
         },
       },
@@ -99,3 +98,5 @@ const Configuration = {
 module.exports = Configuration;
 
 // vim: ft=typescript
+
+/* END DOTGIT-SYNC BLOCK MANAGED */
