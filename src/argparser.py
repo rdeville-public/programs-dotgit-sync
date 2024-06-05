@@ -10,7 +10,7 @@ CONFIG_FILENAME = ".config.yaml"
 log = logging.getLogger(f"{const.PKG_NAME}")
 
 
-def parse_args():
+def parse_args() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="dotgit-sync",
         description="""

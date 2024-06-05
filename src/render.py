@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import inspect
-import io
 import json
 import logging
 import os
@@ -188,11 +187,7 @@ def render_file(
         for idx, key in enumerate(keys):
             begin = f"{marks[_BEGIN]} {_BEGIN} {_MARK}"
             end = f"{marks[_BEGIN]} {_END} {_MARK}"
-            if is_static:
-                begin += f" {_MANAGED}{marks[_END]}"
-                end += f" {_MANAGED}{marks[_END]}"
-                file.write(f"{begin}\n{contexts[key]}{end}")
-            elif _TEMPLATE not in key:
+            if _TEMPLATE not in key:
                 if key not in [_BEFORE, _AFTER]:
                     begin += f" {_EXCLUDED} {key}{marks[_END]}"
                     end += f" {_EXCLUDED} {key}{marks[_END]}"
@@ -203,13 +198,14 @@ def render_file(
                 begin += f" {_MANAGED}{marks[_END]}"
                 if key == f"{_TEMPLATE}{_BEFORE}":
                     file.write(f"{begin}\n")
-                file.write(
-                    _init_jinja_env(tpl_dir).from_string(content[key]).render(config)
-                )
+                if is_static:
+                    file.write(contexts[key])
+                else:
+                    file.write(
+                        _init_jinja_env(tpl_dir).from_string(content[key]).render(config)
+                    )
                 file.write("\n")
-                if idx == len(keys) - 1:
-                    end += f" {_MANAGED}{marks[_END]}"
-                elif keys[idx + 1] == _AFTER:
+                if idx == len(keys) - 1 or keys[idx + 1] == _AFTER:
                     end += f" {_MANAGED}{marks[_END]}\n"
                 else:
                     end = ""
