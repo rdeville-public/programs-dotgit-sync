@@ -1,4 +1,4 @@
-# BEGIN DOTGIT-SYNC MANAGED BLOCK
+# BEGIN DOTGIT-SYNC BLOCK MANAGED
 ---
 # GLOBAL CONFIGURATION
 # =============================================================================
@@ -6,8 +6,10 @@
 # https://docs.gitlab.com/ee/ci/yaml/README.html#workflow
 workflow:
   rules:
-    # Do not run CI when commit title have following chars anywhere
-    # WIP, NO-CI or 🚧 (gitmoji for "work in progress", aka :construction:)
+      # Force pipelines on schedule event on main (mainly for dotgit update)
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      # Do not run CI when commit title have following chars anywhere
+      # WIP, NO-CI or 🚧 (gitmoji for "work in progress", aka :construction:)
     - if: $CI_COMMIT_MESSAGE =~ /(wip|WIP|NO-CI|🚧|:construction:)/
       when: never
     - if: $CI_MERGE_REQUEST_TITLE =~ /^(D|d)raft:/
@@ -35,7 +37,7 @@ stages:
   - &post-ci post-ci
 
 # Fake jobs that simply exit 0 to enable CI
-exit-0:
+"Dumb Job - Exit 0":
   image: alpine:latest
   stage: *pre-ci
   script:
@@ -47,4 +49,4 @@ include:
   - .gitlab/*.yml
   - .gitlab/*.yaml
 
-# END DOTGIT-SYNC MANAGED BLOCK
+# END DOTGIT-SYNC BLOCK MANAGED
