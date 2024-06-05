@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import argparse
 import datetime
 import errno
 import importlib
@@ -68,10 +69,14 @@ def get_git_dir(path: os.path) -> os.path:
     return os.path.dirname(repo.git_dir)
 
 
-def get_config(path: os.path) -> dict:
+def get_config(path: os.path, args: argparse.ArgumentParser) -> dict:
     log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
     repo = _is_git_repo(path)
-    config_file_path = os.path.join(repo.working_dir, ".config.yaml")
+    if args.config:
+        config_file_path = os.path.join(os.getcwd(), args.config)
+    else:
+        config_file_path = os.path.join(repo.working_dir, ".dotgit.yaml")
+    print(repo.working_dir)
     config = _validate_config(config_file_path)
     config[DATE] = {}
     config[DATE][FIRST_YEAR] = _get_first_commit(repo)

@@ -82,8 +82,6 @@ def process(config: dict) -> None:
     tpl = re.sub(r"(^#.+\n)+\n", "", tpl, flags=re.MULTILINE)
     tpl = re.sub(r"(^###.+\n)+\n", "", tpl, flags=re.MULTILINE)
     tpl = url + "\n\n" + tpl
+
     dst = os.path.join(repo.get_git_dir(os.getcwd()), f".{GITIGNORE}")
-
     render.render_file(config, dst, tpl, "gitignore", is_static=True)
-
-    # render.render(tpl, dst, config, force_filetype="gitignore", tpl_is_file=False)

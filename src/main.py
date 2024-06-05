@@ -47,6 +47,7 @@ def process(config: dict, tpl_type: str, is_static: bool = False) -> None:
 
     for dst, sources in processed.items():
         ft = filetype.get_filetype(sources[0])
+        dst = os.path.join(config["git_root"], dst)
         if ft == "json":
             _process_json(config, dst, sources)
         else:
@@ -58,7 +59,7 @@ def main():
     logger.init_logger(args, log)
     log.debug("%s", __name__)
 
-    config = repo.get_config(os.getcwd())
+    config = repo.get_config(os.getcwd(), args)
     config["git_root"] = repo.get_git_dir(os.getcwd())
 
     # Git or Path config passed as args override .config.yaml
