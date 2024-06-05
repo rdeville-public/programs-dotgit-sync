@@ -17,6 +17,7 @@
     - export PYTHONPATH=${PWD}/.release
   script:
       # Avoid being in detached state
+    - git fetch
     - git switch ${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-$CI_COMMIT_BRANCH}
     - semantic-release
         -c releaserc.toml
