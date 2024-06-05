@@ -1,0 +1,56 @@
+---
+# Source of template files
+# ------------------------------------------------------------------------------
+source:
+  git:
+    url: https://framagit.org/rdeville-public/programs/dotgit-sync-templates
+    ref: v0.2.10
+
+# Repos description
+# ------------------------------------------------------------------------------
+name: dotgit-sync
+description: >-
+  Repository allowing to manage dotfile for git repos in an unified ways.
+licenses:
+  copyright:
+    owner: Romain Deville
+    email: code@romaindeville.fr
+  main: MIT
+  others:
+    - BEERWARE
+maintainers:
+  - name: Romain Deville
+    mail: code@romaindeville.fr
+gitignore:
+  templates:
+    - base
+    - python
+statics:
+  - base
+  - base-ci-gitlab
+templates:
+  - base
+
+# Everything below is only used as variables in templates
+# ------------------------------------------------------------------------------
+code_of_conduct:
+  abuse: abuse+code@romaindeville.fr
+extra:
+  maintainers:
+    Romain Deville:
+      socials:
+        Website:
+          alt: &website https://romaindeville.fr
+          url: *website
+        Github:
+          alt: "@rdeville"
+          url: https://github.com/rdeville
+        Gitlab:
+          alt: "@r.deville"
+          url: https://gitlab.com/r.deville
+        Framagit:
+          alt: "@rdeville"
+          url: https://framagit.org/rdeville
+  repo:
+    server: https://framagit.org/
+    namespace: rdeville-public/programs
