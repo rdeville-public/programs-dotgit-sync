@@ -21,6 +21,7 @@ _TYPE = {
     "toml": [".toml"],
     "jinja2": [".j2"],
     "python": [".py"],
+    "json": [".jsonc"],
 }
 
 

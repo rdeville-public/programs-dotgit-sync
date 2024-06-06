@@ -1,0 +1,18 @@
+---
+# Partial schema source related
+schema;dotgit:
+  type: map
+  map:
+    yaml:
+      type: map
+      map:
+        merge:
+          type: str
+          enum:
+            - none
+            - all
+            - only
+        only:
+          type: seq
+          seq:
+            - type: str

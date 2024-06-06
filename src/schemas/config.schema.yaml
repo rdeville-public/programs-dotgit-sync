@@ -2,6 +2,8 @@
 map:
   source:
     include: source
+  dotgit:
+    include: dotgit
   name:
     include: required_str
   description:
