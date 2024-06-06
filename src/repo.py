@@ -10,11 +10,11 @@ import os
 import sys
 
 import git
-
 # import pykwalify
 from pykwalify import core, errors
 
 import const
+import utils
 
 DATE = "date"
 FIRST_YEAR = "first_year"
@@ -72,12 +72,14 @@ def get_git_dir(path: os.path) -> os.path:
 def get_config(path: os.path, args: argparse.ArgumentParser) -> dict:
     log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
     repo = _is_git_repo(path)
+
     if args.config:
         config_file_path = os.path.join(os.getcwd(), args.config)
     else:
         config_file_path = os.path.join(repo.working_dir, ".dotgit.yaml")
-    print(repo.working_dir)
+
     config = _validate_config(config_file_path)
+    config = utils.merge_json_dict(const.DOTGIT, config)
     config[DATE] = {}
     config[DATE][FIRST_YEAR] = _get_first_commit(repo)
     config[DATE][CURR_YEAR] = datetime.datetime.now().strftime("%Y")

@@ -7,6 +7,7 @@ import os
 import re
 
 import jinja2
+import yaml
 
 import const
 import utils
@@ -202,7 +203,9 @@ def render_file(
                     file.write(contexts[key])
                 else:
                     file.write(
-                        _init_jinja_env(tpl_dir).from_string(content[key]).render(config)
+                        _init_jinja_env(tpl_dir)
+                        .from_string(content[key])
+                        .render(config)
                     )
                 file.write("\n")
                 if idx == len(keys) - 1 or keys[idx + 1] == _AFTER:
@@ -212,16 +215,21 @@ def render_file(
                 file.write(end)
 
 
-def render_json(config: dict, dst: os.path, update) -> None:
+def render_json(
+    config: dict, dst: os.path, update: dict, is_yaml: bool = False
+) -> None:
     log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
-    log.info("Merging JSON to %s", dst)
+    log.info("Merging %s to %s", dst, "YAML" if is_yaml else "JSON")
 
     _create_dest_dir(os.path.join(config["git_root"], dst))
 
     content = None
     if os.path.isfile(dst):
         with open(dst, "r", encoding="utf-8") as file:
-            content = json.load(file)
+            if is_yaml:
+                content = yaml.safe_load(file)
+            else:
+                content = json.load(file)
 
     if isinstance(update, list):
         content = utils.merge_json_list(content, update)
@@ -229,5 +237,13 @@ def render_json(config: dict, dst: os.path, update) -> None:
         content = utils.merge_json_dict(content, update)
 
     with open(dst, "w", encoding="utf-8") as file:
-        json.dump(content, file, indent=2)
+        if is_yaml:
+            marks = _get_mark_comment(const.YAML)
+            begin = f"{marks[_BEGIN]} {_BEGIN} {_MARK} {_MANAGED}{marks[_END]}"
+            end = f"{marks[_BEGIN]} {_END} {_MARK} {_MANAGED}{marks[_END]}"
+            file.write(f"{begin}\n")
+            yaml.dump(content, file, indent=2)
+            file.write(end)
+        else:
+            json.dump(content, file, indent=2)
         file.write("\n")

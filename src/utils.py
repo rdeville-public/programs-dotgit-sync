@@ -8,6 +8,7 @@ import os
 import tempfile
 
 import git
+import yaml
 
 import const
 
