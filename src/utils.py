@@ -127,6 +127,8 @@ def compute_template_files(config: dict, tpl_type: str, processed: dict) -> None
     log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
     tpl_src = get_template_dir(config, tpl_type)
     if os.path.isdir(tpl_src):
-        for curr_dir in os.listdir(tpl_src):
-            if curr_dir in config[tpl_type]:
+        for curr_dir in config[tpl_type]:
+            if not os.path.exists(os.path.join(tpl_src, curr_dir)):
+                log.warn("Template directory %s of type %s does not exists in template source", curr_dir, tpl_type)
+            else:
                 _process_dir_template(os.path.join(tpl_src, curr_dir), "", processed)
