@@ -1,6 +1,17 @@
 <!-- markdownlint-disable-file -->
 # CHANGELOG
 
+## v0.3.1 (2024-06-07)
+
+### 🩹 Patch
+
+  * ⚡️ Templates sources are computed only for listed (!10) by Romain Deville ([`d256a35`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/d256a35a972fbfd4397c8511931fb8a4c9750a0e))
+  * ⚡️ Templates sources are computed only for listed by Romain Deville ([`a56f0ee`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/a56f0eea0155b978b572c4f09b15a500e4b9f692)) 🔏
+
+### 🔊 Others
+
+  * 🔊 Update default verbosity to warning by Romain Deville ([`ac302dd`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/ac302dddba9916716754fda6627d851e48a0ba39)) 🔏
+
 ## v0.3.0 (2024-06-07)
 
 ### ✨ Minor
@@ -11,6 +22,10 @@
 ### 🩹 Patch
 
   * ➕ Add json5 dependency by Romain Deville ([`6e1b292`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/6e1b2923499464512acf2418991b27ac7f52d4fc)) 🔏
+
+### 🔊 Others
+
+  * 🔖 v0.3.0 (NO-CI) by Python Semantic Release [bot] ([`c1a8a75`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/c1a8a759f0ba08d6b5df1c2b150a4dacef497b01))
 
 ## v0.2.0 (2024-06-06)
 
@@ -41,8 +56,6 @@
   * ✨ add gitignore.py by Romain Deville ([`7fec538`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/7fec538744acc82f579bcbc5de8075628dd8a31e)) 🔏
   * ✨ add licenses.py by Romain Deville ([`40f857e`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/40f857eb25427ab766d08e9c2c54b4f861eda79c)) 🔏
   * ✨ add render.py by Romain Deville ([`44b1f88`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/44b1f88e17c32fa3867974b9914053543359b2b8)) 🔏
-  * ✨ add utils.py by Romain Deville ([`7dff0d0`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/7dff0d05a7d4c13e63df72ed130360e57a7ee85c)) 🔏
-  * ✨ add filetype.py by Romain Deville ([`cb3b45c`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/cb3b45c4429738005d23f4b92b9c0df1a84f144b)) 🔏
 
 ### 🩹 Patch
 
