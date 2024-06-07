@@ -17,12 +17,10 @@ def init_logger(args: argparse.Namespace, log: logging.Logger) -> None:
 """
 
     if args.verbose == 0:
-        log.setLevel(logging.ERROR)
-    elif args.verbose == 1:
         log.setLevel(logging.WARNING)
-    elif args.verbose == 2:
+    elif args.verbose == 1:
         log.setLevel(logging.INFO)
-    elif args.verbose >= 3:
+    elif args.verbose >= 2:
         log.setLevel(logging.DEBUG)
     else:
         raise LookupError(f"Verbosity of {args.verbose} is not valid.")
