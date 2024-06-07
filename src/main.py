@@ -2,6 +2,7 @@
 
 import inspect
 import json
+import json5
 import logging
 import os
 
@@ -42,7 +43,7 @@ def _process_json(
             if is_yaml:
                 content = yaml.safe_load(file)
             else:
-                content = json.load(file)
+                content = json5.load(file)
         render.render_json(config, dst, content, is_yaml)
 
 
