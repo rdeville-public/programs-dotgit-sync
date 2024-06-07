@@ -38,6 +38,7 @@ dynamic = [
 dependencies = [
   "gitpython",
   "jinja2",
+  "json5",
   "pykwalify",
   "pylibmagic",
   "python-magic",

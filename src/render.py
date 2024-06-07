@@ -2,6 +2,7 @@
 
 import inspect
 import json
+import json5
 import logging
 import os
 import re
@@ -229,7 +230,7 @@ def render_json(
             if is_yaml:
                 content = yaml.safe_load(file)
             else:
-                content = json.load(file)
+                content = json5.load(file)
 
     if isinstance(update, list):
         content = utils.merge_json_list(content, update)
