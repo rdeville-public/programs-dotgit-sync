@@ -1,6 +1,17 @@
 <!-- markdownlint-disable-file -->
 # CHANGELOG
 
+## v0.3.0 (2024-06-07)
+
+### ✨ Minor
+
+  * ✨ Add JSONC Support (!9) by Romain Deville ([`955a520`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/955a5206b8bb30ac798a71a92b8ff09f18f7d25c))
+  * ✨ Add JSONC support through json5 dependency by Romain Deville ([`d547840`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/d5478407e5ef0f840780b1839dee73eaf0d5a2cc)) 🔏
+
+### 🩹 Patch
+
+  * ➕ Add json5 dependency by Romain Deville ([`6e1b292`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/6e1b2923499464512acf2418991b27ac7f52d4fc)) 🔏
+
 ## v0.2.0 (2024-06-06)
 
 ### ✨ Minor
@@ -10,6 +21,7 @@
 
 ### 🔊 Others
 
+  * 🔖 v0.2.0 (NO-CI) by Python Semantic Release [bot] ([`9ea8e5b`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/9ea8e5b559e5c8503918c7525caeed3387fc981b))
   * 🔥 Remove useless old semantic release template by Romain Deville ([`819dea7`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/819dea79e82f7f8e261b0461a7cef8074e872d03)) 🔏
 
 ## v0.1.0 (2024-06-05)
@@ -31,8 +43,6 @@
   * ✨ add render.py by Romain Deville ([`44b1f88`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/44b1f88e17c32fa3867974b9914053543359b2b8)) 🔏
   * ✨ add utils.py by Romain Deville ([`7dff0d0`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/7dff0d05a7d4c13e63df72ed130360e57a7ee85c)) 🔏
   * ✨ add filetype.py by Romain Deville ([`cb3b45c`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/cb3b45c4429738005d23f4b92b9c0df1a84f144b)) 🔏
-  * ✨ add repo.py by Romain Deville ([`74f9113`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/74f9113eb70c51f8f80aa9db35ffee71004a7dfa)) 🔏
-  * ✨ add const.py by Romain Deville ([`0e7eab6`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/0e7eab6e26977721208c4131b085e725fe80d59e)) 🔏
 
 ### 🩹 Patch
 
