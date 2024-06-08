@@ -22,6 +22,9 @@ variables:
 
 stages:
   - &pre-ci pre-ci
+  - &pre-lint pre-lint
+  - &lint lint
+  - &post-lint post-lint
   - &pre-build pre-build
   - &build build
   - &post-build post-build
@@ -48,5 +51,6 @@ stages:
 include:
   - .gitlab/*.yml
   - .gitlab/*.yaml
-
+  - .gitlab/*/*.yml
+  - .gitlab/*/*.yaml
 # END DOTGIT-SYNC BLOCK MANAGED
