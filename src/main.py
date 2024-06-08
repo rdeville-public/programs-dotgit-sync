@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 
 import inspect
-import json
-import json5
 import logging
 import os
 
-# pylint: disable=W0611
-import pylibmagic
+import json5
+import pylibmagic  # noqa: F401
 import requests
 import yaml
 
@@ -22,6 +20,7 @@ import repo
 import utils
 
 log = logging.getLogger(f"{const.PKG_NAME}")
+_LOG_TRACE = f"{os.path.basename(__file__)}:{__name__}"
 
 
 def _process_file(
@@ -48,7 +47,8 @@ def _process_json(
 
 
 def process(config: dict, tpl_type: str, is_static: bool = False) -> None:
-    log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+
     processed = {}
     utils.compute_template_files(config, tpl_type, processed)
 
@@ -68,11 +68,15 @@ def process(config: dict, tpl_type: str, is_static: bool = False) -> None:
         ):
             if const.ONLY not in config[const.PKG_NAME][const.YAML]:
                 raise KeyError(
-                    f"In your config file, if path /config/{const.YAML}/{const.MERGE}"
-                    + f"is set to '{const.ONLY}', key '{const.ONLY}' with a list of filename must be present"
+                    "In your config file, if path "
+                    + f"/config/{const.YAML}/{const.MERGE} is set to "
+                    + f"'{const.ONLY}', key '{const.ONLY}' with a list of "
+                    + "filename must be present"
                 )
-            elif (
-                os.path.basename(dst) in config[const.PKG_NAME][const.YAML][const.ONLY]
+
+            if (
+                os.path.basename(dst)
+                in config[const.PKG_NAME][const.YAML][const.ONLY]
             ):
                 _process_json(config, dst, sources, is_yaml=True)
             else:
@@ -84,7 +88,7 @@ def process(config: dict, tpl_type: str, is_static: bool = False) -> None:
 def main():
     args = argparser.parse_args()
     logger.init_logger(args, log)
-    log.debug("%s", __name__)
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
 
     config = repo.get_config(os.getcwd(), args)
     config["git_root"] = repo.get_git_dir(os.getcwd())
@@ -111,7 +115,7 @@ def main():
     try:
         gitignore.process(config)
     except requests.exceptions.ConnectionError as error:
-        log.warn(error)
+        log.warning(error)
 
     process(config, "statics", is_static=True)
     process(config, "templates")

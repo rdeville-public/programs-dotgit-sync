@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 
 import inspect
-import json
-import json5
 import logging
 import os
 import re
 
 import jinja2
+import json5
 import yaml
 
 import const
 import utils
 
 log = logging.getLogger(f"{const.PKG_NAME}")
+_LOG_TRACE = f"{os.path.basename(__file__)}:{__name__}"
 
 _FULL_FILE_TYPE = ["plain", "handlebars", "unknown"]
 _BEFORE = "before"
@@ -61,7 +61,8 @@ def _yaml_multiline_string_pipe(dumper, data):
 
 
 def _init_jinja_env(tpl_dir: str or None = None) -> jinja2.Environment:
-    log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+
     jinja_env = jinja2.Environment(
         extensions=[
             "jinja2.ext.i18n",
@@ -80,36 +81,39 @@ def _init_jinja_env(tpl_dir: str or None = None) -> jinja2.Environment:
 
 
 def _extract_content(content: str) -> dict:
-    log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+
     contexts = {}
     curr_context = f"{_TEMPLATE}{_BEFORE}"
     contexts[curr_context] = ""
     begin = f"{_BEGIN} {_MARK}"
     end = f"{_END} {_MARK}"
+    re_begin_excluded = re.escape(f"{begin} {_EXCLUDED} ") + r"(\w+)"
 
     for line in content.splitlines():
-
-        if re.search(f"{begin} {_EXCLUDED} (\w+)", line):
-            context_name = re.search(f"{begin} {_EXCLUDED} (\w+)", line).groups()[0]
+        search = re.search(re_begin_excluded, line)
+        if search:
+            context_name = search.groups()[0]
             curr_context = context_name
             contexts[curr_context] = ""
 
-        if re.search(f"{end} {_EXCLUDED} {curr_context}", line):
+        if re.search(re.escape(f"{end} {_EXCLUDED} {curr_context}"), line):
             curr_context = f"{_TEMPLATE}{curr_context}"
             contexts[curr_context] = ""
 
-        if not re.search(f"{_MARK}", line):
+        if not re.search(re.escape(_MARK), line):
             contexts[curr_context] += f"""{line}\n"""
 
     return contexts
 
 
 def _extract_context(dest: str) -> dict:
-    log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
     contexts = {}
     curr_context = _BEFORE
     begin = f"{_BEGIN} {_MARK}"
     end = f"{_END} {_MARK}"
+    re_begin_excluded = re.escape(f"{begin} {_EXCLUDED} ") + r"(\w+)"
 
     if not os.path.exists(dest):
         return contexts
@@ -117,23 +121,23 @@ def _extract_context(dest: str) -> dict:
     contexts[curr_context] = ""
     with open(dest, "r", encoding="utf-8") as file:
         for line in file:
-
-            if re.search(f"{begin} {_EXCLUDED} (\w+)", line):
-                context_name = re.search(f"{begin} {_EXCLUDED} (\w+)", line).groups()[0]
+            search = re.search(re_begin_excluded, line)
+            if search:
+                context_name = search.groups()[0]
                 curr_context = f"{context_name}"
                 contexts[curr_context] = ""
-            elif re.search(f"{begin}", line):
+            elif re.search(re.escape(begin), line):
                 curr_context = f"{_TEMPLATE}{curr_context}"
                 contexts[curr_context] = ""
 
-            if re.search(f"{end} {_EXCLUDED} (\w+)", line):
+            if re.search(re.escape(f"{end} {_EXCLUDED} ") + r"(\w+)", line):
                 curr_context = f"{_TEMPLATE}{curr_context}"
                 contexts[curr_context] = ""
-            elif re.search(f"{end}", line):
+            elif re.search(re.escape(end), line):
                 curr_context = _AFTER
                 contexts[curr_context] = ""
 
-            if not re.search(f"{_MARK}", line):
+            if not re.search(re.escape(_MARK), line):
                 contexts[curr_context] += line
 
     # Remove empty contexts
@@ -143,7 +147,7 @@ def _extract_context(dest: str) -> dict:
 
 
 def _create_dest_dir(dst: os.path) -> None:
-    log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
 
     if not os.path.exists(os.path.dirname(dst)):
         log.debug("Creating directory %s", os.path.dirname(dst))
@@ -151,7 +155,7 @@ def _create_dest_dir(dst: os.path) -> None:
 
 
 def _get_mark_comment(ft: str) -> [[str, str], [str, str]]:
-    log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
     marks = {}
     for type_key, type_val in _MARK_COMMENT_FILETYPE.items():
         if ft in type_val:
@@ -173,6 +177,7 @@ def _merge_context_content(contexts: dict, content: dict) -> dict:
             contexts[key] = content[key]
 
 
+# pylint: disable=too-many-arguments
 def render_file(
     config: dict,
     dst: str,
@@ -181,8 +186,8 @@ def render_file(
     tpl_dir: os.path = False,
     is_static: bool = False,
 ):
-    log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
-    log.info("Processing %s", dst.replace(f"{config["git_root"]}/", ""))
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+    log.info("Processing %s", dst.replace(f"{config['git_root']}/", ""))
 
     _create_dest_dir(os.path.join(config["git_root"], dst))
 
@@ -201,9 +206,11 @@ def render_file(
             end = f"{marks[_BEGIN]} {_END} {_MARK}"
             if _TEMPLATE not in key:
                 if key not in [_BEFORE, _AFTER]:
-                    begin += f" {_EXCLUDED} {key}{marks[_END]}"
-                    end += f" {_EXCLUDED} {key}{marks[_END]}"
-                    file.write(f"{begin}\n{contexts[key]}{end}")
+                    begin += f" {_EXCLUDED} {key}{marks[const.END]}"
+                    end += f" {_EXCLUDED} {key}{marks[const.END]}"
+                    file.write(f"{begin}\n")
+                    file.write(contexts[key])
+                    file.write(f"{end}\n")
                 else:
                     file.write(contexts[key])
             else:
@@ -218,7 +225,6 @@ def render_file(
                         .from_string(content[key])
                         .render(config)
                     )
-                file.write("\n")
                 if idx == len(keys) - 1 or keys[idx + 1] == _AFTER:
                     end += f" {_MANAGED}{marks[_END]}\n"
                 else:
@@ -229,7 +235,7 @@ def render_file(
 def render_json(
     config: dict, dst: os.path, update: dict, is_yaml: bool = False
 ) -> None:
-    log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
     log.info("Merging %s to %s", dst, "YAML" if is_yaml else "JSON")
 
     _create_dest_dir(os.path.join(config["git_root"], dst))
@@ -254,8 +260,8 @@ def render_json(
             end = f"{marks[_BEGIN]} {_END} {_MARK} {_MANAGED}{marks[_END]}"
             file.write(f"{begin}\n")
             yaml.add_representer(str, _yaml_multiline_string_pipe)
-            yaml.dump(content, file, indent=2, encoding="utf-8")
+            yaml.dump(content, file, indent=2, encoding="utf-8", sort_keys=False)
             file.write(end)
         else:
-            json.dump(content, file, indent=2)
+            json5.dump(content, file, indent=2, quote_keys=True, trailing_commas=False)
         file.write("\n")

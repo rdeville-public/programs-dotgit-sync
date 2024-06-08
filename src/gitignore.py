@@ -12,6 +12,7 @@ import render
 import repo
 
 log = logging.getLogger(f"{const.PKG_NAME}")
+_LOG_TRACE = f"{os.path.basename(__file__)}:{__name__}"
 
 GITIGNORE = "gitignore"
 GITIGNORE_TPL_KEY = "templates"
@@ -59,7 +60,8 @@ GITIGNORE_CFG = {
 
 
 def process(config: dict) -> None:
-    log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+
     if GITIGNORE not in config:
         return
 

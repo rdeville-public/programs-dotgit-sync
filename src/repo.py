@@ -16,16 +16,18 @@ from pykwalify import core, errors
 import const
 import utils
 
+log = logging.getLogger(f"{const.PKG_NAME}")
+_LOG_TRACE = f"{os.path.basename(__file__)}:{__name__}"
+
 DATE = "date"
 FIRST_YEAR = "first_year"
 CURR_YEAR = "current_year"
 WORKDIR = "workdir"
 
-log = logging.getLogger(f"{const.PKG_NAME}")
-
 
 def _get_schema_files() -> list:
-    log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+
     schemas = []
     for file in importlib.resources.files("schemas").iterdir():
         schemas += [str(file)]
@@ -33,7 +35,8 @@ def _get_schema_files() -> list:
 
 
 def _validate_config(config_file: os.path) -> None:
-    log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+
     try:
         data = core.Core(
             source_file=config_file, schema_files=_get_schema_files()
@@ -48,7 +51,8 @@ def _validate_config(config_file: os.path) -> None:
 
 
 def _is_git_repo(path: os.path) -> git.Repo:
-    log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+
     try:
         repo = git.Repo(path=path, search_parent_directories=True)
     except git.exc.InvalidGitRepositoryError as error:
@@ -57,20 +61,25 @@ def _is_git_repo(path: os.path) -> git.Repo:
     return repo
 
 
-def _get_first_commit(repo: git.Repo, branch: str = "main", datefmt: str = "%Y") -> str:
-    log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
+def _get_first_commit(
+    repo: git.Repo, branch: str = "main", datefmt: str = "%Y"
+) -> str:
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+
     commit = list(repo.iter_commits(branch, reverse=True))[0]
     return commit.committed_datetime.strftime(datefmt)
 
 
 def get_git_dir(path: os.path) -> os.path:
-    log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+
     repo = _is_git_repo(path)
     return os.path.dirname(repo.git_dir)
 
 
 def get_config(path: os.path, args: argparse.ArgumentParser) -> dict:
-    log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+
     repo = _is_git_repo(path)
 
     if args.config:

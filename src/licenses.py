@@ -9,17 +9,19 @@ import render
 import repo
 import utils
 
+log = logging.getLogger(f"{const.PKG_NAME}")
+_LOG_TRACE = f"{os.path.basename(__file__)}:{__name__}"
+
 LICENSES = "licenses"
 _MAIN = "main"
 _OTHERS = "others"
-
-log = logging.getLogger(f"{const.PKG_NAME}")
 
 
 def _render_license(
     config: dict, dirs: os.path, license_name: str, main: bool = False
 ) -> None:
-    log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+
     tpl_src = utils.template_exists(license_name, dirs)
 
     if tpl_src is None:
@@ -36,7 +38,7 @@ def _render_license(
     with open(tpl_src, "r", encoding="utf-8") as file:
         content = file.read()
 
-    log.debug("Render license %s", license_name)
+    log.info("Render license %s", license_name)
     render.render_file(
         config,
         dest,
@@ -49,10 +51,9 @@ def _render_license(
 
 
 def process(config: dict) -> None:
-    log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
-    tpl_src = utils.get_template_dir(config, LICENSES)
-    log.debug("Licenses directory hosting template %s", tpl_src)
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
 
+    tpl_src = utils.get_template_dir(config, LICENSES)
     _render_license(config, tpl_src, config[LICENSES][_MAIN], True)
 
     if _OTHERS in config[LICENSES]:

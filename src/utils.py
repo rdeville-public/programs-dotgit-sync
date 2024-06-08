@@ -8,22 +8,24 @@ import os
 import tempfile
 
 import git
-import yaml
 
 import const
 
 log = logging.getLogger(f"{const.PKG_NAME}")
+_LOG_TRACE = f"{os.path.basename(__file__)}:{__name__}"
 
 
 def get_template_dir(config: dict, tpl_type: str) -> list[str]:
-    log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+
     if "source" in config and tpl_type == "licenses":
         return os.path.join(importlib.resources.files(), "templates", tpl_type)
     return os.path.join(config["source"]["path"], tpl_type)
 
 
 def template_exists(filename: str, tpl_src: str) -> os.path:
-    log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+
     for inode in os.listdir(tpl_src):
         tplpath = os.path.join(tpl_src, inode)
         if os.path.isfile(tplpath) and str.lower(filename) == str.lower(
@@ -34,7 +36,8 @@ def template_exists(filename: str, tpl_src: str) -> os.path:
 
 
 def merge_json_dict(src, update):
-    log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+
     for key, value in update.items():
         if src is None:
             src = {}
@@ -52,7 +55,8 @@ def merge_json_dict(src, update):
 
 
 def merge_json_list(src: list, update):
-    log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+
     if src and not isinstance(src[0], type(update[0])):
         raise ValueError(f"Different types! {type(src[0])}, {type(update[0])}")
 
@@ -66,7 +70,8 @@ def merge_json_list(src: list, update):
 
 
 def clone_template_repo(config: dict) -> None:
-    log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+
     config["source"]["path"] = tempfile.mkdtemp()
     git_url = config["source"]["git"]["url"]
 
@@ -79,7 +84,8 @@ def clone_template_repo(config: dict) -> None:
 
 
 def merge_json_content(content, update):
-    log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+
     if isinstance(content, list):
         merge_json_list(content, update)
     elif isinstance(content, dict):
@@ -94,7 +100,8 @@ def load_json(src: os.path):
 
 
 def _concat_file_content(tpl_dir, src, parent, subdir=None):
-    log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+
     if subdir is None:
         subdir = []
 
@@ -111,7 +118,8 @@ def _concat_file_content(tpl_dir, src, parent, subdir=None):
 
 
 def _process_dir_template(path: str, parent: str, processed: dict) -> None:
-    log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+
     for node in os.listdir(path):
         file_path = os.path.join(path, node)
         key = os.path.join(parent, node)
@@ -123,12 +131,21 @@ def _process_dir_template(path: str, parent: str, processed: dict) -> None:
             _process_dir_template(file_path, key, processed)
 
 
-def compute_template_files(config: dict, tpl_type: str, processed: dict) -> None:
-    log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
+def compute_template_files(
+    config: dict, tpl_type: str, processed: dict
+) -> None:
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+
     tpl_src = get_template_dir(config, tpl_type)
     if os.path.isdir(tpl_src):
         for curr_dir in config[tpl_type]:
             if not os.path.exists(os.path.join(tpl_src, curr_dir)):
-                log.warn("Template directory %s of type %s does not exists in template source", curr_dir, tpl_type)
+                log.warning(
+                    "Template directory %s of type %s does not exists in template source",
+                    curr_dir,
+                    tpl_type,
+                )
             else:
-                _process_dir_template(os.path.join(tpl_src, curr_dir), "", processed)
+                _process_dir_template(
+                    os.path.join(tpl_src, curr_dir), "", processed
+                )
