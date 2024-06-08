@@ -1,3 +1,4 @@
+# BEGIN DOTGIT-SYNC BLOCK MANAGED
 tox
 black
 isort
@@ -7,3 +8,5 @@ pylint
 pydocstyle
 shellcheck-py
 yamllint
+
+# END DOTGIT-SYNC BLOCK MANAGED
