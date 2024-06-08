@@ -1,17 +1,17 @@
 # BEGIN DOTGIT-SYNC BLOCK MANAGED
-"""Commit parser which looks for gitmojis to determine the type of commit"""
+"""Commit parser which looks for gitmojis to determine the type of commit."""
 
-import requests
 import logging
-from typing import Tuple, NamedTuple
+from typing import Tuple
 
 from git.objects.commit import Commit
 from pydantic.dataclasses import dataclass
-
+import requests
 from semantic_release.commit_parser._base import CommitParser, ParserOptions
 from semantic_release.commit_parser.token import ParsedCommit, ParseResult
 from semantic_release.commit_parser.util import parse_paragraphs
 from semantic_release.enums import LevelBump
+
 
 logger = logging.getLogger(__name__)
 
@@ -47,8 +47,8 @@ class GitmojiParserOptions(ParserOptions):
 
 
 class GitmojiCommitParser(CommitParser[ParseResult, GitmojiParserOptions]):
-    """
-    Parse a commit using an gitmoji in the subject line.
+    """Parse a commit using an gitmoji in the subject line.
+
     When multiple gitmojis are encountered, the one with the highest bump
     level is used. If there are multiple gitmojis on the same level, the
     we use the one listed earliest in the configuration.
@@ -104,5 +104,4 @@ class GitmojiCommitParser(CommitParser[ParseResult, GitmojiParserOptions]):
             ),
             commit=commit,
         )
-
 # END DOTGIT-SYNC BLOCK MANAGED

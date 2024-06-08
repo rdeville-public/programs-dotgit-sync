@@ -800,7 +800,6 @@ FodyWeavers.xsd
 *.sln.iml
 
 # End of https://www.toptal.com/developers/gitignore/api/archive,archives,backup,direnv,dotenv,emacs,linux,macos,nohup,ssh,tags,vim,windows,zsh,vs,visualstudio,jupyternotebooks,python,venv
-
 # END DOTGIT-SYNC BLOCK MANAGED
 
 !.envrc

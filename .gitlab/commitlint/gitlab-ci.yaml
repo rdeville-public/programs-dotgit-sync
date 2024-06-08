@@ -15,7 +15,7 @@ Lint All Commit Since Default Branch:
 Lint MR Title and Desc:
   image: alpine:latest
   stage: pre-ci
-  env:
+  variables:
     CI_MERGE_REQUEST_COMMIT: |-
       ${CI_MERGE_REQUEST_TITLE}
 

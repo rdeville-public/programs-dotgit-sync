@@ -50,5 +50,4 @@ main(){
 main "$@"
 
 # vim: ft=sh
-
 # END DOTGIT-SYNC BLOCK MANAGED

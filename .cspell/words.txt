@@ -58,5 +58,4 @@ autoescape
 # Word present in all my python project
 pyproject
 VENV
-
 # END DOTGIT-SYNC BLOCK MANAGED

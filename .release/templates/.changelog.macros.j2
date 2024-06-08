@@ -40,5 +40,4 @@
 {%- macro print_commit(commit) %}
   * {{ commit.descriptions[0] }} by {{ commit.commit.author.name }} ([`{{ commit.commit.hexsha[:7] }}`]({{ commit.commit.hexsha | commit_hash_url }})){% if commit.commit.gpgsig %} 🔏{% endif -%}
 {%- endmacro %}
-
 {#- END DOTGIT-SYNC BLOCK MANAGED -#}

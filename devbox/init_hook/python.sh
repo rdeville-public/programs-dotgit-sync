@@ -36,40 +36,16 @@ init_logger(){
   fi
 }
 
-install_requirements(){
-  local type="$1"
-  local not_pinned="${PWD}/requirements.${type}.in"
-  local pinned="${PWD}/requirements.${type}.txt"
-
-  if ! [[ -f "${not_pinned}" ]] && ! [[ -f "${pinned}" ]]
-  then
-    _log "WARNING" "devbox: None of the following python requirements exists, nothing to do"
-    _log "WARNING" "devbox:   * ${not_pinned}"
-    _log "WARNING" "devbox:   * ${pinned}"
-    return
-  elif ! [[ -f "${pinned}" ]]
-  then
-    pip-compile "${not_pinned}" >> "${LOG_FILE}"
-  fi
-
-  _log "INFO" "devbox: Installing python requirements from ${pinned}"
-  pip install -r "${pinned}" >> "${LOG_FILE}"
-}
-
 main(){
   # TODO Change below substitution if need
   local DEBUG_LEVEL="${DEVBOX_DEBUG_LEVEL:-INFO}"
   init_logger
 
   _log "INFO" "devbox: Installing python dependencies"
-  pip3 install pip-tools >> "${LOG_FILE}"
-  install_requirements "dev"
-  install_requirements "prod"
-  install_requirements "doc"
+  poetry install
 }
 
 main "$@"
 
 # vim: ft=sh
-
 # END DOTGIT-SYNC BLOCK MANAGED

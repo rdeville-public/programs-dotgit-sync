@@ -22,7 +22,6 @@
 > Repository allowing to manage dotfile for git repos in an unified ways.
 
 ---
-
 <!-- BEGIN DOTGIT-SYNC BLOCK EXCLUDED CUSTOM_README -->
 <!-- YOU CAN REPLACE THIS COMMENT AND PUT CUSTOM CONTENT HERE -->
 <!-- YOUR CUSTOM CONTENT WILL NOT BE OVERRIDEN -->
@@ -67,5 +66,4 @@ This project is under following licenses (**OR**) :
 
 [main_license]: https://framagit.org/rdeville-public/programs/dotgit-sync/blob/main/LICENSE
 [beerware_license]: https://framagit.org/rdeville-public/programs/dotgit-sync/blob/main/LICENSE.BEERWARE
-
 <!-- END DOTGIT-SYNC BLOCK MANAGED -->

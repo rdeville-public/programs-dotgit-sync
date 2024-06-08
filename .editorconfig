@@ -28,5 +28,4 @@ max_line_length = 80
 indent_size = 4
 # Type of indentation (either tabs or space)
 indent_style = space
-
 # END DOTGIT-SYNC BLOCK MANAGED
