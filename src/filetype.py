@@ -14,7 +14,7 @@ _TYPE = {
     "handlebars": [".hbs"],
     "javascript": [".js"],
     "markdown": [".md"],
-    "text": [".txt"],
+    "text": [".txt", ".in"],
     "typescript": [".ts"],
     "yaml": [".yml", ".yaml"],
     "editorconfig": [".editorconfig"],
@@ -34,4 +34,4 @@ def get_filetype(filename: str) -> str | bool:
     for ft, exts in _TYPE.items():
         if ext in exts:
             return ft
-    return "unknown"
+    return "plain"

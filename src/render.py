@@ -50,6 +50,16 @@ _MARK_COMMENT_FILETYPE = {
 }
 
 
+# FROM : https://github.com/yaml/pyyaml/issues/240#issuecomment-2093769180
+def _yaml_multiline_string_pipe(dumper, data):
+    if data.count("\n") > 0:
+        data = "\n".join(
+            [line.rstrip() for line in data.splitlines()]
+        )  # Remove any trailing spaces, then put it back together again
+        return dumper.represent_scalar("tag:yaml.org,2002:str", data, style="|")
+    return dumper.represent_scalar("tag:yaml.org,2002:str", data)
+
+
 def _init_jinja_env(tpl_dir: str or None = None) -> jinja2.Environment:
     log.debug("%s:%s.%s()", os.path.basename(__file__), __name__, inspect.stack()[0][3])
     jinja_env = jinja2.Environment(
@@ -243,7 +253,8 @@ def render_json(
             begin = f"{marks[_BEGIN]} {_BEGIN} {_MARK} {_MANAGED}{marks[_END]}"
             end = f"{marks[_BEGIN]} {_END} {_MARK} {_MANAGED}{marks[_END]}"
             file.write(f"{begin}\n")
-            yaml.dump(content, file, indent=2)
+            yaml.add_representer(str, _yaml_multiline_string_pipe)
+            yaml.dump(content, file, indent=2, encoding="utf-8")
             file.write(end)
         else:
             json.dump(content, file, indent=2)
