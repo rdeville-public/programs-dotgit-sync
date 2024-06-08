@@ -15,7 +15,7 @@ _TYPE = {
     "handlebars": [".hbs"],
     "javascript": [".js"],
     "markdown": [".md"],
-    "text": [".txt", ".in"],
+    "text": [".txt", ".in", ".envrc"],
     "typescript": [".ts"],
     "yaml": [".yml", ".yaml"],
     "editorconfig": [".editorconfig"],
@@ -23,6 +23,7 @@ _TYPE = {
     "jinja2": [".j2"],
     "python": [".py"],
     "json": [".jsonc", ".json"],
+    "shell": [".sh", ".bash", ".zsh"],
 }
 
 

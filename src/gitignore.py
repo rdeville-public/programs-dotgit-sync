@@ -14,7 +14,6 @@ import repo
 log = logging.getLogger(f"{const.PKG_NAME}")
 _LOG_TRACE = f"{os.path.basename(__file__)}:{__name__}"
 
-GITIGNORE = "gitignore"
 GITIGNORE_TPL_KEY = "templates"
 GITIGNORE_CONFIG_KEY = "config"
 GITIGNORE_API = "https://www.toptal.com/developers/gitignore/api/"
@@ -62,16 +61,16 @@ GITIGNORE_CFG = {
 def process(config: dict) -> None:
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
 
-    if GITIGNORE not in config:
+    if const.GITIGNORE not in config:
         return
 
     gitignore_tpl = []
-    if "templates" in config[GITIGNORE]:
-        for tpl in config[GITIGNORE]["templates"]:
+    if "templates" in config[const.GITIGNORE]:
+        for tpl in config[const.GITIGNORE]["templates"]:
             gitignore_tpl.extend(GITIGNORE_CFG[tpl])
 
-    if "query" in config[GITIGNORE]:
-        for query in config[GITIGNORE]["query"]:
+    if "query" in config[const.GITIGNORE]:
+        for query in config[const.GITIGNORE]["query"]:
             gitignore_tpl.append(query)
 
     url = GITIGNORE_API + str.join(",", gitignore_tpl)
@@ -85,5 +84,5 @@ def process(config: dict) -> None:
     tpl = re.sub(r"(^###.+\n)+\n", "", tpl, flags=re.MULTILINE)
     tpl = url + "\n\n" + tpl
 
-    dst = os.path.join(repo.get_git_dir(os.getcwd()), f".{GITIGNORE}")
-    render.render_file(config, dst, tpl, "gitignore", is_static=True)
+    dst = os.path.join(repo.get_git_dir(os.getcwd()), f".{const.GITIGNORE}")
+    render.render_file(config, dst, tpl, const.GITIGNORE, is_static=True)

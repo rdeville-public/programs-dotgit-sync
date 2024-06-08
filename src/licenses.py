@@ -12,9 +12,9 @@ import utils
 log = logging.getLogger(f"{const.PKG_NAME}")
 _LOG_TRACE = f"{os.path.basename(__file__)}:{__name__}"
 
-LICENSES = "licenses"
 _MAIN = "main"
 _OTHERS = "others"
+_LICENSE = "LICENSE"
 
 
 def _render_license(
@@ -29,10 +29,10 @@ def _render_license(
         return
 
     if main:
-        dest = os.path.join(config[repo.WORKDIR], "LICENSE")
+        dest = os.path.join(config[repo.WORKDIR], _LICENSE)
     else:
         dest = os.path.join(
-            config[repo.WORKDIR], f"LICENSE.{os.path.basename(tpl_src)}"
+            config[repo.WORKDIR], f"{_LICENSE}.{os.path.basename(tpl_src)}"
         )
 
     with open(tpl_src, "r", encoding="utf-8") as file:
@@ -43,7 +43,7 @@ def _render_license(
         config,
         dest,
         content,
-        "license",
+        const.LICENSE,
         tpl_dir=os.path.dirname(tpl_src),
         is_static=False,
     )
@@ -53,9 +53,9 @@ def _render_license(
 def process(config: dict) -> None:
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
 
-    tpl_src = utils.get_template_dir(config, LICENSES)
-    _render_license(config, tpl_src, config[LICENSES][_MAIN], True)
+    tpl_src = utils.get_template_dir(config, const.LICENSE)
+    _render_license(config, tpl_src, config[const.LICENSE][_MAIN], True)
 
-    if _OTHERS in config[LICENSES]:
-        for license_name in config[LICENSES][_OTHERS]:
+    if _OTHERS in config[const.LICENSE]:
+        for license_name in config[const.LICENSE][_OTHERS]:
             _render_license(config, tpl_src, license_name)

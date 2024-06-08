@@ -15,39 +15,13 @@ import utils
 log = logging.getLogger(f"{const.PKG_NAME}")
 _LOG_TRACE = f"{os.path.basename(__file__)}:{__name__}"
 
-_FULL_FILE_TYPE = ["plain", "handlebars", "unknown"]
+_FULL_FILE_TYPE = ["plain", "unknown"]
 _BEFORE = "before"
 _AFTER = "after"
-_BEGIN = "BEGIN"
-_END = "END"
 _TEMPLATE = "template"
 _MARK = "DOTGIT-SYNC BLOCK"
 _MANAGED = "MANAGED"
 _EXCLUDED = "EXCLUDED"
-_MARK_COMMENT_TYPE = {
-    "HASHTAG": {_BEGIN: "#", _END: ""},
-    "XML": {_BEGIN: "<!--", _END: "-->"},
-    "DOUBLE_SLASH": {_BEGIN: "//", _END: ""},
-    "SLASH_STAR": {_BEGIN: "/*", _END: "*/"},
-    "CURLY_HASHTAG": {_BEGIN: "{#-", _END: "-#}"},
-}
-_MARK_COMMENT_FILETYPE = {
-    "HASHTAG": [
-        "python",
-        "yaml",
-        "gitignore",
-        "editorconfig",
-        "text",
-        "yaml",
-        "toml",
-        "license",
-    ],
-    "SLASH_STAR": ["javascript", "typescript"],
-    "XML": [
-        "markdown",
-    ],
-    "CURLY_HASHTAG": ["jinja2"],
-}
 
 
 # FROM : https://github.com/yaml/pyyaml/issues/240#issuecomment-2093769180
@@ -86,8 +60,8 @@ def _extract_content(content: str) -> dict:
     contexts = {}
     curr_context = f"{_TEMPLATE}{_BEFORE}"
     contexts[curr_context] = ""
-    begin = f"{_BEGIN} {_MARK}"
-    end = f"{_END} {_MARK}"
+    begin = f"{const.BEGIN} {_MARK}"
+    end = f"{const.END} {_MARK}"
     re_begin_excluded = re.escape(f"{begin} {_EXCLUDED} ") + r"(\w+)"
 
     for line in content.splitlines():
@@ -111,8 +85,8 @@ def _extract_context(dest: str) -> dict:
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
     contexts = {}
     curr_context = _BEFORE
-    begin = f"{_BEGIN} {_MARK}"
-    end = f"{_END} {_MARK}"
+    begin = f"{const.BEGIN} {_MARK}"
+    end = f"{const.END} {_MARK}"
     re_begin_excluded = re.escape(f"{begin} {_EXCLUDED} ") + r"(\w+)"
 
     if not os.path.exists(dest):
@@ -157,14 +131,14 @@ def _create_dest_dir(dst: os.path) -> None:
 def _get_mark_comment(ft: str) -> [[str, str], [str, str]]:
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
     marks = {}
-    for type_key, type_val in _MARK_COMMENT_FILETYPE.items():
+    for type_key, type_val in const.COMMENT_FILETYPE.items():
         if ft in type_val:
-            begin = _MARK_COMMENT_TYPE[type_key][_BEGIN]
-            end = _MARK_COMMENT_TYPE[type_key][_END]
+            begin = const.COMMENT_TYPE[type_key][const.BEGIN]
+            end = const.COMMENT_TYPE[type_key][const.END]
             if end != "":
                 end = f" {end}"
-            marks[_BEGIN] = f"{begin}"
-            marks[_END] = f"{end}"
+            marks[const.BEGIN] = f"{begin}"
+            marks[const.END] = f"{end}"
             return marks
     return None, None
 
@@ -191,6 +165,8 @@ def render_file(
 
     _create_dest_dir(os.path.join(config["git_root"], dst))
 
+    contexts = {}
+    marks = {}
     if ft not in _FULL_FILE_TYPE:
         marks = _get_mark_comment(ft)
         contexts = _extract_context(dst)
@@ -202,8 +178,8 @@ def render_file(
     with open(dst, "w", encoding="utf-8") as file:
         keys = list(contexts.keys())
         for idx, key in enumerate(keys):
-            begin = f"{marks[_BEGIN]} {_BEGIN} {_MARK}"
-            end = f"{marks[_BEGIN]} {_END} {_MARK}"
+            begin = f"{marks[const.BEGIN]} {const.BEGIN} {_MARK}"
+            end = f"{marks[const.BEGIN]} {const.END} {_MARK}"
             if _TEMPLATE not in key:
                 if key not in [_BEFORE, _AFTER]:
                     begin += f" {_EXCLUDED} {key}{marks[const.END]}"
@@ -214,7 +190,7 @@ def render_file(
                 else:
                     file.write(contexts[key])
             else:
-                begin += f" {_MANAGED}{marks[_END]}"
+                begin += f" {_MANAGED}{marks[const.END]}"
                 if key == f"{_TEMPLATE}{_BEFORE}":
                     file.write(f"{begin}\n")
                 if is_static:
@@ -226,7 +202,7 @@ def render_file(
                         .render(config)
                     )
                 if idx == len(keys) - 1 or keys[idx + 1] == _AFTER:
-                    end += f" {_MANAGED}{marks[_END]}\n"
+                    end += f" {_MANAGED}{marks[const.END]}\n"
                 else:
                     end = ""
                 file.write(end)
@@ -256,8 +232,10 @@ def render_json(
     with open(dst, "w", encoding="utf-8") as file:
         if is_yaml:
             marks = _get_mark_comment(const.YAML)
-            begin = f"{marks[_BEGIN]} {_BEGIN} {_MARK} {_MANAGED}{marks[_END]}"
-            end = f"{marks[_BEGIN]} {_END} {_MARK} {_MANAGED}{marks[_END]}"
+            begin = f"{marks[const.BEGIN]} {const.BEGIN} {_MARK} {_MANAGED}{marks[const.END]}"
+            end = (
+                f"{marks[const.BEGIN]} {const.END} {_MARK} {_MANAGED}{marks[const.END]}"
+            )
             file.write(f"{begin}\n")
             yaml.add_representer(str, _yaml_multiline_string_pipe)
             yaml.dump(content, file, indent=2, encoding="utf-8", sort_keys=False)
