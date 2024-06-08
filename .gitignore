@@ -1,5 +1,5 @@
 # Project specific gitignore
-
+.devbox
 .envrc*
 
 # BEGIN DOTGIT-SYNC BLOCK MANAGED
@@ -802,3 +802,5 @@ FodyWeavers.xsd
 # End of https://www.toptal.com/developers/gitignore/api/archive,archives,backup,direnv,dotenv,emacs,linux,macos,nohup,ssh,tags,vim,windows,zsh,vs,visualstudio,jupyternotebooks,python,venv
 
 # END DOTGIT-SYNC BLOCK MANAGED
+
+!.envrc
