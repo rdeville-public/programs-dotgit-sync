@@ -1,6 +1,34 @@
 <!-- markdownlint-disable-file -->
 # CHANGELOG
 
+## v0.3.2 (2024-06-09)
+
+### 🩹 Patch
+
+  * ⚡️ Improve yaml multi line rendering by Romain Deville ([`1e21719`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/1e2171959e46796ac20d45d3cce10c71e1eb5de7)) 🔏
+  * ✏️ Update rendered files from templates by Romain Deville ([`ee10eb9`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/ee10eb978e84b09519d8e6e55b417cc1c6ba4445)) 🔏
+  * ✏️ Fix argparser help output by Romain Deville ([`4882e36`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/4882e36e0177c452bcd29c5bffb3b15009f96620)) 🔏
+  * 📌 Update poetry lock dependencies by Romain Deville ([`f9c6f31`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/f9c6f311c463cc840785d810f8b51eff31f9c189)) 🔏
+  * 🔧 Add ruff.toml with linter configuration by Romain Deville ([`8a794fc`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/8a794fccaa120784de74848f0b35c1b5d02a5899)) 🔏
+
+### 🔊 Others
+
+  * ♻️ Move string used multiple times in const.py by Romain Deville ([`bb7a103`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/bb7a103cc7e13e0fe9541c186e3d921475924c85)) 🔏
+  * 🎨 Format code using ruff by Romain Deville ([`9aead89`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/9aead89091e80782c3cd48ff28174b55bd4211fe)) 🔏
+  * 👷 Update Base CI to new structure to merge YAML by Romain Deville ([`317b8b0`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/317b8b08f7aaf47ffd61c30d012671bc013d2d67)) 🔏
+  * 👷 Update gitlab root CI with new stages by Romain Deville ([`556070b`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/556070b66875542a9c5308585e76b637a7be53ed)) 🔏
+  * 🔥 Remove now useless requirements files by Romain Deville ([`7f4808f`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/7f4808f65936a5323c49c9a115e0f4f0449e941c)) 🔏
+  * 🔥 Remove now useless in packages templates by Romain Deville ([`39cdab8`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/39cdab856a13b2b0599829baf0e59a2461de1e40)) 🔏
+  * 🔨 Update devbox configuration by Romain Deville ([`e127819`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/e12781903e9400077700f4c9eb9f961ecf1f41b5)) 🔏
+  * 🔨 Update .pre-commit-config.yaml from dotgit-sync by Romain Deville ([`290c12e`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/290c12ec7db4f6b4c645f2d3918cc04abccd1d24)) 🔏
+  * 🔨 Add .envrc managed by dotgit-sync by Romain Deville ([`d57454f`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/d57454fc33d95933bf91f709c8a787e9f02dc4b6)) 🔏
+  * 🚚 Rename src to dotgit_sync for poetry by Romain Deville ([`2652f14`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/2652f14f23f909da15384968bd75bac84e65955b)) 🔏
+  * 🚨 Add linter configuration and fix it (!11) by Romain Deville ([`2e4113c`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/2e4113c6b7eaf00023a060495b26fdefab0bf678))
+  * 🚨 Fix linter on commit_parser by Romain Deville ([`33f7631`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/33f7631bb8cc122f14ce793fe7123c094b5ccf2d)) 🔏
+  * 🚨 Fix all ruff warning in dotgit_sync folder by Romain Deville ([`ecdc907`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/ecdc9070f5723faadad360880e3a55a34c7e5e73)) 🔏
+  * 🚨 Fix most linter warning using black and isort by Romain Deville ([`66081c4`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/66081c43767d7c247228a47db114fc15314b6726)) 🔏
+  * 🚨 Fix cspell warning by Romain Deville ([`7d838af`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/7d838af1b5f9981e66edc7cfab4a0da0741bef11)) 🔏
+
 ## v0.3.1 (2024-06-07)
 
 ### 🩹 Patch
@@ -11,6 +39,7 @@
 ### 🔊 Others
 
   * 🔊 Update default verbosity to warning by Romain Deville ([`ac302dd`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/ac302dddba9916716754fda6627d851e48a0ba39)) 🔏
+  * 🔖 v0.3.1 (NO-CI) by Python Semantic Release [bot] ([`31666d5`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/31666d5325318c4ac61604a249264b93238fd6fa))
 
 ## v0.3.0 (2024-06-07)
 
@@ -54,8 +83,6 @@
   * ✨ add main.py by Romain Deville ([`1c01625`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/1c016257d5038606c4ab5a99c539ae1206106a84)) 🔏
   * ✨ add argparse.py by Romain Deville ([`732a3a7`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/732a3a796756e8b1f4a6070644d8c7f531618a70)) 🔏
   * ✨ add gitignore.py by Romain Deville ([`7fec538`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/7fec538744acc82f579bcbc5de8075628dd8a31e)) 🔏
-  * ✨ add licenses.py by Romain Deville ([`40f857e`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/40f857eb25427ab766d08e9c2c54b4f861eda79c)) 🔏
-  * ✨ add render.py by Romain Deville ([`44b1f88`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/44b1f88e17c32fa3867974b9914053543359b2b8)) 🔏
 
 ### 🩹 Patch
 
