@@ -1,0 +1,93 @@
+# BEGIN DOTGIT-SYNC BLOCK MANAGED
+line-length = 80
+output-format = "grouped"
+preview = true
+show-fixes = true
+src = ["dotgit_sync"]
+
+[format]
+docstring-code-format = true
+# BEGIN DOTGIT-SYNC BLOCK EXCLUDED CUSTOM_RUFF_FORMAT
+#
+# END DOTGIT-SYNC BLOCK EXCLUDED CUSTOM_RUFF_FORMAT
+
+[lint]
+select = [
+  # I AM EXIGEANT FOR CODE QUALITY !
+  "F"     , # Flake8
+  "E","W" , # pycodestyle
+  "N"     , # pep8-naming
+  "I"     , # isort
+  "D"     , # pydocstyle
+  "UP"    , # pyupgrade
+  "S"     , # flake8-bandit
+  "ANN"   , # flake8-annotations
+  "BLE"   , # flake8-blind-except
+  "B"     , # flake8-bugbear
+  "A"     , # flake8-builtins
+  "C4"    , # flake8-comprehensions
+  "DTZ"   , # flake8-datetimez
+  "EM"    , # flake8-errmsg
+  "LOG"   , # flake8-logging
+  "G"     , # flake8-logging-format
+  "PT"    , # flake8-pytest-style
+  "Q"     , # flake8-quotes
+  "RSE"   , # flake8-raise
+  "TCH"   , # flake8-type-checking
+  "ARG"   , # flake8-unused-arguments
+  "RET"   , # flake8-return
+  "TD"    , # flake8-todos
+  "FIX"   , # flake8-fixme
+  "SLF"   , # flake8-self
+  "SLOT"  , # flake8-slots
+  "SIM"   , # flake8-simplify
+  "PTH"   , # flake8-use-pathlib
+  "ERA"   , # eradicate
+  "PL"    , # Pylint
+  "TRY"   , # tryceratops
+  "FURB"  , # refurb
+  "RUF"   , # Ruff-specific rules
+# BEGIN DOTGIT-SYNC BLOCK EXCLUDED CUSTOM_RUFF_LINT
+# "C90"   , # mccabe
+# "FBT"   , # flake8-boolean-trap
+# "COM"   , # flake8-commas
+# "T10"   , # flake8-debugger
+# "DJ"    , # flake8-django
+# "EXE"   , # flake8-executable
+# "FA"    , # flake8-future-annotations
+# "ISC"   , # flake8-implicit-str-concat
+# "ICN"   , # flake8-import-conventions
+# "INP"   , # flake8-no-pep420
+# "PIE"   , # flake8-pie
+# "T20"   , # flake8-print
+# "PYI"   , # flake8-pyi
+# "TID"   , # flake8-tidy-imports
+# "INT"   , # flake8-gettext
+# "PD"    , # pandas-vet
+# "PGH"   , # pygrep-hooks
+# "TRY"   , # tryceratops
+# "FLY"   , # flynt
+# "NPY"   , # NumPy-specific rules
+# "AIR"   , # Airflow
+# "PERF"  , # Perflint
+# END DOTGIT-SYNC BLOCK EXCLUDED CUSTOM_RUFF_LINT
+]
+
+[lint.isort]
+combine-as-imports = true
+force-sort-within-sections = true
+lines-after-imports = 2
+section-order = [
+  "future",
+  "standard-library",
+  "third-party",
+  "first-party",
+  "local-folder"
+]
+
+[lint.pydocstyle]
+convention = "google"
+
+[lint.pylint]
+max-args = 6
+# END DOTGIT-SYNC BLOCK MANAGED

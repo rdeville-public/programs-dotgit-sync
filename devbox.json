@@ -1,17 +1,19 @@
 {
-  "include": [
-    "github:rdeville-public/programs.devbox-plugins/main?dir=python",
-    "github:rdeville-public/programs.devbox-plugins/main?dir=base"
-  ],
+  "$schema": "https://raw.githubusercontent.com/jetpack-io/devbox/main/.schema/devbox.schema.json",
+  "packages": {
+    "pre-commit": "3.7.1",
+    "yq-go": "4.44.1",
+    "python312": "latest",
+    "poetry": "latest"
+  },
   "env": {
-    "VENV_DIR": "${PWD}/.devbox/virtenv/config_sync",
-    "PYTHONPATH": "${PWD}/src"
+    "VENV_DIR": ".devbox/virtenv/dotgit-sync/"
   },
   "shell": {
     "init_hook": [
-      "pip3 install pip-tools",
-      "[[ -f requirements.dev.txt ]] && pip3 install -r requirements.dev.txt",
-      "[[ -f requirements.prod.txt ]] && pip3 install -r requirements.prod.txt"
+      "./devbox/init_hook/pre-commit.sh",
+      "source \"${VENV_DIR}/bin/activate\"",
+      "./devbox/init_hook/python.sh"
     ]
   }
 }

@@ -1,0 +1,31 @@
+[version]
+source = "vcs"
+
+[build.targets.wheel]
+packages = [
+  "src"
+]
+include = [
+  "src",
+  "tests",
+  "LICENSE",
+  "LICENSE.BEERWARE",
+  "CHANGELOG.md",
+  "README.md",
+  "CODE_OF_CONDUCT.md",
+  "AUTHORS",
+  "pyproject.toml",
+]
+
+[build.targets.sdist]
+include = [
+  "src",
+  "tests",
+  "LICENSE",
+  "LICENSE.BEERWARE",
+  "CHANGELOG.md",
+  "README.md",
+  "CODE_OF_CONDUCT.md",
+  "AUTHORS",
+  "pyproject.toml",
+]

@@ -98,5 +98,4 @@ const Configuration = {
 module.exports = Configuration;
 
 // vim: ft=typescript
-
 /* END DOTGIT-SYNC BLOCK MANAGED */

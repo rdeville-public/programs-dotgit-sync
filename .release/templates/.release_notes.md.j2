@@ -11,5 +11,4 @@
 {% import ".changelog.macros.j2" as fn with context %}
 {{- fn.recompute_commit(release["elements"]) | replace("None","") }}
 {{- fn.print_release() }}
-
 {#- END DOTGIT-SYNC BLOCK MANAGED -#}

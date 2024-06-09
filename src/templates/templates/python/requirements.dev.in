@@ -1,9 +1,0 @@
-tox
-black
-isort
-pytest
-flake9
-pylint
-pydocstyle
-shellcheck-py
-yamllint

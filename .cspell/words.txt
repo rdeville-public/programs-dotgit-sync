@@ -1,10 +1,17 @@
 argparser
+deville
 Deville
 direnv
+DIRENV
 dotenv
-dotgit
-endfor
+dotfile
+DOTGIT
+EDITORCFG
+elif
+ENOENT
+envrc
 extjs
+glab
 jsonnet
 jupyternotebooks
 loopcontrols
@@ -14,16 +21,20 @@ nuxtjs
 prestashop
 pykwalify
 pylibmagic
-pythonvanilla
+PYTHONPATH
 rdeville
+representer
 Romain
+stdlib
 storybookjs
-tplpath
+strerror
 toptal
-Toptal
+ugprade
 vuejs
+workdir
 WORKDIR
-# BEGIN DOTGIT-SYNC MANAGED BLOCK
+
+# BEGIN DOTGIT-SYNC BLOCK MANAGED
 # Common word present in all my project
 autofix
 blockquote
@@ -41,4 +52,10 @@ parseable
 Refactorize
 releaserc
 SCRIPTPATH
-# END DOTGIT-SYNC MANAGED BLOCK
+endfor
+lstrip
+autoescape
+# Word present in all my python project
+pyproject
+VENV
+# END DOTGIT-SYNC BLOCK MANAGED
