@@ -3,7 +3,8 @@
 import argparse
 import logging
 
-import const
+from . import const
+
 
 CONFIG_FILENAME = ".config.yaml"
 
@@ -62,7 +63,7 @@ of the git repository.
         "-d",
         "--source-dir",
         help="""\
-Path to a directory containing templates following packages templates structure.
+Path to a directory containing templates.
 """,
         nargs="?",
         type=str,
@@ -73,7 +74,7 @@ Path to a directory containing templates following packages templates structure.
         "-g",
         "--source-git",
         help="""\
-Path to a git repository containing templates following packages templates structure.
+Path to a git repository containing templates.
 """,
         nargs="?",
         type=str,

@@ -9,7 +9,8 @@ import tempfile
 
 import git
 
-import const
+from . import const
+
 
 log = logging.getLogger(f"{const.PKG_NAME}")
 _LOG_TRACE = f"{os.path.basename(__file__)}:{__name__}"
@@ -94,7 +95,7 @@ def merge_json_content(content, update):
 
 
 def load_json(src: os.path):
-    with open(src, "r", encoding="utf-8") as file:
+    with open(src, encoding="utf-8") as file:
         content = json.load(file)
     return content
 
@@ -106,13 +107,13 @@ def _concat_file_content(tpl_dir, src, parent, subdir=None):
         subdir = []
 
     basename = os.path.basename(src)
-    with open(src, "r", encoding="utf-8") as tpl_file:
+    with open(src, encoding="utf-8") as tpl_file:
         content = tpl_file.read()
 
     for curr_dir in subdir:
         file = os.path.join(tpl_dir, curr_dir, parent, basename)
         if os.path.exists(file):
-            with open(file, "r", encoding="utf-8") as tpl_file:
+            with open(file, encoding="utf-8") as tpl_file:
                 content += tpl_file.read()
     return content
 
@@ -141,7 +142,7 @@ def compute_template_files(
         for curr_dir in config[tpl_type]:
             if not os.path.exists(os.path.join(tpl_src, curr_dir)):
                 log.warning(
-                    "Template directory %s of type %s does not exists in template source",
+                    "Directory '%s' of type '%s' is not in template source",
                     curr_dir,
                     tpl_type,
                 )

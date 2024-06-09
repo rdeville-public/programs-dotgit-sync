@@ -9,8 +9,8 @@ import jinja2
 import json5
 import yaml
 
-import const
-import utils
+from . import const, utils
+
 
 log = logging.getLogger(f"{const.PKG_NAME}")
 _LOG_TRACE = f"{os.path.basename(__file__)}:{__name__}"
@@ -20,16 +20,18 @@ _BEFORE = "before"
 _AFTER = "after"
 _TEMPLATE = "template"
 _MARK = "DOTGIT-SYNC BLOCK"
-_MANAGED = "MANAGED"
-_EXCLUDED = "EXCLUDED"
+_BEGIN_MANAGED = f"{const.BEGIN} {_MARK} MANAGED"
+_END_MANAGED = f"{const.END} {_MARK} MANAGED"
+_BEGIN_EXCLUDED = f"{const.BEGIN} {_MARK} EXCLUDED"
+_END_EXCLUDED = f"{const.END} {_MARK} EXCLUDED"
 
 
 # FROM : https://github.com/yaml/pyyaml/issues/240#issuecomment-2093769180
 def _yaml_multiline_string_pipe(dumper, data):
     if data.count("\n") > 0:
-        data = "\n".join(
-            [line.rstrip() for line in data.splitlines()]
-        )  # Remove any trailing spaces, then put it back together again
+        data = "\n".join([
+            line.rstrip() for line in data.splitlines()
+        ])  # Remove any trailing spaces, then put it back together again
         return dumper.represent_scalar("tag:yaml.org,2002:str", data, style="|")
     return dumper.represent_scalar("tag:yaml.org,2002:str", data)
 
@@ -60,9 +62,7 @@ def _extract_content(content: str) -> dict:
     contexts = {}
     curr_context = f"{_TEMPLATE}{_BEFORE}"
     contexts[curr_context] = ""
-    begin = f"{const.BEGIN} {_MARK}"
-    end = f"{const.END} {_MARK}"
-    re_begin_excluded = re.escape(f"{begin} {_EXCLUDED} ") + r"(\w+)"
+    re_begin_excluded = re.escape(f"{_BEGIN_EXCLUDED} ") + r"(\w+)"
 
     for line in content.splitlines():
         search = re.search(re_begin_excluded, line)
@@ -71,7 +71,7 @@ def _extract_content(content: str) -> dict:
             curr_context = context_name
             contexts[curr_context] = ""
 
-        if re.search(re.escape(f"{end} {_EXCLUDED} {curr_context}"), line):
+        if re.search(re.escape(f"{_END_EXCLUDED} {curr_context}"), line):
             curr_context = f"{_TEMPLATE}{curr_context}"
             contexts[curr_context] = ""
 
@@ -87,13 +87,13 @@ def _extract_context(dest: str) -> dict:
     curr_context = _BEFORE
     begin = f"{const.BEGIN} {_MARK}"
     end = f"{const.END} {_MARK}"
-    re_begin_excluded = re.escape(f"{begin} {_EXCLUDED} ") + r"(\w+)"
+    re_begin_excluded = re.escape(f"{_BEGIN_EXCLUDED} ") + r"(\w+)"
 
     if not os.path.exists(dest):
         return contexts
 
     contexts[curr_context] = ""
-    with open(dest, "r", encoding="utf-8") as file:
+    with open(dest, encoding="utf-8") as file:
         for line in file:
             search = re.search(re_begin_excluded, line)
             if search:
@@ -104,7 +104,7 @@ def _extract_context(dest: str) -> dict:
                 curr_context = f"{_TEMPLATE}{curr_context}"
                 contexts[curr_context] = ""
 
-            if re.search(re.escape(f"{end} {_EXCLUDED} ") + r"(\w+)", line):
+            if re.search(re.escape(f"{_END_EXCLUDED} ") + r"(\w+)", line):
                 curr_context = f"{_TEMPLATE}{curr_context}"
                 contexts[curr_context] = ""
             elif re.search(re.escape(end), line):
@@ -178,19 +178,19 @@ def render_file(
     with open(dst, "w", encoding="utf-8") as file:
         keys = list(contexts.keys())
         for idx, key in enumerate(keys):
-            begin = f"{marks[const.BEGIN]} {const.BEGIN} {_MARK}"
-            end = f"{marks[const.BEGIN]} {const.END} {_MARK}"
+            begin = f"{marks[const.BEGIN]}"
+            end = f"{marks[const.BEGIN]}"
             if _TEMPLATE not in key:
                 if key not in [_BEFORE, _AFTER]:
-                    begin += f" {_EXCLUDED} {key}{marks[const.END]}"
-                    end += f" {_EXCLUDED} {key}{marks[const.END]}"
+                    begin += f" {_BEGIN_EXCLUDED} {key}{marks[const.END]}"
+                    end += f" {_END_EXCLUDED} {key}{marks[const.END]}"
                     file.write(f"{begin}\n")
                     file.write(contexts[key])
                     file.write(f"{end}\n")
                 else:
                     file.write(contexts[key])
             else:
-                begin += f" {_MANAGED}{marks[const.END]}"
+                begin += f" {_BEGIN_MANAGED}{marks[const.END]}"
                 if key == f"{_TEMPLATE}{_BEFORE}":
                     file.write(f"{begin}\n")
                 if is_static:
@@ -202,7 +202,7 @@ def render_file(
                         .render(config)
                     )
                 if idx == len(keys) - 1 or keys[idx + 1] == _AFTER:
-                    end += f" {_MANAGED}{marks[const.END]}\n"
+                    end += f" {_END_MANAGED}{marks[const.END]}\n"
                 else:
                     end = ""
                 file.write(end)
@@ -218,7 +218,7 @@ def render_json(
 
     content = None
     if os.path.isfile(dst):
-        with open(dst, "r", encoding="utf-8") as file:
+        with open(dst, encoding="utf-8") as file:
             if is_yaml:
                 content = yaml.safe_load(file)
             else:
@@ -232,14 +232,16 @@ def render_json(
     with open(dst, "w", encoding="utf-8") as file:
         if is_yaml:
             marks = _get_mark_comment(const.YAML)
-            begin = f"{marks[const.BEGIN]} {const.BEGIN} {_MARK} {_MANAGED}{marks[const.END]}"
-            end = (
-                f"{marks[const.BEGIN]} {const.END} {_MARK} {_MANAGED}{marks[const.END]}"
-            )
+            begin = f"{marks[const.BEGIN]} {_BEGIN_MANAGED}{marks[const.END]}"
+            end = f"{marks[const.BEGIN]} {_END_MANAGED}{marks[const.END]}"
             file.write(f"{begin}\n")
             yaml.add_representer(str, _yaml_multiline_string_pipe)
-            yaml.dump(content, file, indent=2, encoding="utf-8", sort_keys=False)
+            yaml.dump(
+                content, file, indent=2, encoding="utf-8", sort_keys=False
+            )
             file.write(end)
         else:
-            json5.dump(content, file, indent=2, quote_keys=True, trailing_commas=False)
+            json5.dump(
+                content, file, indent=2, quote_keys=True, trailing_commas=False
+            )
         file.write("\n")

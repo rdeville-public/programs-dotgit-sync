@@ -4,10 +4,8 @@ import inspect
 import logging
 import os
 
-import const
-import render
-import repo
-import utils
+from . import const, render, repo, utils
+
 
 log = logging.getLogger(f"{const.PKG_NAME}")
 _LOG_TRACE = f"{os.path.basename(__file__)}:{__name__}"
@@ -35,7 +33,7 @@ def _render_license(
             config[repo.WORKDIR], f"{_LICENSE}.{os.path.basename(tpl_src)}"
         )
 
-    with open(tpl_src, "r", encoding="utf-8") as file:
+    with open(tpl_src, encoding="utf-8") as file:
         content = file.read()
 
     log.info("Render license %s", license_name)

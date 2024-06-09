@@ -9,15 +9,18 @@ import pylibmagic  # noqa: F401
 import requests
 import yaml
 
-import argparser
-import const
-import filetype
-import gitignore
-import licenses
-import logger
-import render
-import repo
-import utils
+from . import (
+    argparser,
+    const,
+    filetype,
+    gitignore,
+    licenses,
+    logger,
+    render,
+    repo,
+    utils,
+)
+
 
 log = logging.getLogger(f"{const.PKG_NAME}")
 _LOG_TRACE = f"{os.path.basename(__file__)}:{__name__}"
@@ -28,7 +31,7 @@ def _process_file(
 ) -> None:
     content = ""
     for src in sources:
-        with open(src, "r", encoding="utf-8") as file:
+        with open(src, encoding="utf-8") as file:
             content += file.read()
     render.render_file(config, dst, content, ft, is_static=is_static)
 
@@ -38,7 +41,7 @@ def _process_json(
 ) -> None:
     content = None
     for src in sources:
-        with open(src, "r", encoding="utf-8") as file:
+        with open(src, encoding="utf-8") as file:
             if is_yaml:
                 content = yaml.safe_load(file)
             else:
@@ -105,7 +108,7 @@ def main():
 
     if "git" in config["source"] and "path" in config["source"]:
         raise ValueError(
-            "Keys `source.git` and `source.path` can't be used together in `.config.yaml` !"
+            "`source.git` and `source.path` in config can't be used together!"
         )
 
     if "git" in config["source"]:

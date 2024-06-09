@@ -6,7 +6,8 @@ import os
 
 import magic
 
-import const
+from . import const
+
 
 log = logging.getLogger(f"{const.PKG_NAME}")
 _LOG_TRACE = f"{os.path.basename(__file__)}:{__name__}"

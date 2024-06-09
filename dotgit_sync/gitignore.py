@@ -7,9 +7,8 @@ import re
 
 import requests
 
-import const
-import render
-import repo
+from . import const, render, repo
+
 
 log = logging.getLogger(f"{const.PKG_NAME}")
 _LOG_TRACE = f"{os.path.basename(__file__)}:{__name__}"

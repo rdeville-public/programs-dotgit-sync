@@ -10,11 +10,10 @@ import os
 import sys
 
 import git
-# import pykwalify
 from pykwalify import core, errors
 
-import const
-import utils
+from . import const, utils
+
 
 log = logging.getLogger(f"{const.PKG_NAME}")
 _LOG_TRACE = f"{os.path.basename(__file__)}:{__name__}"
@@ -29,8 +28,9 @@ def _get_schema_files() -> list:
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
 
     schemas = []
-    for file in importlib.resources.files("schemas").iterdir():
-        schemas += [str(file)]
+    schemas_dir = os.path.join(importlib.resources.files(), "schemas")
+    for file in os.listdir(schemas_dir):
+        schemas += [os.path.join(schemas_dir, file)]
     return schemas
 
 
