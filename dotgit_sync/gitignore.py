@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
+"""Generate gitignore from list of template."""
 
 import inspect
 import logging
-import os
+import pathlib
 import re
 
 import requests
@@ -10,8 +11,8 @@ import requests
 from . import const, render, repo
 
 
-log = logging.getLogger(f"{const.PKG_NAME}")
-_LOG_TRACE = f"{os.path.basename(__file__)}:{__name__}"
+log = logging.getLogger(const.PKG_NAME)
+_LOG_TRACE = f"{pathlib.Path(__file__).name}:{__name__}"
 
 GITIGNORE_TPL_KEY = "templates"
 GITIGNORE_CONFIG_KEY = "config"
@@ -58,6 +59,11 @@ GITIGNORE_CFG = {
 
 
 def process(config: dict) -> None:
+    """Compute the gitignore file from dotgit config.
+
+    Args:
+        config: Dotgit Sync configuration
+    """
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
 
     if const.GITIGNORE not in config:
@@ -83,5 +89,8 @@ def process(config: dict) -> None:
     tpl = re.sub(r"(^###.+\n)+\n", "", tpl, flags=re.MULTILINE)
     tpl = url + "\n\n" + tpl
 
-    dst = os.path.join(repo.get_git_dir(os.getcwd()), f".{const.GITIGNORE}")
+    dst = (
+        pathlib.Path(repo.get_git_dir(pathlib.Path.cwd()))
+        / f".{const.GITIGNORE}"
+    )
     render.render_file(config, dst, tpl, const.GITIGNORE, is_static=True)

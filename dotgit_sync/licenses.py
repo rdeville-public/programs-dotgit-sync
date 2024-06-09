@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
+"""Generate licences files."""
 
 import inspect
 import logging
 import os
+import pathlib
 
 from . import const, render, repo, utils
 
 
-log = logging.getLogger(f"{const.PKG_NAME}")
-_LOG_TRACE = f"{os.path.basename(__file__)}:{__name__}"
+log = logging.getLogger(const.PKG_NAME)
+_LOG_TRACE = f"{pathlib.Path(__file__).name}:{__name__}"
 
 _MAIN = "main"
 _OTHERS = "others"
@@ -27,14 +29,14 @@ def _render_license(
         return
 
     if main:
-        dest = os.path.join(config[repo.WORKDIR], _LICENSE)
+        dest = pathlib.Path(config[repo.WORKDIR]) / _LICENSE
     else:
-        dest = os.path.join(
-            config[repo.WORKDIR], f"{_LICENSE}.{os.path.basename(tpl_src)}"
+        dest = (
+            pathlib.Path(config[repo.WORKDIR])
+            / f"{_LICENSE}.{pathlib.Path(tpl_src).name}"
         )
 
-    with open(tpl_src, encoding="utf-8") as file:
-        content = file.read()
+    content = pathlib.Path(tpl_src).read_text(encoding="utf-8")
 
     log.info("Render license %s", license_name)
     render.render_file(
@@ -42,13 +44,18 @@ def _render_license(
         dest,
         content,
         const.LICENSE,
-        tpl_dir=os.path.dirname(tpl_src),
+        tpl_dir=pathlib.Path(tpl_src).parent,
         is_static=False,
     )
     return
 
 
 def process(config: dict) -> None:
+    """Process the generation of all licences files.
+
+    Args:
+        config: Dotgit Sync configuration
+    """
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
 
     tpl_src = utils.get_template_dir(config, const.LICENSE)

@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
+"""Module which process rendering of output files."""
 
 import inspect
 import logging
 import os
+import pathlib
 import re
 
 import jinja2
@@ -12,8 +14,8 @@ import yaml
 from . import const, utils
 
 
-log = logging.getLogger(f"{const.PKG_NAME}")
-_LOG_TRACE = f"{os.path.basename(__file__)}:{__name__}"
+log = logging.getLogger(const.PKG_NAME)
+_LOG_TRACE = f"{pathlib.Path(__file__).name}:{__name__}"
 
 _FULL_FILE_TYPE = ["plain", "unknown"]
 _BEFORE = "before"
@@ -27,7 +29,9 @@ _END_EXCLUDED = f"{const.END} {_MARK} EXCLUDED"
 
 
 # FROM : https://github.com/yaml/pyyaml/issues/240#issuecomment-2093769180
-def _yaml_multiline_string_pipe(dumper, data):
+def _yaml_multiline_string_pipe(
+    dumper: yaml.dumper, data: dict
+) -> yaml.dumper.Representer:
     if data.count("\n") > 0:
         data = "\n".join([
             line.rstrip() for line in data.splitlines()
@@ -46,7 +50,7 @@ def _init_jinja_env(tpl_dir: str or None = None) -> jinja2.Environment:
         ],
         keep_trailing_newline=True,
         trim_blocks=False,
-        autoescape=False,
+        autoescape=True,
     )
     if tpl_dir:
         jinja_env.loader = jinja2.FileSystemLoader(tpl_dir)
@@ -89,11 +93,11 @@ def _extract_context(dest: str) -> dict:
     end = f"{const.END} {_MARK}"
     re_begin_excluded = re.escape(f"{_BEGIN_EXCLUDED} ") + r"(\w+)"
 
-    if not os.path.exists(dest):
+    if not pathlib.Path(dest).exists():
         return contexts
 
     contexts[curr_context] = ""
-    with open(dest, encoding="utf-8") as file:
+    with pathlib.Path(dest).open(encoding="utf-8") as file:
         for line in file:
             search = re.search(re_begin_excluded, line)
             if search:
@@ -115,17 +119,15 @@ def _extract_context(dest: str) -> dict:
                 contexts[curr_context] += line
 
     # Remove empty contexts
-    final_contexts = {key: val for key, val in contexts.items() if val != ""}
-
-    return final_contexts
+    return {key: val for key, val in contexts.items() if val}
 
 
-def _create_dest_dir(dst: os.path) -> None:
+def _create_dest_dir(dst: pathlib.Path) -> None:
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
 
-    if not os.path.exists(os.path.dirname(dst)):
-        log.debug("Creating directory %s", os.path.dirname(dst))
-        os.makedirs(os.path.dirname(dst))
+    if not pathlib.Path(dst).parent.exists():
+        log.debug("Creating directory %s", pathlib.Path(dst).parent)
+        pathlib.Path(dst).mkdir(parents=True)
 
 
 def _get_mark_comment(ft: str) -> [[str, str], [str, str]]:
@@ -135,7 +137,7 @@ def _get_mark_comment(ft: str) -> [[str, str], [str, str]]:
         if ft in type_val:
             begin = const.COMMENT_TYPE[type_key][const.BEGIN]
             end = const.COMMENT_TYPE[type_key][const.END]
-            if end != "":
+            if end:
                 end = f" {end}"
             marks[const.BEGIN] = f"{begin}"
             marks[const.END] = f"{end}"
@@ -157,13 +159,23 @@ def render_file(
     dst: str,
     content: str,
     ft: str,
-    tpl_dir: os.path = False,
+    tpl_dir: pathlib.Path = "",
     is_static: bool = False,
-):
-    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
-    log.info("Processing %s", dst.replace(f"{config['git_root']}/", ""))
+) -> None:
+    """Method that render any file from template.
 
-    _create_dest_dir(os.path.join(config["git_root"], dst))
+    Args:
+        config: Dotgit Sync configuration
+        dst: Path to the destination file to render
+        content: Content from template as multiline string
+        ft: Filetype of destination files
+        tpl_dir: Path to directory storing template files
+        is_static: Boolean to specifiy if templates are static or none
+    """
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+    log.info("Processing %s", str(dst).replace(f"{config['git_root']}/", ""))
+
+    _create_dest_dir(pathlib.Path(config["git_root"]) / dst)
 
     contexts = {}
     marks = {}
@@ -174,14 +186,14 @@ def render_file(
     content = _extract_content(content)
     _merge_context_content(contexts, content)
 
-    log.debug("Render %s", dst.replace(os.path.expandvars("${HOME}"), "~"))
-    with open(dst, "w", encoding="utf-8") as file:
+    log.debug("Render %s", str(dst).replace(os.path.expandvars("${HOME}"), "~"))
+    with pathlib.Path(dst).open("w", encoding="utf-8") as file:
         keys = list(contexts.keys())
         for idx, key in enumerate(keys):
             begin = f"{marks[const.BEGIN]}"
             end = f"{marks[const.BEGIN]}"
             if _TEMPLATE not in key:
-                if key not in [_BEFORE, _AFTER]:
+                if key not in {_BEFORE, _AFTER}:
                     begin += f" {_BEGIN_EXCLUDED} {key}{marks[const.END]}"
                     end += f" {_END_EXCLUDED} {key}{marks[const.END]}"
                     file.write(f"{begin}\n")
@@ -209,27 +221,32 @@ def render_file(
 
 
 def render_json(
-    config: dict, dst: os.path, update: dict, is_yaml: bool = False
+    config: dict, dst: pathlib.Path, update: dict, is_yaml: bool = False
 ) -> None:
+    """Method that render json or yaml file from template.
+
+    Args:
+        config: Dotgit Sync configuration
+        dst: Path to the destination file to render
+        update: Dictionnary from template
+        is_yaml: Boolean to specifiy if templates are yaml or json files
+    """
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
     log.info("Merging %s to %s", dst, "YAML" if is_yaml else "JSON")
 
-    _create_dest_dir(os.path.join(config["git_root"], dst))
+    _create_dest_dir(pathlib.Path(config["git_root"]) / dst)
 
     content = None
-    if os.path.isfile(dst):
-        with open(dst, encoding="utf-8") as file:
-            if is_yaml:
-                content = yaml.safe_load(file)
-            else:
-                content = json5.load(file)
+    if pathlib.Path(dst).is_file():
+        with pathlib.Path(dst).open(encoding="utf-8") as file:
+            content = yaml.safe_load(file) if is_yaml else json5.load(file)
 
     if isinstance(update, list):
         content = utils.merge_json_list(content, update)
     elif isinstance(update, dict):
         content = utils.merge_json_dict(content, update)
 
-    with open(dst, "w", encoding="utf-8") as file:
+    with pathlib.Path(dst).open("w", encoding="utf-8") as file:
         if is_yaml:
             marks = _get_mark_comment(const.YAML)
             begin = f"{marks[const.BEGIN]} {_BEGIN_MANAGED}{marks[const.END]}"

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Set of constants use by dotgit sync."""
 
 PKG_NAME = "dotgit"
 

@@ -1,11 +1,23 @@
 #!/usr/bin/env python3
+"""Logger facility."""
 
 import argparse
 import logging
 import re
 
 
+_WARNING = 0
+_INFO = 1
+_DEBUG = 2
+
+
 def init_logger(args: argparse.Namespace, log: logging.Logger) -> None:
+    """Initiliaze logger and format.
+
+    Args:
+        args: Arguments passed to programs
+        log: Python logger
+    """
     str_fmt = "%(asctime)-15s %(levelname)-8s %(name)-10s %(message)s"
     json_fmt = """\
 {
@@ -16,21 +28,23 @@ def init_logger(args: argparse.Namespace, log: logging.Logger) -> None:
 }\
 """
 
-    if args.verbose == 0:
+    if args.verbose == _WARNING:
         log.setLevel(logging.WARNING)
-    elif args.verbose == 1:
+    elif args.verbose == _INFO:
         log.setLevel(logging.INFO)
-    elif args.verbose >= 2:
+    elif args.verbose >= _WARNING:
         log.setLevel(logging.DEBUG)
     else:
-        raise LookupError(f"Verbosity of {args.verbose} is not valid.")
+        error_msg = f"Verbosity of {args.verbose} is not valid."
+        raise LookupError(error_msg)
 
     if re.match("json|Json|JSON*", args.log_format):
         stream_formatter = logging.Formatter(json_fmt)
     elif re.match("string|String|STRING*", args.log_format):
         stream_formatter = logging.Formatter(str_fmt)
     else:
-        raise LookupError("Log format should be either `json` or `string`.")
+        error_msg = "Log format should be either `json` or `string`."
+        raise LookupError(error_msg)
 
     stream_handler = logging.StreamHandler()
     stream_handler.setFormatter(stream_formatter)

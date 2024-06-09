@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Parse argument provided by users."""
 
 import argparse
 import logging
@@ -8,10 +9,11 @@ from . import const
 
 CONFIG_FILENAME = ".config.yaml"
 
-log = logging.getLogger(f"{const.PKG_NAME}")
+log = logging.getLogger(const.PKG_NAME)
 
 
 def parse_args() -> argparse.ArgumentParser:
+    """Parser argument which set dotgit sync options."""
     parser = argparse.ArgumentParser(
         prog="dotgit-sync",
         description="""\
@@ -81,6 +83,4 @@ Path to a git repository containing templates.
         default=None,
     )
 
-    args = parser.parse_args()
-
-    return args
+    return parser.parse_args()
