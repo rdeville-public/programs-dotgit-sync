@@ -7,8 +7,14 @@ from typing import Tuple
 from git.objects.commit import Commit
 from pydantic.dataclasses import dataclass
 import requests
-from semantic_release.commit_parser._base import CommitParser, ParserOptions
-from semantic_release.commit_parser.token import ParsedCommit, ParseResult
+from semantic_release.commit_parser._base import (
+    CommitParser,  # noqa: PLC2701
+    ParserOptions,  # noqa: PLC2701
+)
+from semantic_release.commit_parser.token import (
+    ParsedCommit,
+    ParseResult,
+)
 from semantic_release.commit_parser.util import parse_paragraphs
 from semantic_release.enums import LevelBump
 
@@ -19,30 +25,32 @@ GITMOJIS = "https://raw.githubusercontent.com/carloscuesta/gitmoji/master/packag
 
 
 def gitmoji_per_semver(
-    gitmojis: str | dict, semver: str | None = None
+    semver: str | None = None
 ) -> Tuple[str, ...]:
-    global GITMOJIS
-    if isinstance(GITMOJIS, str):
-        GITMOJIS = requests.get(gitmojis).json()["gitmojis"]
+    """Construct a typle of datas based on gitmojis definition.
+
+    Args:
+        semver: String representing the semver (major, minor, patch) to regroup
+                gitmojis
+    Return:
+        A tuple of gitmoji datas based on semver
+    """
+    gitmojis = requests.get(GITMOJIS, timeout=1).json()["gitmojis"]
     selected_gitmojis = []
-    for gitmoji in GITMOJIS:
+    for gitmoji in gitmojis:
         if gitmoji["semver"] == semver:
-            selected_gitmojis.append(gitmoji["emoji"])
+            selected_gitmojis.append(gitmoji["emoji"])  # noqa: FURB113
             selected_gitmojis.append(gitmoji["code"])
     return selected_gitmojis
 
 
 @dataclass
 class GitmojiParserOptions(ParserOptions):
-    # compute_default_gitmoji()
-    major: Tuple[str, ...] = tuple(gitmoji_per_semver(GITMOJIS, "major"))
-    minor: Tuple[str, ...] = tuple(gitmoji_per_semver(GITMOJIS, "minor"))
-    patch: Tuple[str, ...] = tuple(gitmoji_per_semver(GITMOJIS, "patch"))
-    other: Tuple[str, ...] = tuple(
-        gitmoji_per_semver(
-            GITMOJIS,
-        )
-    )
+    """Python Semantic Release parser option."""
+    major: Tuple[str, ...] = tuple(gitmoji_per_semver("major"))
+    minor: Tuple[str, ...] = tuple(gitmoji_per_semver("minor"))
+    patch: Tuple[str, ...] = tuple(gitmoji_per_semver("patch"))
+    other: Tuple[str, ...] = tuple(gitmoji_per_semver())
     default_bump_level: LevelBump = LevelBump.NO_RELEASE
 
 
@@ -59,10 +67,18 @@ class GitmojiCommitParser(CommitParser[ParseResult, GitmojiParserOptions]):
     the commit subject in the changelog.
     """
 
-    # TODO: Deprecate in lieu of get_default_options()
+    # TODO@rdeville: Deprecate in lieu of get_default_options(), from PSR  # noqa: FIX002, TD003, E501
     parser_options = GitmojiParserOptions
 
     def parse(self, commit: Commit) -> ParseResult:
+        """Method for python semantic release to parse commit.
+
+        Args:
+            commit: The pythin git commit object to parse
+
+        Return:
+            Parsing result for python semantic release
+        """
         all_gitmojis = (
             self.options.major
             + self.options.minor
@@ -93,7 +109,6 @@ class GitmojiCommitParser(CommitParser[ParseResult, GitmojiParserOptions]):
 
         # All gitmojis will remain part of the returned description
         descriptions = parse_paragraphs(message)
-        # re.compile(r"\(![0-9]+\)").search(commit.message)
         return ParsedCommit(
             bump=level_bump,
             type=primary_gitmoji,
