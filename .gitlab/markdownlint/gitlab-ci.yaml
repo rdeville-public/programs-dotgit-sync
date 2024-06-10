@@ -1,0 +1,12 @@
+# BEGIN DOTGIT-SYNC BLOCK MANAGED
+Lint Markdown:
+  image: alpine:latest
+  stage: lint
+  before_script:
+  - apk add --update --no-cache git nodejs npm
+  - npm install markdownlint-cli
+  script:
+  - npx markdownlint
+  rules:
+  - when: always
+# END DOTGIT-SYNC BLOCK MANAGED
