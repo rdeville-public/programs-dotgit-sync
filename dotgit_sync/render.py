@@ -17,7 +17,7 @@ from . import const, utils
 log = logging.getLogger(const.PKG_NAME)
 _LOG_TRACE = f"{pathlib.Path(__file__).name}:{__name__}"
 
-_FULL_FILE_TYPE = ["plain", "unknown"]
+_FULL_FILE_TYPE = ["plain"]
 _BEFORE = "before"
 _AFTER = "after"
 _TEMPLATE = "template"
@@ -130,7 +130,7 @@ def _create_dest_dir(dst: pathlib.Path) -> None:
         pathlib.Path(dst).mkdir(parents=True)
 
 
-def _get_mark_comment(ft: str) -> [[str, str], [str, str]]:
+def _get_mark_comment(ft: str) -> dict:
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
     marks = {}
     for type_key, type_val in const.COMMENT_FILETYPE.items():
@@ -142,7 +142,7 @@ def _get_mark_comment(ft: str) -> [[str, str], [str, str]]:
             marks[const.BEGIN] = f"{begin}"
             marks[const.END] = f"{end}"
             return marks
-    return None, None
+    return marks
 
 
 def _merge_context_content(contexts: dict, content: dict) -> dict:
@@ -153,35 +153,16 @@ def _merge_context_content(contexts: dict, content: dict) -> dict:
             contexts[key] = content[key]
 
 
-# pylint: disable=too-many-arguments
-def render_file(
+def _write_from_template(
     config: dict,
-    dst: str,
     content: str,
+    dst: str,
     ft: str,
-    tpl_dir: pathlib.Path = "",
-    is_static: bool = False,
-) -> None:
-    """Method that render any file from template.
-
-    Args:
-        config: Dotgit Sync configuration
-        dst: Path to the destination file to render
-        content: Content from template as multiline string
-        ft: Filetype of destination files
-        tpl_dir: Path to directory storing template files
-        is_static: Boolean to specifiy if templates are static or none
-    """
-    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
-    log.info("Processing %s", str(dst).replace(f"{config['git_root']}/", ""))
-
-    _create_dest_dir(pathlib.Path(config["git_root"]) / dst)
-
-    contexts = {}
-    marks = {}
-    if ft not in _FULL_FILE_TYPE:
-        marks = _get_mark_comment(ft)
-        contexts = _extract_context(dst)
+    tpl_dir: pathlib.Path,
+    is_static: bool
+):
+    marks = _get_mark_comment(ft)
+    contexts = _extract_context(dst)
 
     content = _extract_content(content)
     _merge_context_content(contexts, content)
@@ -218,6 +199,31 @@ def render_file(
                 else:
                     end = ""
                 file.write(end)
+
+
+def render_file(
+    config: dict,
+    dst: str,
+    content: str,
+    ft: str,
+    tpl_dir: pathlib.Path = "",
+    is_static: bool = False,
+) -> None:
+    """Method that render any file from template.
+
+    Args:
+        config: Dotgit Sync configuration
+        dst: Path to the destination file to render
+        content: Content from template as multiline string
+        ft: Filetype of destination files
+        tpl_dir: Path to directory storing template files
+        is_static: Boolean to specifiy if templates are static or none
+    """
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+    log.info("Processing %s", str(dst).replace(f"{config['git_root']}/", ""))
+
+    _create_dest_dir(pathlib.Path(config["git_root"]) / dst)
+    _write_from_template(config, content, dst, ft, tpl_dir, is_static)
 
 
 def render_json(

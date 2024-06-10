@@ -39,6 +39,9 @@ statics:
   - base-ci-gitlab
   - base-pre-commit
   - commitlint-pre-commit
+  - markdown
+  - markdown-pre-commit
+  - markdown-ci-gitlab
   - python
 templates:
   - base

@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD013 MD033 MD043 -->
 <!-- BEGIN DOTGIT-SYNC BLOCK MANAGED -->
 # 👋 Welcome to dotgit-sync
 
@@ -49,11 +50,11 @@ You can also take a look at the [CONTRIBUTING.md][contributing].
 
 ## 👤 Maintainers
 
-  * 📧 [**Romain Deville** \<code@romaindeville.fr\>](mailto:code@romaindeville.fr)
-    * Website: [https://romaindeville.fr](https://romaindeville.fr)
-    * Github: [@rdeville](https://github.com/rdeville)
-    * Gitlab: [@r.deville](https://gitlab.com/r.deville)
-    * Framagit: [@rdeville](https://framagit.org/rdeville)
+* 📧 [**Romain Deville** \<code@romaindeville.fr\>](mailto:code@romaindeville.fr)
+  * Website: [https://romaindeville.fr](https://romaindeville.fr)
+  * Github: [@rdeville](https://github.com/rdeville)
+  * Gitlab: [@r.deville](https://gitlab.com/r.deville)
+  * Framagit: [@rdeville](https://framagit.org/rdeville)
 
 ## 📝 License
 
@@ -61,8 +62,8 @@ Copyright © 2023 - 2024 Romain Deville
 
 This project is under following licenses (**OR**) :
 
-  * [MIT][main_license]
-  * [BEERWARE][beerware_license]
+* [MIT][main_license]
+* [BEERWARE][beerware_license]
 
 [main_license]: https://framagit.org/rdeville-public/programs/dotgit-sync/blob/main/LICENSE
 [beerware_license]: https://framagit.org/rdeville-public/programs/dotgit-sync/blob/main/LICENSE.BEERWARE
