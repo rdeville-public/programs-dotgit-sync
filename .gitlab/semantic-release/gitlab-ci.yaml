@@ -23,9 +23,6 @@ Generate Changelog:
 Tag and Release:
   image: alpine:latest
   stage: release
-  needs:
-  - Lint All Commit Since Default Branch
-  - Generate Changelog
   before_script: *id001
   script:
   - git fetch
