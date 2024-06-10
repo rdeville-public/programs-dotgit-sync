@@ -12,6 +12,7 @@ BEGIN = "BEGIN"
 END = "END"
 
 # FILETYPES
+PLAIN = "plain"
 EDITORCFG = "editorconfig"
 GITIGNORE = "gitignore"
 HBS = "handlebars"
@@ -40,7 +41,7 @@ FILETYPES = {
     SH: [".sh", ".bash", ".zsh"],
     TOML: [".toml"],
     TS: [".ts"],
-    TXT: [".txt", ".in", ".envrc"],
+    PLAIN: [".txt", ".in", ".envrc"],
     YAML: [".yml", ".yaml"],
 }
 
@@ -67,7 +68,7 @@ COMMENT_FILETYPE = {
         YAML,
         GITIGNORE,
         EDITORCFG,
-        TXT,
+        PLAIN,
         TOML,
         LICENSE,
         SH,
