@@ -11,7 +11,7 @@ workflow:
       # Force pipelines on trigger event on main
     - if: $CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       # Force pipelines when called from upstream CI
-    - if: $CI_PIPELINE_SOURCE == "pipelins" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == "pipeline" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       # Do not run CI when commit title have following chars anywhere
       # WIP, NO-CI or 🚧 (gitmoji for "work in progress", aka :construction:)
     - if: $CI_COMMIT_MESSAGE =~ /(wip|WIP|NO-CI|🚧|:construction:)/
