@@ -82,5 +82,4 @@ python-magic = "^0.4.27"
 pyyaml = "^6.0.1"
 requests = "^2.32.3"
 # END DOTGIT-SYNC BLOCK EXCLUDED CUSTOM_POETRY_DEP
-
 # END DOTGIT-SYNC BLOCK MANAGED
