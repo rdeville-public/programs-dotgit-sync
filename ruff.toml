@@ -8,7 +8,9 @@ src = ["dotgit_sync"]
 [format]
 docstring-code-format = true
 # BEGIN DOTGIT-SYNC BLOCK EXCLUDED CUSTOM_RUFF_FORMAT
-#
+exclude = [
+  ".release/commit_parser.py"
+]
 # END DOTGIT-SYNC BLOCK EXCLUDED CUSTOM_RUFF_FORMAT
 
 [lint]
@@ -30,7 +32,6 @@ select = [
   "EM"    , # flake8-errmsg
   "LOG"   , # flake8-logging
   "G"     , # flake8-logging-format
-  "PT"    , # flake8-pytest-style
   "Q"     , # flake8-quotes
   "RSE"   , # flake8-raise
   "TCH"   , # flake8-type-checking
@@ -49,6 +50,7 @@ select = [
   "RUF"   , # Ruff-specific rules
 # BEGIN DOTGIT-SYNC BLOCK EXCLUDED CUSTOM_RUFF_LINT
 # "C90"   , # mccabe
+# "PT"    , # flake8-pytest-style
 # "FBT"   , # flake8-boolean-trap
 # "COM"   , # flake8-commas
 # "T10"   , # flake8-debugger
@@ -91,3 +93,6 @@ convention = "google"
 [lint.pylint]
 max-args = 6
 # END DOTGIT-SYNC BLOCK MANAGED
+[lint.per-file-ignores]
+# Ignore `S101` Use off assert from flake8-bandit in tests
+"tests/**.py" = ["S101"]
