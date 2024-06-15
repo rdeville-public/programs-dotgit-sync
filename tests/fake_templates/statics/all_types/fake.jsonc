@@ -1,0 +1,10 @@
+// JSONC Comment
+{
+  "key": "Fake JSONC Content Value",
+  "dict": {
+    "list": [
+      "a_string",
+      "another_string"
+    ]
+  }
+}

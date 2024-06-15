@@ -1,0 +1,10 @@
+{
+  "key": "value",
+  "list": [
+    "item",
+    "another_item"
+  ],
+  "dict": {
+    "key": "val"
+  }
+}
