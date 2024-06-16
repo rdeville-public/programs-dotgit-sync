@@ -2,6 +2,13 @@
 schema;licenses:
   required: true
   map:
+    date:
+      required: true
+      map:
+        first_year:
+          type: date
+          required: true
+          format: "%Y"
     copyright:
       required: true
       map:
