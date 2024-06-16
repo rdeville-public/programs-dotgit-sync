@@ -18,7 +18,7 @@ def init_logger(args: argparse.Namespace, log: logging.Logger) -> None:
         args: Arguments passed to programs
         log: Python logger
     """
-    str_fmt = "%(asctime)-15s %(levelname)-8s %(name)-10s %(message)s"
+    str_fmt = "%(asctime)-8s %(levelname)-8s %(name)-10s %(message)s"
     json_fmt = """\
 {
     "time":"%(asctime)s",

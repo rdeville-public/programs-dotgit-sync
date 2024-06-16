@@ -1,7 +1,5 @@
 ---
 map:
-  source:
-    include: source
   dotgit:
     include: dotgit
   name:

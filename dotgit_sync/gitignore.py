@@ -8,14 +8,13 @@ import re
 
 import requests
 
-from . import const, render, repo
+from . import render
+from .utils import const
 
 
 log = logging.getLogger(const.PKG_NAME)
 _LOG_TRACE = f"{pathlib.Path(__file__).name}:{__name__}"
 
-GITIGNORE_TPL_KEY = "templates"
-GITIGNORE_CONFIG_KEY = "config"
 GITIGNORE_API = "https://www.toptal.com/developers/gitignore/api/"
 # List of available gitignore templates :
 # https://github.com/toptal/gitignore/tree/master/templates
@@ -58,6 +57,34 @@ GITIGNORE_CFG = {
 }
 
 
+def build_query_param(config: dict) -> list:
+    query_params = []
+    if "templates" in config[const.GITIGNORE]:
+        for tpl in config[const.GITIGNORE]["templates"]:
+            query_params.extend(GITIGNORE_CFG[tpl])
+
+    if "query" in config[const.GITIGNORE]:
+        for query in config[const.GITIGNORE]["query"]:
+            query_params.append(query)
+    return query_params
+
+
+def clean_gitignore(url: str, tpl: str) -> str:
+    # Catch Toptal URL
+    url = re.search(r".+toptal.+", tpl, flags=re.MULTILINE).group(0)
+    # Remove trailing tabs
+    tpl = re.sub(r"[\t]+$", "", tpl, flags=re.MULTILINE)
+    # Remove comment lines not followed by patterns
+    tpl = re.sub(r"(^#.+\n)+\n", "", tpl, flags=re.MULTILINE)
+    tpl = re.sub(r"(^###.+\n)+\n", "", tpl, flags=re.MULTILINE)
+    return url + "\n\n" + tpl
+
+
+def request_gitignore(query_params: str) -> str:
+    url = GITIGNORE_API + str.join(",", query_params)
+    return url, requests.get(url, timeout=5).text
+
+
 def process(config: dict) -> None:
     """Compute the gitignore file from dotgit config.
 
@@ -69,28 +96,9 @@ def process(config: dict) -> None:
     if const.GITIGNORE not in config:
         return
 
-    gitignore_tpl = []
-    if "templates" in config[const.GITIGNORE]:
-        for tpl in config[const.GITIGNORE]["templates"]:
-            gitignore_tpl.extend(GITIGNORE_CFG[tpl])
+    query_params = build_query_param(config)
+    url, tpl = request_gitignore(query_params)
+    tpl = clean_gitignore(url, tpl)
 
-    if "query" in config[const.GITIGNORE]:
-        for query in config[const.GITIGNORE]["query"]:
-            gitignore_tpl.append(query)
-
-    url = GITIGNORE_API + str.join(",", gitignore_tpl)
-    tpl = requests.get(url, timeout=5).text
-    # Catch Toptal URL
-    url = re.search(r".+toptal.+", tpl, flags=re.MULTILINE).group(0)
-    # Remove trailing tabs
-    tpl = re.sub(r"[\t]+$", "", tpl, flags=re.MULTILINE)
-    # Remove comment lines not followed by patterns
-    tpl = re.sub(r"(^#.+\n)+\n", "", tpl, flags=re.MULTILINE)
-    tpl = re.sub(r"(^###.+\n)+\n", "", tpl, flags=re.MULTILINE)
-    tpl = url + "\n\n" + tpl
-
-    dst = (
-        pathlib.Path(repo.get_git_dir(pathlib.Path.cwd()))
-        / f".{const.GITIGNORE}"
-    )
+    dst = pathlib.Path(config[const.OUTDIR]) / f".{const.GITIGNORE}"
     render.render_file(config, dst, tpl, const.GITIGNORE, is_static=True)

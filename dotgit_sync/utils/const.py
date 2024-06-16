@@ -16,16 +16,17 @@ PLAIN = "plain"
 EDITORCFG = "editorconfig"
 GITIGNORE = "gitignore"
 HBS = "handlebars"
+J2 = "jinja2"
+JAVA = "java"
 JS = "javascript"
 JSON = "json"
-J2 = "jinja2"
-LICENSE = "licenses"
+LICENSES = "licenses"  # Also a dotgit config key
 MD = "markdown"
-PY = "python"
+PY = "script.python"
 TOML = "toml"
-SH = "shell"
+SH = "shellscript"
 TS = "typescript"
-TXT = "text"
+PLAIN = "plain"
 YAML = "yaml"
 
 # FILETYPES WITH EXTS
@@ -33,10 +34,11 @@ FILETYPES = {
     GITIGNORE: [".gitignore"],
     EDITORCFG: [".editorconfig"],
     HBS: [".hbs"],
-    JS: [".js"],
     J2: [".j2"],
-    JSON: [".jsonc", ".json"],
-    MD: [".md"],
+    JAVA: [],
+    JS: [],
+    JSON: [".jsonc"],
+    MD: [".md", ".markdown", ".mkdown"],
     PY: [".py"],
     SH: [".sh", ".bash", ".zsh"],
     TOML: [".toml"],
@@ -70,19 +72,32 @@ COMMENT_FILETYPE = {
         EDITORCFG,
         PLAIN,
         TOML,
-        LICENSE,
+        LICENSES,
         SH,
     ],
-    SLASH_STAR: [JS, TS],
+    SLASH_STAR: [JS, TS, JAVA],
     XML: [MD],
     CURLY_HASHTAG: [J2],
 }
 
-# Config Options
+# Keys used in config files
 MERGE = "merge"
 NONE = "none"
 ALL = "all"
 ONLY = "only"
+OUTDIR = "outdir"
+DATE = "date"
+FIRST_YEAR = "first_year"
+CURR_YEAR = "current_year"
+SOURCE = "source"
+GIT = "git"
+URL = "url"
+REF = "ref"
+PATH = "path"
+SECONDARIES = "secondaries"
+PRIMARY = "primary"
+TEMPLATES = "templates"
+STATICS = "statics"
 
 # CONST STORING DEFAULT DOTGIT CONFIG
-DOTGIT = {PKG_NAME: {YAML: {MERGE: NONE}}}
+# DEFAULT_CONFIG = {PKG_NAME: {YAML: {MERGE: NONE}}}

@@ -6,14 +6,13 @@ import logging
 import os
 import pathlib
 
-from . import const, render, repo, utils
+from . import render
+from .utils import const, templates as utils
 
 
 log = logging.getLogger(const.PKG_NAME)
 _LOG_TRACE = f"{pathlib.Path(__file__).name}:{__name__}"
 
-_MAIN = "main"
-_OTHERS = "others"
 _LICENSE = "LICENSE"
 
 
@@ -25,14 +24,14 @@ def _render_license(
     tpl_src = utils.template_exists(license_name, dirs)
 
     if tpl_src is None:
-        log.warning("There are not template license %s", license_name)
-        return
+        error_msg = f"There are not template license {license_name}"
+        raise FileNotFoundError(error_msg)
 
     if main:
-        dest = pathlib.Path(config[repo.WORKDIR]) / _LICENSE
+        dest = pathlib.Path(config[const.OUTDIR]) / _LICENSE
     else:
         dest = (
-            pathlib.Path(config[repo.WORKDIR])
+            pathlib.Path(config[const.OUTDIR])
             / f"{_LICENSE}.{pathlib.Path(tpl_src).name}"
         )
 
@@ -43,11 +42,10 @@ def _render_license(
         config,
         dest,
         content,
-        const.LICENSE,
+        const.LICENSES,
         tpl_dir=pathlib.Path(tpl_src).parent,
         is_static=False,
     )
-    return
 
 
 def process(config: dict) -> None:
@@ -58,9 +56,18 @@ def process(config: dict) -> None:
     """
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
 
-    tpl_src = utils.get_template_dir(config, const.LICENSE)
-    _render_license(config, tpl_src, config[const.LICENSE][_MAIN], True)
+    tpl_src = utils.get_template_dir(config, const.LICENSES)
+    try:
+        _render_license(
+            config, tpl_src, config[const.LICENSES][const.PRIMARY], True
+        )
+    except FileNotFoundError as error:
+        log.warning(error)
+        return
 
-    if _OTHERS in config[const.LICENSE]:
-        for license_name in config[const.LICENSE][_OTHERS]:
-            _render_license(config, tpl_src, license_name)
+    if const.SECONDARIES in config[const.LICENSES]:
+        for license_name in config[const.LICENSES][const.SECONDARIES]:
+            try:
+                _render_license(config, tpl_src, license_name)
+            except FileNotFoundError as error:
+                log.warning(error)

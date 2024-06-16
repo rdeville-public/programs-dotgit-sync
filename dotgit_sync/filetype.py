@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """Check filetypes of template files."""
 
-import inspect
+import inspect  # noqa: I001
 import logging
 import pathlib
 
+import pylibmagic  # noqa: F401
 import magic
 
-from . import const
+from .utils import const
 
 
 log = logging.getLogger(const.PKG_NAME)
@@ -27,6 +28,8 @@ def get_filetype(filepath: pathlib.Path) -> str:
     ft = magic.from_file(filepath, mime=True).split("/")[-1]
     if ft != "plain" and not ft.startswith("x-"):
         return ft
+    if ft.startswith("x-"):
+        return ft.replace("x-", "")
     ext = "." + filepath.name.split(".")[-1]
     for ft, exts in const.FILETYPES.items():
         if ext in exts:

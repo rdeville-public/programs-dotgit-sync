@@ -11,13 +11,12 @@ import jinja2
 import json5
 import yaml
 
-from . import const, utils
+from .utils import const, json as utils
 
 
 log = logging.getLogger(const.PKG_NAME)
 _LOG_TRACE = f"{pathlib.Path(__file__).name}:{__name__}"
 
-_FULL_FILE_TYPE = ["plain"]
 _BEFORE = "before"
 _AFTER = "after"
 _TEMPLATE = "template"
@@ -60,7 +59,7 @@ def _init_jinja_env(tpl_dir: str or None = None) -> jinja2.Environment:
     return jinja_env
 
 
-def _extract_content(content: str) -> dict:
+def _extract_context_from_template(content: str) -> dict:
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
 
     contexts = {}
@@ -70,11 +69,13 @@ def _extract_content(content: str) -> dict:
 
     for line in content.splitlines():
         search = re.search(re_begin_excluded, line)
-        if search:
+        # If begin of exclude block in template file
+        if re.search(re_begin_excluded, line):
             context_name = search.groups()[0]
             curr_context = context_name
             contexts[curr_context] = ""
 
+        # If end of exclude block, switch context
         if re.search(re.escape(f"{_END_EXCLUDED} {curr_context}"), line):
             curr_context = f"{_TEMPLATE}{curr_context}"
             contexts[curr_context] = ""
@@ -85,7 +86,7 @@ def _extract_content(content: str) -> dict:
     return contexts
 
 
-def _extract_context(dest: str) -> dict:
+def _extract_context_from_rendered_file(dest: str) -> dict:
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
     contexts = {}
     curr_context = _BEFORE
@@ -97,26 +98,26 @@ def _extract_context(dest: str) -> dict:
         return contexts
 
     contexts[curr_context] = ""
-    with pathlib.Path(dest).open(encoding="utf-8") as file:
-        for line in file:
-            search = re.search(re_begin_excluded, line)
-            if search:
-                context_name = search.groups()[0]
-                curr_context = f"{context_name}"
-                contexts[curr_context] = ""
-            elif re.search(re.escape(begin), line):
-                curr_context = f"{_TEMPLATE}{curr_context}"
-                contexts[curr_context] = ""
+    content = pathlib.Path(dest).read_text(encoding="utf-8")
+    for line in content.splitlines():
+        search = re.search(re_begin_excluded, line)
+        if search:
+            context_name = search.groups()[0]
+            curr_context = f"{context_name}"
+            contexts[curr_context] = ""
+        elif re.search(re.escape(begin), line):
+            curr_context = f"{_TEMPLATE}{curr_context}"
+            contexts[curr_context] = ""
 
-            if re.search(re.escape(f"{_END_EXCLUDED} ") + r"(\w+)", line):
-                curr_context = f"{_TEMPLATE}{curr_context}"
-                contexts[curr_context] = ""
-            elif re.search(re.escape(end), line):
-                curr_context = _AFTER
-                contexts[curr_context] = ""
+        if re.search(re.escape(f"{_END_EXCLUDED} ") + r"(\w+)", line):
+            curr_context = f"{_TEMPLATE}{curr_context}"
+            contexts[curr_context] = ""
+        elif re.search(re.escape(end), line):
+            curr_context = _AFTER
+            contexts[curr_context] = ""
 
-            if not re.search(re.escape(_MARK), line):
-                contexts[curr_context] += line
+        if not re.search(re.escape(_MARK), line):
+            contexts[curr_context] += f"""{line}\n"""
 
     # Remove empty contexts
     return {key: val for key, val in contexts.items() if val}
@@ -127,7 +128,7 @@ def _create_dest_dir(dst: pathlib.Path) -> None:
 
     if not pathlib.Path(dst).parent.exists():
         log.debug("Creating directory %s", pathlib.Path(dst).parent)
-        pathlib.Path(dst).mkdir(parents=True)
+        pathlib.Path(dst).parent.mkdir(parents=True)
 
 
 def _get_mark_comment(ft: str) -> dict:
@@ -145,12 +146,11 @@ def _get_mark_comment(ft: str) -> dict:
     return marks
 
 
-def _merge_context_content(contexts: dict, content: dict) -> dict:
-    for key, _ in content.items():
-        if key.startswith(_TEMPLATE):
-            contexts[key] = content[key]
-        if not key.startswith(_TEMPLATE) and key not in contexts:
-            contexts[key] = content[key]
+def _merge_contexts(contexts: dict, tpl_contexts: dict) -> dict:
+    for key, _ in tpl_contexts.items():
+        if key.startswith(_TEMPLATE) or key not in contexts:
+            contexts[key] = tpl_contexts[key]
+    return contexts
 
 
 def _write_from_template(
@@ -158,14 +158,28 @@ def _write_from_template(
     content: str,
     dst: str,
     ft: str,
-    tpl_dir: pathlib.Path,
-    is_static: bool
-):
-    marks = _get_mark_comment(ft)
-    contexts = _extract_context(dst)
+    tpl_dir: pathlib.Path = "",
+    is_static: bool = False,
+) -> None:
+    """Method that render any file from template.
 
-    content = _extract_content(content)
-    _merge_context_content(contexts, content)
+    Args:
+        config: Dotgit Sync configuration
+        dst: Path to the destination file to render
+        content: Content from template as multiline string
+        ft: Filetype of destination files
+        tpl_dir: Path to directory storing template files
+        is_static: Boolean to specifiy if templates are static or none
+    """
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+    log.info("Writing %s", str(dst).replace(f"{config[const.OUTDIR]}/", ""))
+
+    marks = _get_mark_comment(ft)
+    contexts = _extract_context_from_rendered_file(dst)
+    tpl_contexts = _extract_context_from_template(content)
+
+    contexts = _merge_contexts(contexts, tpl_contexts)
+    _create_dest_dir(dst)
 
     log.debug("Render %s", str(dst).replace(os.path.expandvars("${HOME}"), "~"))
     with pathlib.Path(dst).open("w", encoding="utf-8") as file:
@@ -191,7 +205,7 @@ def _write_from_template(
                 else:
                     file.write(
                         _init_jinja_env(tpl_dir)
-                        .from_string(content[key])
+                        .from_string(contexts[key])
                         .render(config)
                     )
                 if idx == len(keys) - 1 or keys[idx + 1] == _AFTER:
@@ -220,15 +234,13 @@ def render_file(
         is_static: Boolean to specifiy if templates are static or none
     """
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
-    log.info("Processing %s", str(dst).replace(f"{config['git_root']}/", ""))
+    log.info("Processing %s", str(dst).replace(f"{config[const.OUTDIR]}/", ""))
 
-    _create_dest_dir(pathlib.Path(config["git_root"]) / dst)
+    _create_dest_dir(pathlib.Path(config[const.OUTDIR]) / dst)
     _write_from_template(config, content, dst, ft, tpl_dir, is_static)
 
 
-def render_json(
-    config: dict, dst: pathlib.Path, update: dict, is_yaml: bool = False
-) -> None:
+def render_json(dst: pathlib.Path, update: dict, is_yaml: bool = False) -> None:
     """Method that render json or yaml file from template.
 
     Args:
@@ -240,17 +252,17 @@ def render_json(
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
     log.info("Merging %s to %s", dst, "YAML" if is_yaml else "JSON")
 
-    _create_dest_dir(pathlib.Path(config["git_root"]) / dst)
+    _create_dest_dir(dst)
 
     content = None
     if pathlib.Path(dst).is_file():
         with pathlib.Path(dst).open(encoding="utf-8") as file:
             content = yaml.safe_load(file) if is_yaml else json5.load(file)
 
-    if isinstance(update, list):
-        content = utils.merge_json_list(content, update)
-    elif isinstance(update, dict):
+    if isinstance(update, dict):
         content = utils.merge_json_dict(content, update)
+    else:  # isinstance(update, list):
+        content = utils.merge_json_list(content, update)
 
     with pathlib.Path(dst).open("w", encoding="utf-8") as file:
         if is_yaml:
