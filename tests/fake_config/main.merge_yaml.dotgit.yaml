@@ -1,0 +1,37 @@
+---
+# DotGit Sync Configuration
+# ------------------------------------------------------------------------------
+dotgit:
+  yaml:
+    merge: all
+
+# Repos description and template usage configuration
+# ------------------------------------------------------------------------------
+name: program
+description: Program Description
+licenses:
+  date:
+    first_year: "1970"
+    current_year: "2100"
+  copyright:
+    owner: &fullname Full Name
+    email: &email mail@domain.tld
+  primary: MIT
+  secondaries:
+    - BEERWARE
+maintainers:
+  - name: *fullname
+    mail: *email
+gitignore:
+  query:
+    - vim
+statics:
+  - main
+  - another_main
+templates:
+  - main
+
+# Everything below is only used as variables in templates
+# ------------------------------------------------------------------------------
+extra:
+  foo: bar

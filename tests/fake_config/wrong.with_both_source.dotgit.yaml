@@ -1,0 +1,24 @@
+---
+# DotGit Sync Configuration
+# ------------------------------------------------------------------------------
+dotgit:
+  source:
+    # Path relative to fake_repo
+    path: ../fake_templates
+    git:
+      url: ../fake_templates
+
+# Repos description and template usage configuration
+# ------------------------------------------------------------------------------
+name: Program Name
+description: Program description
+licenses:
+  date:
+    first_year: "1970"
+  copyright:
+    owner: &fullname Full Name
+    email: &email mail@domain.tld
+  primary: MIT
+maintainers:
+  - name: *fullname
+    mail: *email

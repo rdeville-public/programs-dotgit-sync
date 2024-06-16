@@ -1,0 +1,16 @@
+---
+# Repos description and template usage configuration
+# ------------------------------------------------------------------------------
+name: Program Name
+description: Program description
+licenses:
+  date:
+    first_year: "1970"
+    current_year: "2100"
+  copyright:
+    owner: &fullname Full Name
+    email: &email mail@domain.tld
+  primary: MIT
+maintainers:
+  - name: *fullname
+    mail: *email
