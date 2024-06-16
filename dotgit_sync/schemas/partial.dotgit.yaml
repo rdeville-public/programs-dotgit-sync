@@ -3,19 +3,20 @@
 schema;dotgit:
   type: map
   map:
-    type: map
-    matching-rule: 'any'
-    map:
-      regex;(^git$):
-        type: map
-        map:
-          url:
-            required: true
-            type: str
-          ref:
-            type: str
-      regex;(^path$):
-        type: str
+    source:
+      type: map
+      matching-rule: 'any'
+      map:
+        regex;(^git$):
+          type: map
+          map:
+            url:
+              required: true
+              type: str
+            ref:
+              type: str
+        regex;(^path$):
+          type: str
     yaml:
       type: map
       map:
