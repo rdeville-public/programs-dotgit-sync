@@ -1,0 +1,13 @@
+[coverage-threshold]
+# Minimum global average line coverage threshold
+line_coverage_min = 80
+# Minimum global average branch coverage threshold
+branch_coverage_min = 80
+# Minimum global average combined line and branch coverage threshold
+combined_coverage_min = 80
+# The line coverage threshold for each file
+file_line_coverage_min = 80
+# The branch coverage threshold for each file
+file_branch_coverage_min = 80
+# The combined line and branch coverage threshold for each file
+file_combined_coverage_min = 80
