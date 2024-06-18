@@ -24,8 +24,18 @@
 
 ---
 <!-- BEGIN DOTGIT-SYNC BLOCK EXCLUDED CUSTOM_README -->
-<!-- YOU CAN REPLACE THIS COMMENT AND PUT CUSTOM CONTENT HERE -->
-<!-- YOUR CUSTOM CONTENT WILL NOT BE OVERRIDEN -->
+<center>
+
+## ⚠️ Currently under alpha stage
+
+**The repo is currently still in alpha stage.**
+
+**While heavily tested and already used by myself on most of my repos, do not
+consider it stable as breaking changes (especially in core configuration) might
+occurs.**
+
+</center>
+
 <!-- TODO
 ## 📌 Prerequisites
 
@@ -58,7 +68,7 @@ You can also take a look at the [CONTRIBUTING.md][contributing].
 
 ## 📝 License
 
-Copyright © 2023 - 2024 Romain Deville
+Copyright © 2023 - 2024 [Romain Deville](code@romaindeville.fr)
 
 This project is under following licenses (**OR**) :
 
