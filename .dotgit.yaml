@@ -1,35 +1,35 @@
 ---
-# Source of template files
-# ------------------------------------------------------------------------------
-source:
-  git:
-    url: https://framagit.org/rdeville-public/programs/dotgit-sync-templates
-    ref: main
-
 # DotGit Sync Configuration
 # ------------------------------------------------------------------------------
 dotgit:
+  source:
+    path: ../dotgit-sync-templates
+    # git:
+    #   url: https://framagit.org/rdeville-public/programs/dotgit-sync-templates
+    #   ref: main
   yaml:
     merge: only
     only:
       - .pre-commit-config.yaml
       - gitlab-ci.yaml
 
-# Repos description
+# Repos description and template usage configuration
 # ------------------------------------------------------------------------------
 name: dotgit-sync
 description: >-
   Repository allowing to manage dotfile for git repos in an unified ways.
 licenses:
+  date:
+    first_year: "2023"
   copyright:
-    owner: Romain Deville
-    email: code@romaindeville.fr
-  main: MIT
-  others:
+    owner: &fullname Romain Deville
+    email: &email code@romaindeville.fr
+  primary: MIT
+  secondaries:
     - BEERWARE
 maintainers:
-  - name: Romain Deville
-    mail: code@romaindeville.fr
+  - name: *fullname
+    mail: *email
 gitignore:
   templates:
     - base
