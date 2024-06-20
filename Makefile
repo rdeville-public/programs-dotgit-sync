@@ -11,7 +11,6 @@ build:
 		--clean \
 		--noconfirm \
 		--log-level WARN \
-		--dist $(BUILD_DIR) \
 		--workpath /tmp \
 		pyinstaller.spec
 	poetry build
