@@ -1,0 +1,47 @@
+# BEGIN DOTGIT-SYNC BLOCK MANAGED
+Python Linter:
+  image: python:3.12-alpine
+  stage: lint
+  before_script: &id001
+  - apk add --update --no-cache git
+  - pip install poetry
+  - poetry install
+  script:
+  - poetry run ruff check
+  rules: &id002
+  - when: always
+Python Build:
+  image: python:3.12-alpine
+  stage: build
+  needs:
+  - Python Linter
+  before_script: *id001
+  script:
+  - poetry run pyinstaller \ --clean \ --noconfirm \ --log-level WARN \ pyinstaller.spec
+  - poetry build
+  - poetry run pyinstaller --clean --noconfirm --log-level WARN pyinstaller.spec
+  rules: *id002
+Python Tests Suite:
+  image: python:3.12-alpine
+  stage: test
+  needs:
+  - Python Build
+  variables:
+    GIT_STRATEGY: clone
+  before_script: *id001
+  script:
+  - poetry run coverage run -m pytest
+  - poetry run coverage json
+  - poetry run coverage-threshold --config .coverage-threshold.toml
+  - poetry run coverage report
+  rules: *id002
+Python Publish:
+  image: python:3.12-alpine
+  stage: post-release
+  before_script: *id001
+  script:
+  - poetry publish
+  rules:
+  - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    when: always
+# END DOTGIT-SYNC BLOCK MANAGED
