@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Module testing dotgit_sync.utils.template."""
 
 import inspect
 import logging
@@ -16,6 +17,8 @@ _LOG_TRACE = f"{pathlib.Path(__file__).name}:{__name__}"
 
 
 class TestUtilsTemplate:
+    """Collection to test utility related to template."""
+
     _script_path = pathlib.Path(__file__).parent
     _tpl_dir = _script_path / ".." / "fake_templates"
     _license_tpl_dir = (
@@ -25,19 +28,23 @@ class TestUtilsTemplate:
     )
 
     @pytest.fixture(autouse=True)
-    def inject_fixtures(self, caplog):
+    def _inject_fixtures(self, caplog: str) -> None:
         self._caplog = caplog
 
-    def test_get_licenses_template_dir(self):
+    def test_get_licenses_template_dir(self) -> None:
+        """Test it return the right folder storing licenses."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Return path to the licenses templates")
+
         assert (
             utils.get_template_dir({}, const.LICENSES) == self._license_tpl_dir
         )
 
-    def test_get_template_dir(self):
+    def test_get_template_dir(self) -> None:
+        """Test it return the right folder storing statics or templates."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Return path to templates and statics folder in source")
+
         config = {const.PKG_NAME: {const.SOURCE: {const.PATH: self._tpl_dir}}}
         assert (
             utils.get_template_dir(config, const.TEMPLATES)
@@ -48,26 +55,32 @@ class TestUtilsTemplate:
             == self._tpl_dir / const.STATICS
         )
 
-    def test_template_file_exists(self):
+    def test_template_file_exists(self) -> None:
+        """Test a template file exists from template flavor and filename."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Return path to template file")
+
         tpl_src = self._tpl_dir / const.STATICS / "all_types"
         filename = "fake.json"
         file_path = tpl_src / filename
         assert utils.template_exists(filename, tpl_src) == file_path
 
-    def test_template_file_not_exists(self):
+    def test_template_file_not_exists(self) -> None:
+        """Test a template file does not exist from template flavor and filename."""  # noqa: E501
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Return None as template file does not exists")
+
         tpl_src = self._tpl_dir / const.STATICS / "all_types"
         filename = "fake.fake"
         assert utils.template_exists(filename, tpl_src) is None
 
-    def test_process_dir_template(self):
+    def test_process_dir_template(self) -> None:
+        """Test building list of template files from a template flavor."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info(
             "Return a set of dest files associated with their template sources"
         )
+
         path = self._tpl_dir / const.TEMPLATES / "few_types"
         process_target = {
             pathlib.Path("fake.toml"): [
@@ -78,14 +91,16 @@ class TestUtilsTemplate:
             ],
         }
         processed = {}
-        utils._process_dir_template(path, "", processed)
+        utils._process_dir_template(path, "", processed)  # noqa: SLF001
         assert processed == process_target
 
-    def test_compute_template_files(self):
+    def test_compute_template_files(self) -> None:
+        """Test building list of template files from multiple template flavors."""  # noqa: E501
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info(
             "Return a set of dest files associated with their template sources"
         )
+
         path = self._tpl_dir / const.TEMPLATES
         process_target = {
             pathlib.Path("fake.json"): [
@@ -116,9 +131,11 @@ class TestUtilsTemplate:
         utils.compute_template_files(config, const.TEMPLATES, processed)
         assert processed == process_target
 
-    def test_compute_template_files_wrong_dir(self):
+    def test_compute_template_files_wrong_dir(self) -> None:
+        """Test wrong template flavor provided."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should log a warning that template directory does not exists")
+
         wrong_dir = "wrong_tpl"
         config = {
             const.PKG_NAME: {
@@ -136,9 +153,12 @@ class TestUtilsTemplate:
         )
         assert warning_msg in self._caplog.text
 
-    def test_simple_cloning_git_repo(self):
+    @staticmethod
+    def test_simple_cloning_git_repo() -> None:
+        """Test cloning repo without ref."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should clone itself in temporary directory")
+
         repo = git.Repo(pathlib.Path(__file__), search_parent_directories=True)
         config = {
             const.PKG_NAME: {
@@ -154,9 +174,12 @@ class TestUtilsTemplate:
         assert repo.head.commit == cloned_repo.head.commit
         shutil.rmtree(cloned_repo.working_dir)
 
-    def test_ref_cloning_git_repo(self):
+    @staticmethod
+    def test_ref_cloning_git_repo() -> None:
+        """Test cloning repo with a ref."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should clone itself in temporary directory")
+
         repo = git.Repo(pathlib.Path(__file__), search_parent_directories=True)
         ref = "v0.0.0"
         config = {

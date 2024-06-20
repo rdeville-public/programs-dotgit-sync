@@ -1,4 +1,5 @@
-#!/usr/bin/env python3  # noqa: D100
+#!/usr/bin/env python3
+"""Module testing dotgit_sync.render."""
 
 import inspect
 import logging
@@ -18,6 +19,8 @@ _LOG_TRACE = f"{pathlib.Path(__file__).name}:{__name__}"
 
 
 class TestRender:
+    """Collection testing rendering methods."""
+
     _script_path = pathlib.Path(__file__).parent
     _tpl_dir = _script_path / "fake_templates"
     _target_out_dir = _script_path / "fake_rendered"
@@ -70,8 +73,8 @@ class TestRender:
         )
         assert dest.read_text() == target.read_text()
 
+    @staticmethod
     def _test_rendering_json_yaml(
-        self,
         dest: pathlib.Path,
         update_file: pathlib.Path,
         target_file: pathlib.Path,
@@ -91,8 +94,10 @@ class TestRender:
         assert content == target
 
     def test_extract_context_from_template(self) -> None:
+        """Test dictionnary with context are correctly built from template."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Return a dictionnary with template content")
+
         context = render._extract_context_from_template(  # noqa: SLF001
             str(self._fake_md_tpl_file.read_text())
         )
@@ -104,8 +109,10 @@ class TestRender:
         assert context == target_context
 
     def test_extract_context_from_rendered_files(self) -> None:
+        """Test dictionnary with context are correctly built from rendered file."""  # noqa: E501
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Return a dictionnary with rendered file content")
+
         fake_rendered_file = (
             self._script_path / "fake_rendered" / "fake_templates.md"
         )
@@ -122,10 +129,12 @@ class TestRender:
         assert context == target_context
 
     def test_merge_contexts(self) -> None:
+        """Test merging dictionnary with contexts is done correctly."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info(
             "Return a dictionnary with file content to write handling customize excluded content"  # noqa: E501
         )
+
         rendered_file = self._script_path / "fake_rendered" / "fake_statics.md"
         self._test_merge_contexts(
             rendered_file,
@@ -157,8 +166,10 @@ class TestRender:
         )
 
     def test_create_dest_dir(self) -> None:
+        """Test creation of destination directory."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Create parent directory tree of dest file if not exists")
+
         fake_dest_file = (
             self._script_path / "fake_repo" / "foo" / "bar" / "baz.md"
         )
@@ -167,6 +178,7 @@ class TestRender:
         assert fake_dest_file.parent.is_dir()
 
     def test_build_of_marks_comment(self) -> None:
+        """Test the build of marks used for block comment."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should return right comment marks for specified ft")
         self._test_marks(const.MD, {const.BEGIN: "<!--", const.END: " -->"})
@@ -176,6 +188,7 @@ class TestRender:
         self._test_marks("no_comment_for_filetype", {})
 
     def test_rendering_file(self) -> None:
+        """Test rendering a fingle file."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should return right comment marks for specified ft")
         dest = self._output_dir / "fake.md"
@@ -195,6 +208,7 @@ class TestRender:
         self._test_rendering_file(dest, target, True)
 
     def test_rendering_json_yaml(self) -> None:
+        """Test rendering a json and yaml file."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should return right comment marks for specified ft")
         dest = self._output_dir / "fake.json"

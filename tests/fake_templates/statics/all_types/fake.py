@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
+"""Fake module."""
 # Fake python file
 
 
-def fake_method():  # noqa: ANN201, D103
+def fake_method() -> None:
+    """Fake method."""
     pass

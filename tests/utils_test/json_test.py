@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Module testing dotgit_sync.utils.json."""
 
 import inspect
 import logging
@@ -13,43 +14,55 @@ _LOG_TRACE = f"{pathlib.Path(__file__).name}:{__name__}"
 
 
 class TestUtilsJson:
+    """Collection to tests json manipulation."""
+
     _script_path = pathlib.Path(__file__).parent
     _tpl_dir = _script_path / ".." / "fake_templates" / "statics" / "all_types"
 
-    def _merge_list_diff_types(self, src, update):
+    @staticmethod
+    def _merge_list_diff_types(src: object, update: object) -> None:
         with pytest.raises(ValueError) as error:
             utils.merge_json_list(src, update)
         error_msg = f"Different types! {type(src[0])}, {type(update[0])}"
         assert error.match(error_msg)
 
-    def _merge_list_first_empty(self, src, update):
+    @staticmethod
+    def _merge_list_first_empty(src: list, update: list) -> None:
         assert utils.merge_json_list(src, update) == update
 
-    def _merge_list(self, src, update, target):
+    @staticmethod
+    def _merge_list(src: list, update: list, target: list) -> None:
         assert utils.merge_json_list(src, update) == target
 
-    def _merge_dict(self, src, update, target):
+    @staticmethod
+    def _merge_dict(src: dict, update: dict, target: dict) -> None:
         assert utils.merge_json_dict(src, update) == target
 
-    def test_merge_list_different_types(self):
+    def test_merge_list_different_types(self) -> None:
+        """Test merging json lists compose of different element type."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should throw an error as item in lists are not same type")
+
         self._merge_list_diff_types(["foo"], [{"key": "value"}])
         self._merge_list_diff_types([["foo"]], [{"key": "value"}])
         self._merge_list_diff_types(["foo"], [["bar"]])
 
-    def test_merge_list_first_empty(self):
+    def test_merge_list_first_empty(self) -> None:
+        """Test merging json lists with source is empty list."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info(
             "Should return the content of the second list as the first is empty"
         )
+
         self._merge_list_first_empty([], [{"key": "value"}])
         self._merge_list_first_empty([], ["foo"])
         self._merge_list_first_empty([], [["bar"]])
 
-    def test_merge_list(self):
+    def test_merge_list(self) -> None:
+        """Test merging json lists."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should return the merged content of the two list")
+
         self._merge_list(["foo"], ["bar"], ["foo", "bar"])
         self._merge_list(["foo", "baz"], ["foo", "bar"], ["foo", "baz", "bar"])
         self._merge_list(
@@ -72,9 +85,11 @@ class TestUtilsJson:
             [["foo", "baz"], ["bar"], ["foo", "bar"]],
         )
 
-    def test_merge_dict(self):
+    def test_merge_dict(self) -> None:
+        """Test merging json dictionary."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should return the merged content of the two dictionary")
+
         self._merge_dict(None, {"key": "val"}, {"key": "val"})
         self._merge_dict({}, {"key": "val"}, {"key": "val"})
         self._merge_dict(

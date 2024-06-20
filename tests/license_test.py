@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Module testing dotgit_sync.license."""
 
 import copy
 import inspect
@@ -6,7 +7,6 @@ import logging
 import os
 import pathlib
 import shutil
-import unittest
 
 from dotgit_sync import licenses
 from dotgit_sync.utils import const, templates as utils
@@ -17,15 +17,17 @@ log = logging.getLogger(__name__)
 _LOG_TRACE = f"{pathlib.Path(__file__).name}:{__name__}"
 
 
-class TestLicenses(unittest.TestCase):
+class TestLicenses:
+    """Collection suite to test license."""
+
     _script_path = pathlib.Path(__file__).parent
-    _tpl_source = pathlib.Path(_script_path) / "fake_licenses"
-    _output_dir = pathlib.Path(_script_path) / "fake_repo"
-    _out_primary = pathlib.Path(_output_dir) / "LICENSE"
-    _out_secondary = pathlib.Path(_output_dir) / "LICENSE.BEERWARE"
-    _target_primary = pathlib.Path(_tpl_source) / "render.LICENSE.MIT"
-    _target_secondary = pathlib.Path(_tpl_source) / "render.LICENSE.BEERWARE"
-    _config = {
+    _tpl_source = _script_path / "fake_licenses"
+    _output_dir = _script_path / "fake_repo"
+    _out_primary = _output_dir / "LICENSE"
+    _out_secondary = _output_dir / "LICENSE.BEERWARE"
+    _target_primary = _tpl_source / "render.LICENSE.MIT"
+    _target_secondary = _tpl_source / "render.LICENSE.BEERWARE"
+    _config = {  # noqa: RUF012
         const.OUTDIR: _output_dir,
         "name": "program",
         "description": "Program Description",
@@ -49,7 +51,7 @@ class TestLicenses(unittest.TestCase):
     }
 
     @pytest.fixture(autouse=True)
-    def _remove_rendered_files(self):
+    def _remove_rendered_files(self) -> None:
         for node in os.listdir(self._output_dir):
             node_path = pathlib.Path(self._output_dir) / node
             if node_path.is_dir():
@@ -58,10 +60,11 @@ class TestLicenses(unittest.TestCase):
                 node_path.unlink()
 
     @pytest.fixture(autouse=True)
-    def inject_fixtures(self, caplog):
+    def _inject_fixtures(self, caplog: str) -> None:
         self._caplog = caplog
 
-    def test_unsupported_license_name(self):
+    def test_unsupported_license_name(self) -> None:
+        """Test license name not supported."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should throw an error as license template does not exists")
 
@@ -70,82 +73,89 @@ class TestLicenses(unittest.TestCase):
         }
         tpl_src = utils.get_template_dir(config, const.LICENSES)
         with pytest.raises(FileNotFoundError) as error:
-            licenses._render_license(config, tpl_src, "foo")
+            licenses._render_license(config, tpl_src, "foo")  # noqa : SLF0001
         assert "There are not template license foo" in str(error.value)
 
-    def test_rendering_single_primary_license(self):
+    def test_rendering_single_primary_license(self) -> None:
+        """Test when only single primary license if provided."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should write MIT license in fake repo")
+
         config = copy.deepcopy(self._config)
         tpl_src = utils.get_template_dir(config, const.LICENSES)
-        licenses._render_license(config, tpl_src, "MIT", True)
-        self.assertEqual(
-            pathlib.Path(self._out_primary).read_text(encoding="utf-8"),
-            pathlib.Path(self._target_primary).read_text(encoding="utf-8"),
-        )
+        licenses._render_license(config, tpl_src, "MIT", True)  # noqa : SLF0001
+        assert self._out_primary.read_text(
+            encoding="utf-8"
+        ) == self._target_primary.read_text(encoding="utf-8")
 
-    def test_rendering_single_secondary_license(self):
+    def test_rendering_single_secondary_license(self) -> None:
+        """Test when single primary and single secondary licenses if provided."""  # noqa: E501
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should write BEERWARE license in fake repo")
+
         config = copy.deepcopy(self._config)
         tpl_src = utils.get_template_dir(config, const.LICENSES)
-        licenses._render_license(config, tpl_src, "BEERWARE")
-        self.assertEqual(
-            pathlib.Path(self._out_secondary).read_text(encoding="utf-8"),
-            pathlib.Path(self._target_secondary).read_text(encoding="utf-8"),
-        )
+        licenses._render_license(config, tpl_src, "BEERWARE")  # noqa : SLF0001
+        assert self._out_secondary.read_text(
+            encoding="utf-8"
+        ) == self._target_secondary.read_text(encoding="utf-8")
 
-    def test_rendering_from_config_single_primary(self):
+    def test_rendering_from_config_single_primary(self) -> None:
+        """Test rendering license when in config."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should write MIT and BEERWARE licenses in fake repo")
+
         config = copy.deepcopy(self._config)
         config[const.LICENSES].pop(const.SECONDARIES)
         licenses.process(config)
-        self.assertEqual(
-            pathlib.Path(self._out_primary).read_text(encoding="utf-8"),
-            pathlib.Path(self._target_primary).read_text(encoding="utf-8"),
-        )
+        assert self._out_primary.read_text(
+            encoding="utf-8"
+        ) == self._target_primary.read_text(encoding="utf-8")
 
-    def test_rendering_from_config_primary_and_secondary(self):
+    def test_rendering_from_config_primary_and_secondary(self) -> None:
+        """Test rendering primary and secondary licenses."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should write MIT and BEERWARE licenses in fake repo")
+
         config = copy.deepcopy(self._config)
         licenses.process(config)
-        self.assertEqual(
-            pathlib.Path(self._out_secondary).read_text(encoding="utf-8"),
-            pathlib.Path(self._target_secondary).read_text(encoding="utf-8"),
-        )
-        self.assertEqual(
-            pathlib.Path(self._out_primary).read_text(encoding="utf-8"),
-            pathlib.Path(self._target_primary).read_text(encoding="utf-8"),
-        )
+        assert self._out_secondary.read_text(
+            encoding="utf-8"
+        ) == self._target_secondary.read_text(encoding="utf-8")
+        assert self._out_primary.read_text(
+            encoding="utf-8"
+        ) == self._target_primary.read_text(encoding="utf-8")
 
-    def test_rendering_from_config_primary_and_wrong_secondary(self):
+    def test_rendering_from_config_primary_and_wrong_secondary(self) -> None:
+        """Test rendering primary and wrong secondary licenses."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should write MIT licenses in fake repo and print a warning")
+
         config = copy.deepcopy(self._config)
         config[const.LICENSES][const.SECONDARIES] = ["foo"]
         licenses.process(config)
-        self.assertEqual(
-            pathlib.Path(self._out_primary).read_text(encoding="utf-8"),
-            pathlib.Path(self._target_primary).read_text(encoding="utf-8"),
-        )
+        assert self._out_primary.read_text(
+            encoding="utf-8"
+        ) == self._target_primary.read_text(encoding="utf-8")
         assert "There are not template license foo" in self._caplog.text
 
-    def test_rendering_from_config_primary_and_empty_secondary(self):
+    def test_rendering_from_config_primary_and_empty_secondary(self) -> None:
+        """Test primary license and empty secondary license."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should write MIT licenses in fake repo")
+
         config = copy.deepcopy(self._config)
         config[const.LICENSES][const.SECONDARIES] = []
         licenses.process(config)
-        self.assertEqual(
-            pathlib.Path(self._out_primary).read_text(encoding="utf-8"),
-            pathlib.Path(self._target_primary).read_text(encoding="utf-8"),
-        )
+        assert self._out_primary.read_text(
+            encoding="utf-8"
+        ) == self._target_primary.read_text(encoding="utf-8")
 
-    def test_rendering_from_config_with_wrong_license(self):
+    def test_rendering_from_config_with_wrong_license(self) -> None:
+        """Test rendering when unsupported license is provided."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should return None as licenses does not exists")
+
         config = {
             const.PKG_NAME: {
                 const.SOURCE: {const.PATH: self._tpl_source},
@@ -156,4 +166,4 @@ class TestLicenses(unittest.TestCase):
         }
         ret = licenses.process(config)
         assert "There are not template license foo" in self._caplog.text
-        self.assertIsNone(ret)
+        assert ret is None

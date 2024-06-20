@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Module testing dogtit.utils.config."""
 
 import datetime
 import errno
@@ -7,6 +8,7 @@ import logging
 import os
 import pathlib
 import shutil
+from typing import ClassVar
 
 from dotgit_sync import argparser
 from dotgit_sync.utils import config as utils, const
@@ -19,11 +21,13 @@ _LOG_TRACE = f"{pathlib.Path(__file__).name}:{__name__}"
 
 
 class TestUtilsConfig:
+    """Collection to test utility config."""
+
     _script_path = pathlib.Path(__file__).parent
     _output_dir = pathlib.Path(_script_path).parent / "fake_repo"
     _config_dir = pathlib.Path(_script_path).parent / "fake_config"
     _config_file = _config_dir / "valid.with_source_path.dotgit.yaml"
-    _config_licenses = {
+    _config_licenses: ClassVar[dict] = {
         "copyright": {
             "email": "mail@domain.tld",
             "owner": "Full Name",
@@ -36,7 +40,7 @@ class TestUtilsConfig:
         },
         const.PRIMARY: "MIT",
     }
-    _config_licenses_with_curr_date = {
+    _config_licenses_with_curr_date: ClassVar[dict] = {
         const.LICENSES: _config_licenses
         | {
             const.DATE: {
@@ -45,18 +49,18 @@ class TestUtilsConfig:
             },
         },
     }
-    _config_maintainers = [
+    _config_maintainers: ClassVar[dict] = [
         {
             "mail": "mail@domain.tld",
             "name": "Full Name",
         },
     ]
-    _config_name = "Program Name"
-    _config_desc = "Program description"
-    _config_outdir = {
+    _config_name: ClassVar[str] = "Program Name"
+    _config_desc: ClassVar[str] = "Program description"
+    _config_outdir: ClassVar[dict] = {
         const.OUTDIR: _output_dir,
     }
-    _config_common = {
+    _config_common: ClassVar[dict] = {
         const.LICENSES: _config_licenses,
         "maintainers": _config_maintainers,
         "name": _config_name,
@@ -65,7 +69,7 @@ class TestUtilsConfig:
     _args = None
 
     @pytest.fixture(autouse=True)
-    def _prepare_fake_repo(self):
+    def _prepare_fake_repo(self) -> None:
         for node in os.listdir(self._output_dir):
             node_path = pathlib.Path(self._output_dir) / node
             if node_path.is_dir():
@@ -80,61 +84,74 @@ class TestUtilsConfig:
         self._args = argparser.parser().parse_args([])
 
     @pytest.fixture(autouse=True)
-    def inject_fixtures(self, caplog):
+    def _inject_fixtures(self, caplog: str) -> None:
         self._caplog = caplog
 
-    def test_config_file_not_exists(self):
+    def test_config_file_not_exists(self) -> None:
+        """Test program exit if config file does not exists."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info(
             "Should throw an error and exit as config file does not exists"
         )
+
         cfg_path = self._script_path / "foo.yaml"
         with pytest.raises(SystemExit) as exit_code:
-            utils._validate_config(cfg_path)
+            utils._validate_config(cfg_path)  # noqa : SLF001
         error_msg = f"Provided source_file do not exists on disk: {cfg_path}"
         assert error_msg in self._caplog.text
         assert exit_code.value.code == errno.ENOENT
 
-    def test_config_file_empty(self):
+    def test_config_file_empty(self) -> None:
+        """Test program exit if config file is empty."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info(
             "Should throw an error and exit as config file does not exists"
         )
+
         cfg_path = self._config_dir / "empty.dotgit.yaml"
         with pytest.raises(SystemExit) as exit_code:
-            utils._validate_config(cfg_path)
+            utils._validate_config(cfg_path)  # noqa : SLF001
         error_msg = "No source file/data was loaded"
         assert error_msg in self._caplog.text
         assert exit_code.value.code == errno.ENODATA
 
-    def test_config_file_schema_not_respected(self):
+    def test_config_file_schema_not_respected(self) -> None:
+        """Test program exit if config file does not respect schema."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should throw an error and exit as config file is invalid")
+
         cfg_path = self._config_dir / "wrong.dotgit.yaml"
         with pytest.raises(SystemExit) as exit_code:
-            utils._validate_config(cfg_path)
+            utils._validate_config(cfg_path)  # noqa : SLF001
         error_msg = "[\"Cannot find required key 'maintainers'. Path: ''\"]"
         assert error_msg in self._caplog.text
         assert exit_code.value.code == errno.ENODATA
 
-    def test_config_file_schema_respected(self):
+    def test_config_file_schema_respected(self) -> None:
+        """Test program exit if config file does respect schema."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should return the configuration read from the config file")
+
         cfg_path = self._config_dir / "valid.minimal.dotgit.yaml"
-        assert utils._validate_config(cfg_path) == yaml.safe_load(
+        assert utils._validate_config(cfg_path) == yaml.safe_load(  # noqa : SLF001
             cfg_path.read_text()
         )
 
-    def test_search_found_git_parent(self):
+    def test_search_found_git_parent(self) -> None:
+        """Test program found is able to find .git parent folder."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should return the configuration read from the config file")
+
         fake_cwd_path = self._output_dir / "fake_dir"
         fake_cwd_path.mkdir()
         assert utils.search_git_workdir(fake_cwd_path) == self._output_dir
 
-    def test_search_no_found_git_parent(self):
+    @staticmethod
+    def test_search_no_found_git_parent() -> None:
+        """Test program does not found parent .git folder."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should throw an error as unable to find git parent")
+
         fake_cwd_path = pathlib.Path("/")
         with pytest.raises(FileNotFoundError) as error:
             utils.search_git_workdir(fake_cwd_path)
@@ -144,9 +161,11 @@ class TestUtilsConfig:
         )
         assert error.match(error_msg)
 
-    def test_get_config_no_args_no_config_file(self):
+    def test_get_config_no_args_no_config_file(self) -> None:
+        """Test throw an error if unable to find config file."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should throw an error as unable to find config file")
+
         os.chdir(self._output_dir)
         self._args = argparser.parser().parse_args([])
         cfg_path = self._output_dir / ".dotgit.yaml"
@@ -157,9 +176,11 @@ class TestUtilsConfig:
         assert error_msg in self._caplog.text
         assert exit_code.value.code == errno.ENOENT
 
-    def test_get_config_no_args_config_file(self):
+    def test_get_config_no_args_config_file(self) -> None:
+        """Test reading of config file."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should return the content of configuration files")
+
         os.chdir(self._output_dir)
         self._args = argparser.parser().parse_args([])
         target_config = (
@@ -173,9 +194,11 @@ class TestUtilsConfig:
         )
         assert utils.get_config(self._args) == target_config
 
-    def test_get_config_args_absolute_config_file(self):
+    def test_get_config_args_config_file(self) -> None:
+        """Test reading of config file provided by argument."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should return the content of configuration")
+
         os.chdir(self._output_dir)
         self._args = argparser.parser().parse_args([
             "-c",
@@ -192,12 +215,8 @@ class TestUtilsConfig:
         )
         assert utils.get_config(self._args) == target_config
 
-    def test_get_config_args_relative_config_file(self):
-        log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
-        log.info("Should return the content of configuration")
         # Fake path to dotgit config relative to self._output_dir
         cfg_path = "../fake_config/valid.with_source_path.dotgit.yaml"
-        os.chdir(self._output_dir)
         self._args = argparser.parser().parse_args(["-c", str(cfg_path)])
         target_config = (
             {
@@ -210,9 +229,11 @@ class TestUtilsConfig:
         )
         assert utils.get_config(self._args) == target_config
 
-    def test_get_config_args_source_dir(self):
+    def test_get_config_args_source_dir(self) -> None:
+        """Test output directory correctly set in config."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should return the content of configuration with source path")
+
         os.chdir(self._output_dir)
         tpl_path = pathlib.Path.cwd() / ".." / "fake_templates"
         shutil.copy(
@@ -234,15 +255,6 @@ class TestUtilsConfig:
         )
         assert utils.get_config(self._args) == target_config
 
-    def test_get_config_args_source_git(self):
-        log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
-        log.info("Should return the content of configuration with source git")
-        os.chdir(self._output_dir)
-        tpl_path = pathlib.Path.cwd() / ".." / "fake_templates"
-        shutil.copy(
-            self._config_dir / "valid.minimal.dotgit.yaml",
-            self._output_dir / ".dotgit.yaml",
-        )
         self._args = argparser.parser().parse_args(["-g", str(tpl_path)])
         target_config = (
             {
@@ -260,9 +272,11 @@ class TestUtilsConfig:
         )
         assert utils.get_config(self._args) == target_config
 
-    def test_get_config_args_both_source_git_and_dir(self):
+    def test_get_config_args_both_source_git_and_dir(self) -> None:
+        """Test error in build output dir as multiple source provided."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should throw an error as both source are defined in config")
+
         os.chdir(self._output_dir)
         shutil.copy(
             self._config_dir / "wrong.with_both_source.dotgit.yaml",
@@ -279,9 +293,11 @@ class TestUtilsConfig:
         )
         assert error.match(error_msg)
 
-    def test_get_config_no_args_no_source(self):
+    def test_get_config_no_args_no_source(self) -> None:
+        """Test error as no source is provided in config file."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should throw an error as no source are defined")
+
         os.chdir(self._output_dir)
         shutil.copy(
             self._config_dir / "valid.minimal.dotgit.yaml",
@@ -294,9 +310,11 @@ class TestUtilsConfig:
         )
         assert error.match(error_msg)
 
-    def test_get_config_wrong_yaml_merge(self):
+    def test_get_config_wrong_yaml_merge(self) -> None:
+        """Test wrong yaml merge configuration key."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should throw an error as YAML merge config is wrong")
+
         os.chdir(self._output_dir)
         tpl_path = pathlib.Path.cwd() / ".." / "fake_templates"
         shutil.copy(
