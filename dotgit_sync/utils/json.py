@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Set of utility method to manipulate template data."""
+"""Set of utility to manipulate data."""
 
 import inspect
 import logging

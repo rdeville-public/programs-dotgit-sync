@@ -98,6 +98,3 @@ SECONDARIES = "secondaries"
 PRIMARY = "primary"
 TEMPLATES = "templates"
 STATICS = "statics"
-
-# CONST STORING DEFAULT DOTGIT CONFIG
-# DEFAULT_CONFIG = {PKG_NAME: {YAML: {MERGE: NONE}}}

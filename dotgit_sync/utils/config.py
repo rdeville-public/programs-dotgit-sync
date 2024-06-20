@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Utility that help managing dotgit configuration."""
 
 import argparse
 import datetime

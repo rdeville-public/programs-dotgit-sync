@@ -58,6 +58,14 @@ GITIGNORE_CFG = {
 
 
 def build_query_param(config: dict) -> list:
+    """Parse gitignore configuration to build gitignore.io query.
+
+    Args:
+        config: dotgit configuration
+
+    Return:
+        A list with query parameters
+    """
     query_params = []
     if "templates" in config[const.GITIGNORE]:
         for tpl in config[const.GITIGNORE]["templates"]:
@@ -70,6 +78,15 @@ def build_query_param(config: dict) -> list:
 
 
 def clean_gitignore(url: str, tpl: str) -> str:
+    """Remove useless lignes in gitignore obtained from gitignore.io.
+
+    Args:
+        url: string of the URL used to generate gitignore
+        tpl: content of return gitignore from gitignore.io
+
+    Return:
+        Multiline string with cleaned content of gitignore
+    """
     # Catch Toptal URL
     url = re.search(r".+toptal.+", tpl, flags=re.MULTILINE).group(0)
     # Remove trailing tabs
@@ -80,7 +97,15 @@ def clean_gitignore(url: str, tpl: str) -> str:
     return url + "\n\n" + tpl
 
 
-def request_gitignore(query_params: str) -> str:
+def request_gitignore(query_params: list[str]) -> str:
+    """Request gitignore API with query parameters.
+
+    Args:
+        query_params: list of string parameter to pass to gitignore.io
+
+    Return:
+        The content of the gitignore file obtained from requests
+    """
     url = GITIGNORE_API + str.join(",", query_params)
     return url, requests.get(url, timeout=5).text
 

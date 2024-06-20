@@ -35,9 +35,7 @@ def _process_file(
     render.render_file(config, dst, content, ft, is_static=is_static)
 
 
-def _process_json(
-    config: dict, dst: str, sources: list[str], is_yaml: bool = False
-) -> None:
+def _process_json(dst: str, sources: list[str], is_yaml: bool = False) -> None:
     content = None
     for src in sources:
         with pathlib.Path(src).open(encoding="utf-8") as file:
@@ -62,14 +60,14 @@ def process(config: dict, tpl_dir: str, is_static: bool = False) -> None:
         ft = filetype.get_filetype(sources[0])
         dst_path = pathlib.Path(config[const.OUTDIR]) / dst
         if ft == "json":
-            _process_json(config, dst_path, sources)
+            _process_json(dst_path, sources)
         elif (
             ft == "yaml"
             and const.YAML in config[const.PKG_NAME]
             and const.MERGE in config[const.PKG_NAME][const.YAML]
             and config[const.PKG_NAME][const.YAML][const.MERGE] == const.ALL
         ):
-            _process_json(config, dst_path, sources, True)
+            _process_json(dst_path, sources, True)
         elif (
             ft == "yaml"
             and const.YAML in config[const.PKG_NAME]
@@ -77,7 +75,7 @@ def process(config: dict, tpl_dir: str, is_static: bool = False) -> None:
             and config[const.PKG_NAME][const.YAML][const.MERGE] == const.ONLY
         ):
             if dst_path.name in config[const.PKG_NAME][const.YAML][const.ONLY]:
-                _process_json(config, dst_path, sources, is_yaml=True)
+                _process_json(dst_path, sources, is_yaml=True)
             else:
                 _process_file(
                     config, dst_path, sources, ft, is_static=is_static
