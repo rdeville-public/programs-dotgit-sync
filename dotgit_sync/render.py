@@ -21,6 +21,7 @@ _BEFORE = "before"
 _AFTER = "after"
 _TEMPLATE = "template"
 _MARK = "DOTGIT-SYNC BLOCK"
+_YAML_MERGED = "YAML_MERGED"
 _BEGIN_MANAGED = f"{const.BEGIN} {_MARK} MANAGED"
 _END_MANAGED = f"{const.END} {_MARK} MANAGED"
 _BEGIN_EXCLUDED = f"{const.BEGIN} {_MARK} EXCLUDED"
@@ -267,8 +268,8 @@ def render_json(dst: pathlib.Path, update: dict, is_yaml: bool = False) -> None:
     with pathlib.Path(dst).open("w", encoding="utf-8") as file:
         if is_yaml:
             marks = _get_mark_comment(const.YAML)
-            begin = f"{marks[const.BEGIN]} {_BEGIN_MANAGED}{marks[const.END]}"
-            end = f"{marks[const.BEGIN]} {_END_MANAGED}{marks[const.END]}"
+            begin = f"{marks[const.BEGIN]} {_BEGIN_MANAGED}{marks[const.END]} {_YAML_MERGED}"
+            end = f"{marks[const.BEGIN]} {_END_MANAGED}{marks[const.END]} {_YAML_MERGED}"
             file.write(f"{begin}\n")
             yaml.add_representer(str, _yaml_multiline_string_pipe)
             yaml.dump(
