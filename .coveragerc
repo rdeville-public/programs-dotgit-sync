@@ -1,0 +1,23 @@
+# These settings are generally used when running product code, though some apply
+# to more than one command.
+[run]
+# Whether to measure branch coverage in addition to statement coverage.
+branch = True
+source =
+  dotgit_sync
+  tests
+dynamic_context = test_function
+
+[report]
+fail_under = 80
+precision = 2
+format = text
+show_missing = True
+skip_empty = True
+
+[html]
+# Settings particular to HTML reporting. The settings in the [report] section
+# also apply to HTML output, where appropriate.
+directory = .coverage_html
+
+# vim: ft=dosini

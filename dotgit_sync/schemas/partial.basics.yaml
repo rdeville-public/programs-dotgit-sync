@@ -1,9 +1,9 @@
 ---
-# Partial schema email related
+# partial schema email related
 schema;email: &email
   type: str
   # source: https://stackabuse.com/python-validate-email-address-with-regular-expressions-regex/
-  pattern: ([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]+)*|\"([]!#-[^-~ \t]|(\\[\t -~]))+\")@([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]+)*|\[[\t -Z^-~]*])
+  pattern: ([-!#-'*+/-9=?a-z^-~]+(\.[-!#-'*+/-9=?a-z^-~]+)*|\"([]!#-[^-~ \t]|(\\[\t -~]))+\")@([-!#-'*+/-9=?a-z^-~]+(\.[-!#-'*+/-9=?a-z^-~]+)*|\[[\t -z^-~]*])
 
 schema;required_email:
   required: true

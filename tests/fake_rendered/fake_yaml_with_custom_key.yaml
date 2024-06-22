@@ -1,0 +1,15 @@
+key: value
+dict:
+  key: |-
+    Multiline content
+    In order to keep bash script in CI
+    for instance
+list:
+  - item
+  - another item
+custom_key: custom_val
+custom_dict:
+  custom_list:
+    - custom_item
+    - another_custom_item
+  custom_key: another_custom_val

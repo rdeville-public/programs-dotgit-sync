@@ -3,16 +3,15 @@
 
 import argparse
 import logging
+import pathlib
 
-from . import const
+from .utils import config as utils, const
 
-
-CONFIG_FILENAME = ".config.yaml"
 
 log = logging.getLogger(const.PKG_NAME)
 
 
-def parse_args() -> argparse.ArgumentParser:
+def parser() -> argparse.ArgumentParser:
     """Parser argument which set dotgit sync options."""
     parser = argparse.ArgumentParser(
         prog="dotgit-sync",
@@ -29,8 +28,8 @@ repos
         "--verbose",
         help="""\
 Increase default verbosity of the programs.
-More '-v' means more verbosity (up to 3).
-Default set to ERROR, then WARNING, INFO, DEBUG.
+More '-v' means more verbosity (up to 2).
+Default set to WARNING, then INFO, DEBUG.
 """,
         action="count",
         default=0,
@@ -51,12 +50,25 @@ Output format of the log (either string or json), default is set to 'string'
         "-c",
         "--config",
         help="""\
-Path to the configuration file. If not specified, will search look at the root
-of the git repository.
+Path to the configuration file.
+If not specified, will search the root of the git repository from current
+location.
 """,
+        type=pathlib.Path,
         nargs="?",
-        type=str,
-        default=None,
+        default=utils.search_git_workdir(pathlib.Path.cwd()) / ".dotgit.yaml",
+    )
+
+    parser.add_argument(
+        "-o",
+        "--outdir",
+        help="""\
+Path where the rendered directories and files will be written.
+If not specified, will search the root of the git repository from current path.
+""",
+        type=pathlib.Path,
+        nargs="?",
+        default=utils.search_git_workdir(pathlib.Path.cwd()),
     )
 
     group = parser.add_mutually_exclusive_group()
@@ -83,4 +95,4 @@ Path to a git repository containing templates.
         default=None,
     )
 
-    return parser.parse_args()
+    return parser

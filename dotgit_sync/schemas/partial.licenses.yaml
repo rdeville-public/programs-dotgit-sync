@@ -2,6 +2,16 @@
 schema;licenses:
   required: true
   map:
+    date:
+      required: true
+      map:
+        first_year: &date
+          type: date
+          required: true
+          format: "%Y"
+        current_year:
+          type: date
+          format: "%Y"
     copyright:
       required: true
       map:
@@ -10,14 +20,14 @@ schema;licenses:
           type: str
         email:
           include: required_email
-    main:
+    primary:
       required: true
       type: str
       # Currently supported licenses
       enum: &supported_licenses
         - MIT
         - BEERWARE
-    others:
+    secondaries:
       seq:
         - type: str
           # Currently supported licenses

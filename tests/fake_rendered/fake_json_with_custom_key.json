@@ -1,0 +1,16 @@
+{
+  "key": "value",
+  "list": [
+    "item",
+    "another_item"
+  ],
+  "dict": {
+    "key": "val"
+  },
+  "custom_content": {
+    "custom_key": "val",
+    "custom_list": [
+      "custom_item"
+    ]
+  }
+}

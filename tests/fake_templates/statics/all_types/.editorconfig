@@ -1,0 +1,4 @@
+# Fake editorconfig
+root = false
+[*]
+end_of_line = lf
