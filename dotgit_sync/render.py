@@ -268,8 +268,14 @@ def render_json(dst: pathlib.Path, update: dict, is_yaml: bool = False) -> None:
     with pathlib.Path(dst).open("w", encoding="utf-8") as file:
         if is_yaml:
             marks = _get_mark_comment(const.YAML)
-            begin = f"{marks[const.BEGIN]} {_BEGIN_MANAGED}{marks[const.END]} {_YAML_MERGED}"
-            end = f"{marks[const.BEGIN]} {_END_MANAGED}{marks[const.END]} {_YAML_MERGED}"
+            begin = (
+                f"{marks[const.BEGIN]} {_BEGIN_MANAGED}{marks[const.END]} "
+                + f"{_YAML_MERGED}"
+            )
+            end = (
+                f"{marks[const.BEGIN]} {_END_MANAGED}{marks[const.END]} "
+                + f"{_YAML_MERGED}"
+            )
             file.write(f"{begin}\n")
             yaml.add_representer(str, _yaml_multiline_string_pipe)
             yaml.dump(
