@@ -3,7 +3,7 @@ Python Linter:
   image: python:3.12-alpine
   stage: lint
   before_script: &id001
-  - apk add --update --no-cache git
+  - apk add --update --no-cache git binutils
   - pip install poetry
   - poetry install
   script:
@@ -17,7 +17,6 @@ Python Build:
   - Python Linter
   before_script: *id001
   script:
-  - poetry run pyinstaller \ --clean \ --noconfirm \ --log-level WARN \ pyinstaller.spec
   - poetry build
   - poetry run pyinstaller --clean --noconfirm --log-level WARN pyinstaller.spec
   rules: *id002
