@@ -5,9 +5,10 @@ import inspect
 import logging
 import pathlib
 import shutil
+import tempfile
 
 import dotgit_sync
-from dotgit_sync.utils import const, templates as utils
+from dotgit_sync.utils import config as cfg_utils, const, templates as utils
 import git
 import pytest
 
@@ -159,7 +160,11 @@ class TestUtilsTemplate:
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should clone itself in temporary directory")
 
-        repo = git.Repo(pathlib.Path(__file__), search_parent_directories=True)
+        repo_dest = tempfile.mkdtemp()
+        repo_workdir = cfg_utils.search_git_workdir(
+            pathlib.Path(__file__).parent
+        )
+        repo = git.Repo.clone_from(repo_workdir, repo_dest)
         config = {
             const.PKG_NAME: {
                 const.SOURCE: {
@@ -180,12 +185,13 @@ class TestUtilsTemplate:
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should clone itself in temporary directory")
 
-        repo = git.Repo(pathlib.Path(__file__), search_parent_directories=True)
+        url = "https://framagit.org/rdeville-public/programs/dotgit-sync.git"
         ref = "v0.0.0"
+
         config = {
             const.PKG_NAME: {
                 const.SOURCE: {
-                    const.GIT: {const.URL: repo.working_dir, const.REF: ref},
+                    const.GIT: {const.URL: url, const.REF: ref},
                 },
             },
         }
@@ -193,5 +199,8 @@ class TestUtilsTemplate:
         cloned_repo = git.Repo(
             pathlib.Path(config[const.PKG_NAME][const.SOURCE][const.PATH])
         )
-        assert repo.tag(ref).commit == cloned_repo.head.commit
+        assert (
+            str(cloned_repo.head.commit)
+            == "2532876902b28883c6b0f736453f61a712f6d97b"
+        )
         shutil.rmtree(cloned_repo.working_dir)
