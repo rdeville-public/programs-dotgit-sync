@@ -1,4 +1,4 @@
-# BEGIN DOTGIT-SYNC BLOCK MANAGED
+# BEGIN DOTGIT-SYNC BLOCK MANAGED YAML_MERGED
 Python Linter:
   image: python:3.12-alpine
   stage: lint
@@ -6,6 +6,7 @@ Python Linter:
   - apk add --update --no-cache git binutils
   - pip install poetry
   - poetry install
+  - apk add --update --no-cache git
   script:
   - poetry run ruff check
   rules: &id002
@@ -43,4 +44,4 @@ Python Publish:
   rules:
   - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     when: always
-# END DOTGIT-SYNC BLOCK MANAGED
+# END DOTGIT-SYNC BLOCK MANAGED YAML_MERGED
