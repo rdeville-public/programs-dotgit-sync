@@ -43,6 +43,7 @@ statics:
   - markdown-pre-commit
   - markdown-ci-gitlab
   - python
+  - python-ci-gitlab
 templates:
   - base
   - python
