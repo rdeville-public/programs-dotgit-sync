@@ -1,6 +1,19 @@
 <!-- markdownlint-disable-file -->
 # CHANGELOG
 
+## v0.3.5 (2024-06-23)
+
+### 🩹 Patch
+
+  * ⬆️ Update rendered files from templates (!19) by Romain Deville ([`ad9eb02`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/ad9eb023c4319893097bea2fb8e1bc18bf506986))
+  * 🔧 Add template python-ci-gitlab in dotgit.yaml by Romain Deville ([`a593b42`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/a593b4218f5cb7af50f9314f44352ca7b8a754aa)) 🔏
+
+### 🔊 Others
+
+  * 💚 Update CIs from templates by Romain Deville ([`9ca9eab`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/9ca9eab84a5c48d6baaca13e598fc9a9186f9c04)) 🔏
+  * 🔨 Make main.py executable by Romain Deville ([`0e83bb9`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/0e83bb99873f4fbbd62d254adbcbfc36bba80178)) 🔏
+  * 🔨 Update pre-commit from templates by Romain Deville ([`2c19072`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/2c19072c8366411d32d3eb3b2d9b6f6c7ebf71f1)) 🔏
+
 ## v0.3.4 (2024-06-22)
 
 ### 🩹 Patch
@@ -14,8 +27,6 @@
   * ✅ Fix main tests after adding yaml merge block by Romain Deville ([`0132d85`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/0132d85385191ff5a159d32ee6661e817207af97)) 🔏
   * ✅ Add main tests by Romain Deville ([`f70ad21`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/f70ad21e0aa3b43174aff7de161b37f17c78ed71)) 🔏
   * ✅ Add render tests by Romain Deville ([`3584936`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/35849363994821d3d8bde5758edb78d14fc8a8c9)) 🔏
-  * ✅ Add utils/template tests by Romain Deville ([`db2acc8`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/db2acc81ac3f6e3e192f562378d2cdeaacf45414)) 🔏
-  * ✅ Add utils/json tests by Romain Deville ([`c8565b0`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/c8565b0497f89c6ace1bc26821bc3927a7e312c7)) 🔏
   * 🎨 Improve overall quality of code with tests, lint, etc. (!18) by Romain Deville ([`3a2733a`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/3a2733a9d3333bb7705a4e5ff49c9e2c83fedc3b))
   * 👷 Add pyinstaller.spec to build package by Romain Deville ([`c32a757`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/c32a757516a52c53a1706f38441dc7479f4b6072)) 🔏
   * 👷 Add python related CI by Romain Deville ([`90a7d52`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/90a7d52e447a5f4c2d44e8d8c6f8834123f69c8e)) 🔏
@@ -28,6 +39,7 @@
   * 💚 Fix typo in CI (!13) by Romain Deville ([`f1733c6`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/f1733c6af17f08993b3173d5b23c9828428d3378))
   * 💚 Fix typo in CI by Romain Deville ([`c0ff94d`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/c0ff94d83cb31a92993a8fef115deb6914e8b975)) 🔏
   * 📝 Update README.md by Romain Deville ([`6a839fd`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/6a839fdd5d47b9384b00119484571a9344a70936)) 🔏
+  * 🔖 v0.3.4 (NO-CI) by Python Semantic Release [bot] ([`ec41c4e`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/ec41c4ec751a0e1ec82f4e9ef7401bfabdfdd041))
   * 🔨 Update makefile by Romain Deville ([`40cbab5`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/40cbab53ec6162d0ee4f1e7309c99c1fa15e25da)) 🔏
   * 🔨 Add root main.py to run package without installing by Romain Deville ([`c38e43c`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/c38e43c5c4e4cde7b3068682f6b0e94948e1cc3c)) 🔏
   * 🔨 Add Makefile to ease run of command by Romain Deville ([`4c7f36d`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/4c7f36d8b22fde9b0f1b1092fc1dba5dc60b8ace)) 🔏
@@ -65,12 +77,10 @@
 ### 🔊 Others
 
   * 🎨 Format code using ruff by Romain Deville ([`9aead89`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/9aead89091e80782c3cd48ff28174b55bd4211fe)) 🔏
-  * 👷 Update Base CI to new structure to merge YAML by Romain Deville ([`317b8b0`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/317b8b08f7aaf47ffd61c30d012671bc013d2d67)) 🔏
   * 🔖 v0.3.2 (NO-CI) by Python Semantic Release [bot] ([`b33d75d`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/b33d75d2453afbcf96ad1133da8edb09e45d3bef))
   * 🔥 Remove now useless requirements files by Romain Deville ([`7f4808f`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/7f4808f65936a5323c49c9a115e0f4f0449e941c)) 🔏
   * 🔥 Remove now useless in packages templates by Romain Deville ([`39cdab8`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/39cdab856a13b2b0599829baf0e59a2461de1e40)) 🔏
   * 🔨 Update devbox configuration by Romain Deville ([`e127819`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/e12781903e9400077700f4c9eb9f961ecf1f41b5)) 🔏
-  * 🔨 Update .pre-commit-config.yaml from dotgit-sync by Romain Deville ([`290c12e`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/290c12ec7db4f6b4c645f2d3918cc04abccd1d24)) 🔏
   * 🚚 Rename src to dotgit_sync for poetry by Romain Deville ([`2652f14`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/2652f14f23f909da15384968bd75bac84e65955b)) 🔏
   * 🚨 Add linter configuration and fix it (!11) by Romain Deville ([`2e4113c`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/2e4113c6b7eaf00023a060495b26fdefab0bf678))
   * 🚨 Fix linter on commit_parser by Romain Deville ([`33f7631`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/33f7631bb8cc122f14ce793fe7123c094b5ccf2d)) 🔏
@@ -123,20 +133,9 @@
   * ✨ Improve rendering and configuration file (!6) by Romain Deville ([`73e4892`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/73e4892044a2ffc5f6dfd6c5515670823f3e9216))
   * ✨ Add possibility to exclude part of template by Romain Deville ([`a9f8f91`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/a9f8f9156d80aa36cf9924fc6c29c006b16a3ca9))
   * ✨ Add `source` in config and improve rendering (!5) by Romain Deville ([`e0d0572`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/e0d0572d22d3f75f182c7f80ca5fdd0e8d195e1d))
-  * ✨ Add support for j2 files and fix rendering by Romain Deville ([`73c5165`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/73c5165f5c0b70f8843c4c09f4dead41bacdc739)) 🔏
-
-### 🩹 Patch
-
-  * 🐛 Fix license rendering by Romain Deville ([`c940e48`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/c940e488f64b8d51d1db2796f644b2e745d58968))
-  * 🐛 fix pykwalify import errors (!3) by Romain Deville ([`3cc2536`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/3cc25367055050faa59f09d97dfbaaad0ea5bfc3))
 
 ### 🔊 Others
 
   * 👷 Add auto dotgit-sync template update by Romain Deville ([`be88867`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/be88867e916ce6e299d0a7d4eb977f02aa06004a)) 🔏
-  * 👷 Add automatic release via CI by Romain Deville ([`1f449c3`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/1f449c3b86e002c457cd0b54a3ff91b0b9b80a41)) 🔏
-  * 👷 Add commitlint config and CI by Romain Deville ([`478700d`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/478700d2d41d05bee1de56f57a0ca238f2909c17)) 🔏
   * 💚 Update gitlab release ci by Romain Deville ([`5941a98`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/5941a9849ac3830896b5e04a0a3a9180aea445c2)) 🔏
-  * 💚 Fix root CI directly from template with fake job by Romain Deville ([`aaed1b7`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/aaed1b7833aa2bd0b4c6296a6517ec3f2d35e1d1)) 🔏
-  * 🔇 remove useless print (!4) by Romain Deville ([`2bcd5da`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/2bcd5da0a36379822cea0ea467dab95a0e7c97c2))
-  * 🔇 remove useless print by Romain Deville ([`99bec74`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/99bec741b6ceaaa4c6fe35ff4611c43ea9d2fd55))
   * 🔖 v0.1.0 (NO-CI) by Python Semantic Release [bot] ([`02e0416`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/02e04169bb30d98c0b9d53d464a0c1a7cf019837))

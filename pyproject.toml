@@ -13,7 +13,7 @@ maintainers = [
   "Romain Deville <code@romaindeville.fr>",
 ]
 # BEGIN DOTGIT-SYNC BLOCK EXCLUDED CUSTOM_POETRY
-version = "0.3.4"
+version = "0.3.5"
 readme = "README.md"
 keywords = []
 classifiers = [
