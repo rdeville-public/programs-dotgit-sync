@@ -1,4 +1,4 @@
-# BEGIN DOTGIT-SYNC BLOCK MANAGED
+# BEGIN DOTGIT-SYNC BLOCK MANAGED YAML_MERGED
 Generate Changelog:
   image: alpine:latest
   stage: pre-release
@@ -32,4 +32,4 @@ Tag and Release:
   rules:
   - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
   - when: never
-# END DOTGIT-SYNC BLOCK MANAGED
+# END DOTGIT-SYNC BLOCK MANAGED YAML_MERGED
