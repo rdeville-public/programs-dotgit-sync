@@ -1,6 +1,21 @@
 <!-- markdownlint-disable MD013 MD033 MD043 -->
 <!-- BEGIN DOTGIT-SYNC BLOCK MANAGED -->
-# 👋 Welcome to dotgit-sync
+# 👋 Welcome to DogGit Sync
+
+<center>
+
+> ⚠️ IMPORTANT !
+>
+> Main repo is on [framagit.org](https://framagit.org/rdeville-public/programs/dotgit-sync).
+>
+> On other online git platforms, they are just mirror of the main repo.
+>
+> Any issues, pull/merge requests, etc., might not be considered on those other
+> platforms.
+
+</center>
+
+---
 
 <center>
 
@@ -20,7 +35,7 @@
 [changelog_badge]: https://img.shields.io/badge/Changelog-Python%20Semantic%20Release-yellow
 [changelog_badge_url]: https://github.com/python-semantic-release/python-semantic-release
 
-> Repository allowing to manage dotfile for git repos in an unified ways.
+Repository helping to manage dotfile for accross git repos in an unified ways.
 
 ---
 <!-- BEGIN DOTGIT-SYNC BLOCK EXCLUDED CUSTOM_README -->
@@ -46,7 +61,6 @@ occurs.**
 ## ✅ Run tests
 -->
 <!-- END DOTGIT-SYNC BLOCK EXCLUDED CUSTOM_README -->
-
 ## 🤝 Contributing
 
 Contributions, issues and feature requests are welcome!
