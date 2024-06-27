@@ -4,8 +4,8 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "dotgit-sync"
-description = "Repository allowing to manage dotfile for git repos in an unified ways."
+name = "DogGit Sync"
+description = "Repository helping to manage dotfile for accross git repos in an unified ways."
 authors = [
   "Romain Deville <code@romaindeville.fr>",
 ]
