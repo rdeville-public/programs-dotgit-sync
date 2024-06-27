@@ -15,9 +15,9 @@ dotgit:
 
 # Repos description and template usage configuration
 # ------------------------------------------------------------------------------
-name: dotgit-sync
-description: >-
-  Repository allowing to manage dotfile for git repos in an unified ways.
+name: DogGit Sync
+description: |-
+  Repository helping to manage dotfile for accross git repos in an unified ways.
 licenses:
   date:
     first_year: "2023"
@@ -46,6 +46,7 @@ statics:
   - python-ci-gitlab
 templates:
   - base
+  - nix
   - python
 
 # Everything below is only used as variables in templates
@@ -69,5 +70,5 @@ extra:
           alt: "@rdeville"
           url: https://framagit.org/rdeville
   repo:
-    server: https://framagit.org/
-    namespace: rdeville-public/programs
+    url: https://framagit.org/rdeville-public/programs/dotgit-sync
+    slug: dotgit-sync
