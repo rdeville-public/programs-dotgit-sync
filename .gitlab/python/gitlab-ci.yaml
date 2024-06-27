@@ -11,6 +11,8 @@ Python Linter:
   - poetry run ruff check
   rules: &id002
   - when: always
+  - if: $CI_PIPELINE_SOURCE == "pipeline" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    when: never
 Python Build:
   image: python:3.12-alpine
   stage: build
