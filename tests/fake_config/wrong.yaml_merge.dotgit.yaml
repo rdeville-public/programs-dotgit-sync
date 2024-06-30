@@ -13,6 +13,7 @@ dotgit:
 # Repos description and template usage configuration
 # ------------------------------------------------------------------------------
 name: Program Name
+slug: program-name
 description: Program description
 licenses:
   date:

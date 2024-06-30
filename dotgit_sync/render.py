@@ -241,7 +241,9 @@ def render_file(
     _write_from_template(config, content, dst, ft, tpl_dir, is_static)
 
 
-def render_json(dst: pathlib.Path, update: dict, is_yaml: bool = False) -> None:
+def render_json(
+    config: dict, dst: str, update: dict, is_yaml: bool = False
+) -> None:
     """Method that render json or yaml file from template.
 
     Args:
@@ -251,7 +253,11 @@ def render_json(dst: pathlib.Path, update: dict, is_yaml: bool = False) -> None:
         is_yaml: Boolean to specifiy if templates are yaml or json files
     """
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
-    log.info("Merging %s to %s", dst, "YAML" if is_yaml else "JSON")
+    log.info(
+        "Merging %s to %s",
+        str(dst).replace(f"{config[const.OUTDIR]}/", ""),
+        "YAML" if is_yaml else "JSON",
+    )
 
     _create_dest_dir(dst)
 

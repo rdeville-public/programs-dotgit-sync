@@ -85,10 +85,10 @@ class TestUtilsTemplate:
         path = self._tpl_dir / const.TEMPLATES / "few_types"
         process_target = {
             pathlib.Path("fake.toml"): [
-                path / "fake.toml",
+                (path / "fake.toml").resolve(),
             ],
             pathlib.Path("folder_cfg/fake.toml"): [
-                path / "folder_cfg" / "fake.toml",
+                (path / "folder_cfg" / "fake.toml").resolve(),
             ],
         }
         processed = {}
@@ -105,17 +105,17 @@ class TestUtilsTemplate:
         path = self._tpl_dir / const.TEMPLATES
         process_target = {
             pathlib.Path("fake.json"): [
-                path / "all_types" / "fake.json",
+                (path / "all_types" / "fake.json").resolve(),
             ],
             pathlib.Path("fake.md"): [
-                path / "other_types" / "fake.md",
+                (path / "other_types" / "fake.md").resolve(),
             ],
             pathlib.Path("fake.toml"): [
-                path / "few_types" / "fake.toml",
-                path / "other_types" / "fake.toml",
+                (path / "few_types" / "fake.toml").resolve(),
+                (path / "other_types" / "fake.toml").resolve(),
             ],
             pathlib.Path("folder_cfg/fake.toml"): [
-                path / "few_types" / "folder_cfg" / "fake.toml",
+                (path / "few_types" / "folder_cfg" / "fake.toml").resolve(),
             ],
         }
         config = {

@@ -27,6 +27,7 @@ schema;licenses:
       enum: &supported_licenses
         - MIT
         - BEERWARE
+        - COPYRIGHT
     secondaries:
       seq:
         - type: str

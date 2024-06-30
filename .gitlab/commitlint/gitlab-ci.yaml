@@ -12,6 +12,8 @@ Lint All Commit Since Default Branch:
   - npx commitlint --from "${CI_DEFAULT_BRANCH}" --to "${CI_COMMIT_BRANCH}"
   rules:
   - when: always
+  - if: $CI_PIPELINE_SOURCE == "pipeline" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    when: never
 Lint MR Title and Desc:
   image: alpine:latest
   stage: pre-ci
@@ -28,4 +30,6 @@ Lint MR Title and Desc:
   rules:
   - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     when: always
+  - if: $CI_PIPELINE_SOURCE == "pipeline" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    when: never
 # END DOTGIT-SYNC BLOCK MANAGED YAML_MERGED

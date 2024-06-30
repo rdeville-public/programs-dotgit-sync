@@ -21,6 +21,7 @@ JAVA = "java"
 JS = "javascript"
 JSON = "json"
 LICENSES = "licenses"  # Also a dotgit config key
+NIX = "nix"
 MD = "markdown"
 PY = "script.python"
 TOML = "toml"
@@ -31,13 +32,14 @@ YAML = "yaml"
 
 # FILETYPES WITH EXTS
 FILETYPES = {
-    GITIGNORE: [".gitignore"],
+    GITIGNORE: [".gitignore", ".markdownlintignore"],
     EDITORCFG: [".editorconfig"],
     HBS: [".hbs"],
     J2: [".j2"],
     JAVA: [],
     JS: [],
-    JSON: [".jsonc"],
+    JSON: [".jsonc", ".json"],
+    NIX: [".nix"],
     MD: [".md", ".markdown", ".mkdown"],
     PY: [".py"],
     SH: [".sh", ".bash", ".zsh"],
@@ -71,6 +73,7 @@ COMMENT_FILETYPE = {
         GITIGNORE,
         EDITORCFG,
         PLAIN,
+        NIX,
         TOML,
         LICENSES,
         SH,
@@ -94,6 +97,7 @@ GIT = "git"
 URL = "url"
 REF = "ref"
 PATH = "path"
+COPYRIGHT = "copyright"
 SECONDARIES = "secondaries"
 PRIMARY = "primary"
 TEMPLATES = "templates"

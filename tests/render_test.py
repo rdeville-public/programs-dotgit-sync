@@ -73,20 +73,24 @@ class TestRender:
         )
         assert dest.read_text() == target.read_text()
 
-    @staticmethod
     def _test_rendering_json_yaml(
+        self,
         dest: pathlib.Path,
         update_file: pathlib.Path,
         target_file: pathlib.Path,
         is_yaml: bool = False,
     ) -> None:
+        config = {
+            const.OUTDIR: self._output_dir,
+            "description": "Program Description",
+        }
         if is_yaml:
             update = yaml.safe_load(update_file.read_text())
             target = yaml.safe_load(target_file.read_text())
         else:
             update = json5.loads(update_file.read_text())
             target = json5.loads(target_file.read_text())
-        render.render_json(dest, update, is_yaml)
+        render.render_json(config, dest, update, is_yaml)
         if is_yaml:
             content = yaml.safe_load(dest.read_text())
         else:

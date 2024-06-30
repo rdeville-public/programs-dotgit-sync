@@ -1,0 +1,6 @@
+{%- from "./copyright.j2" import copyright_header with context -%}
+{{- copyright_header(name, description, date, licenses.copyright) }}
+
+This projet is under the copyright if its owner, non authorized used if
+forbidden:
+  * {{ licenses.copyright.owner }} <{{ licenses.copyright.email }}>

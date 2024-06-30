@@ -14,10 +14,11 @@ log = logging.getLogger(const.PKG_NAME)
 _LOG_TRACE = f"{pathlib.Path(__file__).name}:{__name__}"
 
 _LICENSE = "LICENSE"
+_COPYRIGHT = "COPYRIGHT"
 
 
 def _render_license(
-    config: dict, dirs: os.path, license_name: str, main: bool = False
+    config: dict, dirs: os.path, license_name: str, is_primary: bool = False
 ) -> None:
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
 
@@ -27,8 +28,20 @@ def _render_license(
         error_msg = f"There are not template license {license_name}"
         raise FileNotFoundError(error_msg)
 
-    if main:
-        dest = pathlib.Path(config[const.OUTDIR]) / _LICENSE
+    if config[const.LICENSES][const.PRIMARY] == _COPYRIGHT and (
+        const.SECONDARIES in config[const.LICENSES]
+        and len(config[const.LICENSES][const.SECONDARIES]) >= 0
+    ):
+        error_msg = (
+            f"There can't be a licenses {_COPYRIGHT} and a secondary license"
+        )
+        raise ValueError(error_msg)
+
+    if is_primary:
+        if config[const.LICENSES][const.PRIMARY] == _COPYRIGHT:
+            dest = pathlib.Path(config[const.OUTDIR]) / _COPYRIGHT
+        else:
+            dest = pathlib.Path(config[const.OUTDIR]) / _LICENSE
     else:
         dest = (
             pathlib.Path(config[const.OUTDIR])

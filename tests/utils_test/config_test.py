@@ -56,6 +56,7 @@ class TestUtilsConfig:
         },
     ]
     _config_name: ClassVar[str] = "Program Name"
+    _config_slug: ClassVar[str] = "program-name"
     _config_desc: ClassVar[str] = "Program description"
     _config_outdir: ClassVar[dict] = {
         const.OUTDIR: _output_dir,
@@ -64,6 +65,7 @@ class TestUtilsConfig:
         const.LICENSES: _config_licenses,
         "maintainers": _config_maintainers,
         "name": _config_name,
+        "slug": _config_slug,
         "description": _config_desc,
     }
     _args = None

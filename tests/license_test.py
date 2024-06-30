@@ -25,8 +25,10 @@ class TestLicenses:
     _output_dir = _script_path / "fake_repo"
     _out_primary = _output_dir / "LICENSE"
     _out_secondary = _output_dir / "LICENSE.BEERWARE"
+    _out_copyright = _output_dir / "COPYRIGHT"
     _target_primary = _tpl_source / "render.LICENSE.MIT"
     _target_secondary = _tpl_source / "render.LICENSE.BEERWARE"
+    _target_copyright = _tpl_source / "render.COPYRIGHT"
     _config = {  # noqa: RUF012
         const.OUTDIR: _output_dir,
         "name": "program",
@@ -39,9 +41,9 @@ class TestLicenses:
                 const.FIRST_YEAR: 1970,
                 const.CURR_YEAR: 2100,
             },
-            "copyright": {
+            const.COPYRIGHT: {
                 "owner": "Full Name",
-                "email": "mail@doprimary.tld",
+                "email": "mail@domain.tld",
             },
             const.PRIMARY: "MIT",
             const.SECONDARIES: [
@@ -167,3 +169,28 @@ class TestLicenses:
         ret = licenses.process(config)
         assert "There are not template license foo" in self._caplog.text
         assert ret is None
+
+    def test_rendering_from_config_copyright(self) -> None:
+        """Test rendering license when in config."""
+        log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+        log.info("Should write MIT and BEERWARE licenses in fake repo")
+
+        config = copy.deepcopy(self._config)
+        config[const.LICENSES].pop(const.SECONDARIES)
+        config[const.LICENSES][const.PRIMARY] = "COPYRIGHT"
+        licenses.process(config)
+        assert self._out_copyright.read_text(
+            encoding="utf-8"
+        ) == self._target_copyright.read_text(encoding="utf-8")
+
+    def test_rendering_from_config_copyright_and_secondary(self) -> None:
+        """Test rendering license when in config."""
+        log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+        log.info("Should write MIT and BEERWARE licenses in fake repo")
+
+        config = copy.deepcopy(self._config)
+        config[const.LICENSES][const.PRIMARY] = "COPYRIGHT"
+        with pytest.raises(ValueError) as error:
+            licenses.process(config)
+        err_msg = f"There can't be a licenses {licenses._COPYRIGHT} and a secondary license"  # noqa: SLF001, E501
+        assert err_msg in str(error.value)

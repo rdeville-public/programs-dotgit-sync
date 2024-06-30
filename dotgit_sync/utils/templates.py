@@ -83,11 +83,13 @@ def template_exists(filename: str, tpl_src: str) -> pathlib.Path | None:
     return None
 
 
-def _process_dir_template(path: str, parent: str, processed: dict) -> None:
+def _process_dir_template(
+    path: pathlib.Path, parent: str, processed: dict
+) -> None:
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
 
-    for node in os.listdir(path):
-        file_path = pathlib.Path(path) / node
+    for node in os.listdir(path.resolve()):
+        file_path = (pathlib.Path(path) / node).resolve()
         key = pathlib.Path(parent) / node
         if pathlib.Path(file_path).is_file():
             if key not in processed:
