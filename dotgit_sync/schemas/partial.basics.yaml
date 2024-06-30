@@ -13,6 +13,11 @@ schema;required_str:
   required: true
   type: str
 
+schema;required_slug:
+  required: true
+  type: str
+  pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+
 schema;list_str:
   seq:
     - type: str

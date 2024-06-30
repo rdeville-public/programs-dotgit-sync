@@ -4,17 +4,19 @@ map:
     include: dotgit
   name:
     include: required_str
+  slug:
+    include: required_str
   description:
     include: required_str
   maintainers:
     include: maintainers
   licenses:
     include: licenses
+  gitignore:
+    include: gitignore
   statics:
     include: list_str
   templates:
     include: list_str
-  gitignore:
-    include: gitignore
   regex;(.*):
     type: any
