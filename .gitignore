@@ -1,5 +1,6 @@
 # Project specific gitignore
 .devbox
+.devenv
 .envrc*
 tests/fake_repo
 requirements.txt
