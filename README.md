@@ -1,6 +1,6 @@
 <!-- markdownlint-disable MD013 MD033 MD043 -->
 <!-- BEGIN DOTGIT-SYNC BLOCK MANAGED -->
-# 👋 Welcome to DogGit Sync
+# 👋 Welcome to DotGit Sync
 
 <center>
 

@@ -15,7 +15,8 @@ dotgit:
 
 # Repos description and template usage configuration
 # ------------------------------------------------------------------------------
-name: DogGit Sync
+name: DotGit Sync
+slug: dotgit-sync
 description: |-
   Repository helping to manage dotfile for accross git repos in an unified ways.
 licenses:
@@ -46,8 +47,8 @@ statics:
   - python-ci-gitlab
 templates:
   - base
-  - nix
   - python
+  - nix-flake
 
 # Everything below is only used as variables in templates
 # ------------------------------------------------------------------------------
