@@ -6,13 +6,12 @@ Python Linter:
   - apk add --update --no-cache git binutils
   - pip install poetry
   - poetry install
-  - apk add --update --no-cache git
   script:
   - poetry run ruff check
   rules: &id002
-  - when: always
   - if: $CI_PIPELINE_SOURCE == "pipeline" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     when: never
+  - when: always
 Python Build:
   image: python:3.12-alpine
   stage: build
@@ -20,16 +19,14 @@ Python Build:
   - Python Linter
   before_script: *id001
   script:
-  - poetry build
   - poetry run pyinstaller --clean --noconfirm --log-level WARN pyinstaller.spec
+  - poetry build
   rules: *id002
 Python Tests Suite:
   image: python:3.12-alpine
   stage: test
   needs:
   - Python Build
-  variables:
-    GIT_STRATEGY: clone
   before_script: *id001
   script:
   - poetry run coverage run -m pytest
@@ -44,6 +41,8 @@ Python Publish:
   script:
   - poetry publish
   rules:
+  - if: $CI_PIPELINE_SOURCE == "pipeline" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    when: never
   - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     when: always
 # END DOTGIT-SYNC BLOCK MANAGED YAML_MERGED
