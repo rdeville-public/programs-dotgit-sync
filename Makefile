@@ -14,6 +14,7 @@ build:
 		--workpath /tmp \
 		pyinstaller.spec
 	poetry build
+	nix build
 
 test:
 	poetry run coverage run -m pytest
