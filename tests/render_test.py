@@ -49,11 +49,18 @@ class TestRender:
 
     @staticmethod
     def _test_merge_contexts(
-        rendered_file: pathlib.Path, tpl_file: pathlib.Path, target: dict
+        rendered_file: pathlib.Path,
+        tpl_file: pathlib.Path,
+        target: dict,
+        marks: dict,
     ) -> None:
         contexts = render._merge_contexts(  # noqa: SLF001
-            render._extract_context_from_rendered_file(str(rendered_file)),  # noqa: SLF001
-            render._extract_context_from_template(str(tpl_file.read_text())),  # noqa: SLF001
+            render._extract_context_from_rendered_file(  # noqa: SLF001
+                str(rendered_file), marks
+            ),
+            render._extract_context_from_template(  # noqa: SLF001
+                str(tpl_file.read_text()), marks
+            ),
         )
         assert contexts == target
 
@@ -102,13 +109,23 @@ class TestRender:
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Return a dictionnary with template content")
 
+        marks = render._get_mark_comment(const.MD)  # noqa: SLF001
         context = render._extract_context_from_template(  # noqa: SLF001
-            str(self._fake_md_tpl_file.read_text())
+            str(self._fake_md_tpl_file.read_text()), marks
         )
         target_context = {
-            "templatebefore": "# Markdwon Title\n\nRender from jinja below :\n{{ description }}\n\n",  # noqa: E501
-            "TAG_EXCLUDE": "Content Excluded from template\n\nCustomized by user\n\n",  # noqa: E501
-            "templateTAG_EXCLUDE": "\n## Markdwon Subtitle\n\nWith some content\n",  # noqa: E501
+            "templatebefore": {
+                render._INDENT: "",  # noqa: SLF001
+                render._CONTENT: "# Markdwon Title\n\nRender from jinja below :\n{{ description }}\n\n",  # noqa: E501, SLF001
+            },
+            "TAG_EXCLUDE": {
+                render._INDENT: "  ",  # noqa: SLF001
+                render._CONTENT: "Content Excluded from template\n\nCustomized by user\n\n",  # noqa: E501, SLF001
+            },
+            "templateTAG_EXCLUDE": {
+                render._INDENT: "",  # noqa: SLF001
+                render._CONTENT: "\n## Markdwon Subtitle\n\nWith some content\n",  # noqa: SLF001, E501
+            },
         }
         assert context == target_context
 
@@ -120,15 +137,31 @@ class TestRender:
         fake_rendered_file = (
             self._script_path / "fake_rendered" / "fake_templates.md"
         )
+        marks = render._get_mark_comment(const.MD)  # noqa: SLF001
         context = render._extract_context_from_rendered_file(  # noqa: SLF001
-            str(fake_rendered_file)
+            str(fake_rendered_file), marks
         )
         target_context = {
-            "before": "Context Before\n",
-            "templatebefore": "# Markdwon Title\n\nRender from jinja below :\nProgram Description\n\n",  # noqa: E501
-            "TAG_EXCLUDE": "Content Excluded from template\n\nCustomized by user\n\n",  # noqa: E501
-            "templateTAG_EXCLUDE": "\n## Markdwon Subtitle\n\nWith some content\n",  # noqa: E501
-            "after": "Context After\n",
+            "before": {
+                render._INDENT: "",  # noqa: SLF001
+                render._CONTENT: "Context Before\n",  # noqa: SLF001
+            },
+            "templatebefore": {
+                render._INDENT: "",  # noqa: SLF001
+                render._CONTENT: "# Markdwon Title\n\nRender from jinja below :\nProgram Description\n\n",  # noqa: E501, SLF001
+            },
+            "TAG_EXCLUDE": {
+                render._INDENT: "  ",  # noqa: SLF001
+                render._CONTENT: "Content Excluded from template\n\nCustomized by user\n\n",  # noqa: E501, SLF001
+            },
+            "templateTAG_EXCLUDE": {
+                render._INDENT: "  ",  # noqa: SLF001
+                render._CONTENT: "\n## Markdwon Subtitle\n\nWith some content\n",  # noqa: E501, SLF001
+            },
+            "after": {
+                render._INDENT: "",  # noqa: SLF001
+                render._CONTENT: "Context After\n",  # noqa: SLF001
+            },
         }
         assert context == target_context
 
@@ -140,16 +173,33 @@ class TestRender:
         )
 
         rendered_file = self._script_path / "fake_rendered" / "fake_statics.md"
+        marks = render._get_mark_comment(const.MD)  # noqa: SLF001
         self._test_merge_contexts(
             rendered_file,
             self._fake_md_tpl_file,
             {
-                "before": "Context Before\n",
-                "templatebefore": "# Markdwon Title\n\nRender from jinja below :\n{{ description }}\n\n",  # noqa: E501
-                "TAG_EXCLUDE": "Content Excluded from template\n\nCustomized by user\n\n",  # noqa: E501
-                "templateTAG_EXCLUDE": "\n## Markdwon Subtitle\n\nWith some content\n",  # noqa: E501
-                "after": "Context After\n",
+                "before": {
+                    render._INDENT: "",  # noqa: SLF001
+                    render._CONTENT: "Context Before\n",  # noqa: SLF001
+                },
+                "templatebefore": {
+                    render._INDENT: "",  # noqa: SLF001
+                    render._CONTENT: "# Markdwon Title\n\nRender from jinja below :\n{{ description }}\n\n",  # noqa: E501, SLF001
+                },
+                "TAG_EXCLUDE": {
+                    render._INDENT: "  ",  # noqa: SLF001
+                    render._CONTENT: "Content Excluded from template\n\nCustomized by user\n\n",  # noqa: E501, SLF001
+                },
+                "templateTAG_EXCLUDE": {
+                    render._INDENT: "",  # noqa: SLF001
+                    render._CONTENT: "\n## Markdwon Subtitle\n\nWith some content\n",  # noqa: E501, SLF001
+                },
+                "after": {
+                    render._INDENT: "",  # noqa: SLF001
+                    render._CONTENT: "Context After\n",  # noqa: SLF001
+                },
             },
+            marks,
         )
         self._test_merge_contexts(
             rendered_file,
@@ -159,14 +209,36 @@ class TestRender:
             / "other_types"
             / "fake.md",
             {
-                "before": "Context Before\n",
-                "templatebefore": "# Markdwon Title\n\nRender from jinja below :\n{{ description }}\n\n",  # noqa: E501
-                "TAG_EXCLUDE": "Content Excluded from template\n\nCustomized by user\n\n",  # noqa: E501
-                "templateTAG_EXCLUDE": "\n## Markdwon Subtitle\n\nWith some content\n\n",  # noqa: E501
-                "ANOTHER_TAG_EXCLUDE": "Another Content Excluded from template\n\n",  # noqa: E501
-                "templateANOTHER_TAG_EXCLUDE": "",
-                "after": "Context After\n",
+                "before": {
+                    render._INDENT: "",  # noqa: SLF001
+                    render._CONTENT: "Context Before\n",  # noqa: SLF001
+                },
+                "templatebefore": {
+                    render._INDENT: "",  # noqa: SLF001
+                    render._CONTENT: "# Markdwon Title\n\nRender from jinja below :\n{{ description }}\n\n",  # noqa: E501, SLF001
+                },
+                "TAG_EXCLUDE": {
+                    render._INDENT: "  ",  # noqa: SLF001
+                    render._CONTENT: "Content Excluded from template\n\nCustomized by user\n\n",  # noqa: E501, SLF001
+                },
+                "templateTAG_EXCLUDE": {
+                    render._INDENT: "",  # noqa: SLF001
+                    render._CONTENT: "\n## Markdwon Subtitle\n\nWith some content\n\n",  # noqa: E501, SLF001
+                },
+                "ANOTHER_TAG_EXCLUDE": {
+                    render._INDENT: "",  # noqa: SLF001
+                    render._CONTENT: "Another Content Excluded from template\n\n",  # noqa: E501, SLF001
+                },
+                "templateANOTHER_TAG_EXCLUDE": {
+                    render._INDENT: "",  # noqa: SLF001
+                    render._CONTENT: "",  # noqa: SLF001
+                },
+                "after": {
+                    render._INDENT: "",  # noqa: SLF001
+                    render._CONTENT: "Context After\n",  # noqa: SLF001
+                },
             },
+            marks,
         )
 
     def test_create_dest_dir(self) -> None:
