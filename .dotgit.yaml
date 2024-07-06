@@ -3,10 +3,9 @@
 # ------------------------------------------------------------------------------
 dotgit:
   source:
-    path: ../dotgit-sync-templates
-    # git:
-    #   url: https://framagit.org/rdeville-public/programs/dotgit-sync-templates
-    #   ref: main
+    git:
+      url: https://framagit.org/rdeville-public/programs/dotgit-sync-templates
+      ref: main
   yaml:
     merge: only
     only:
