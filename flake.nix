@@ -60,6 +60,10 @@
       system:
         inputs.alejandra.defaultPackage.${system}
     );
+    homeManagerModules = {
+      dotgit-sync = import ./modules/home-manager.nix self;
+    };
+    homeManagerModule = self.homeManagerModules.dotgit-sync;
 
     # BEGIN DOTGIT-SYNC BLOCK EXCLUDED NIX_FLAKE_OUTPUTS_CUSTOM
     packages = forAllSystems (system: let

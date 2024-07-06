@@ -48,6 +48,7 @@ templates:
   - base
   - python
   - nix-flake
+  - nix-home-manager-module
 
 # Everything below is only used as variables in templates
 # ------------------------------------------------------------------------------
