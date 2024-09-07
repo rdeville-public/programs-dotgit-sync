@@ -27,15 +27,13 @@
     };
     # END DOTGIT-SYNC BLOCK EXCLUDED NIX_FLAKE_INPUT
   };
-    # BEGIN DOTGIT-SYNC BLOCK EXCLUDED NIX_FLAKE_CUSTOM_VARS
-    # END DOTGIT-SYNC BLOCK EXCLUDED NIX_FLAKE_CUSTOM_VARS
-
   outputs = inputs @ {self, ...}: let
     pkgsForSystem = system:
       import inputs.nixpkgs {
         inherit system;
       };
-
+    # BEGIN DOTGIT-SYNC BLOCK EXCLUDED NIX_FLAKE_CUSTOM_VARS
+    # END DOTGIT-SYNC BLOCK EXCLUDED NIX_FLAKE_CUSTOM_VARS
     # This is a function that generates an attribute by calling a function you
     # pass to it, with each system as an argument
     forAllSystems = inputs.nixpkgs.lib.genAttrs allSystems;
