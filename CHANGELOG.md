@@ -1,12 +1,23 @@
 <!-- markdownlint-disable-file -->
 # CHANGELOG
 
+## v0.6.6 (2024-11-23)
+
+### 🩹 Patch
+
+  * ⬆️ Update templated files from dotgit-sync (!32) by Romain Deville ([`0b5eada`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/0b5eada23cd637b92a501b17b036e76aeb8065cc))
+  * ⬆️ Upgrade templated files from DGS by Romain Deville ([`d8b481b`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/d8b481bc938922cf589f656c69127887b73d4beb)) 🔏
+
 ## v0.6.5 (2024-09-08)
 
 ### 🩹 Patch
 
   * ⬆️ Update flake.lock (!31) by Romain Deville ([`6945920`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/6945920fc0960a1c7acd8b2c0a09849b21f596e0))
   * ⬆️ Update flake.lock by Romain Deville ([`90c4283`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/90c428365353928b4f48a206ad62907155f3f6e5)) 🔏
+
+### 🔊 Others
+
+  * 🔖 v0.6.5 (NO-CI) by Python Semantic Release [bot] ([`f7ff64c`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/f7ff64c112c507378cfc72cb7351da36d6f37c42))
 
 ## v0.6.4 (2024-09-07)
 
@@ -82,12 +93,10 @@
 ### ✨ Minor
 
   * ✨ Improve home-manager module and DGS (!22) by Romain Deville ([`e373be3`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/e373be38b8b92c8386a687fe6503306ed10b1dfa))
-  * ✨ Make home-manager module package install by Romain Deville ([`983fc90`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/983fc90872980409748a75553e4031b36fb227ba)) 🔏
 
 ### 🔊 Others
 
   * ✅ Update tests according to changed in render by Romain Deville ([`921321c`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/921321c32c8966090e3927193c568fcf45bbfc27)) 🔏
-  * 🎨 Update flake format by Romain Deville ([`f8d0aed`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/f8d0aeddbb16e2f1c897634f9feaa98c229e6a64)) 🔏
   * 💚 Update CI no python on source pipeline (!21) by Romain Deville ([`06a9cf2`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/06a9cf26c873b4ca5415d8925c71df7a39ca5726))
   * 💚 Update CI no python on source pipeline by Romain Deville ([`273a4f6`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/273a4f61a735ee9fb6d65522f8c87ac19eaeb874)) 🔏
   * 🔖 v0.5.0 (NO-CI) by Python Semantic Release [bot] ([`9520684`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/9520684df98f28fcc73dba14cf492851c6b83e94))
@@ -95,17 +104,6 @@
 
 ## v0.4.0 (2024-06-30)
 
-### ✨ Minor
-
-  * ✨ Add nixification of the repo and drop dependencies (!20) by Romain Deville ([`8c21d24`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/8c21d24816e30d4f1e739c280cf0cf6a6a063fb8))
-
 ### 🔊 Others
 
-  * ✅ Add to empty file to test filetypes by Romain Deville ([`4ab50a9`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/4ab50a9f4c170f509b18a2025bff2e065f7c4a1c)) 🔏
   * 🔖 v0.4.0 (NO-CI) by Python Semantic Release [bot] ([`5cc5af3`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/5cc5af3c0992124e6e71f3c565879d79d44bac23))
-
-## v0.3.5 (2024-06-23)
-
-### 🔊 Others
-
-  * 🔖 v0.3.5 (NO-CI) by Python Semantic Release [bot] ([`0d9454a`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/0d9454a218fb1a1fa41b5a7b51d35819d1c7ed41))
