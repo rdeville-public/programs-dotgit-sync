@@ -19,7 +19,7 @@ from . import (
     logger,
     render,
 )
-from .utils import config as cfg_utils, const, templates as tpl_utils
+from .utils import config as cfg_utils, const, templates as tpl_utils, json as json_utils
 
 
 log = logging.getLogger(const.PKG_NAME)
@@ -36,13 +36,23 @@ def _process_file(
 
 
 def _process_json(
-    config: dict, dst: str, sources: list[str], is_yaml: bool = False
+    config: dict,
+    dst: str,
+    sources: list[str],
+    ft: str,
+    enforce: bool,
 ) -> None:
     content = None
     for src in sources:
         with pathlib.Path(src).open(encoding="utf-8") as file:
-            content = yaml.safe_load(file) if is_yaml else json5.load(file)
-        render.render_json(config, dst, content, is_yaml)
+            update = (
+                yaml.safe_load(file) if ft == const.YAML else json5.load(file)
+            )
+            if isinstance(update, dict):
+                content = json_utils.merge_json_dict(content, update)
+            else:  # isinstance(update, list)
+                content = json_utils.merge_json_list(content, update)
+    render.render_json(config, dst, content, ft, enforce)
 
 
 def process(config: dict, tpl_dir: str, is_static: bool = False) -> None:
@@ -61,27 +71,18 @@ def process(config: dict, tpl_dir: str, is_static: bool = False) -> None:
     for dst, sources in processed.items():
         ft = filetype.get_filetype(sources[0])
         dst_path = pathlib.Path(config[const.OUTDIR]) / dst
-        if ft == "json":
-            _process_json(config, dst_path, sources)
-        elif (
-            ft == "yaml"
-            and const.YAML in config[const.PKG_NAME]
-            and const.MERGE in config[const.PKG_NAME][const.YAML]
-            and config[const.PKG_NAME][const.YAML][const.MERGE] == const.ALL
-        ):
-            _process_json(config, dst_path, sources, True)
-        elif (
-            ft == "yaml"
-            and const.YAML in config[const.PKG_NAME]
-            and const.MERGE in config[const.PKG_NAME][const.YAML]
-            and config[const.PKG_NAME][const.YAML][const.MERGE] == const.ONLY
-        ):
-            if dst_path.name in config[const.PKG_NAME][const.YAML][const.ONLY]:
-                _process_json(config, dst_path, sources, is_yaml=True)
-            else:
+
+        if ft in [const.YAML, const.JSON]:
+            merge, enforce = cfg_utils.get_merge_enforce(
+                ft, config, dst_path.name
+            )
+
+            if ft == const.YAML and not merge:
                 _process_file(
                     config, dst_path, sources, ft, is_static=is_static
                 )
+            else:
+                _process_json(config, dst_path, sources, ft, enforce)
         else:
             _process_file(config, dst_path, sources, ft, is_static=is_static)
 
@@ -103,8 +104,8 @@ def main(args: argparse.Namespace = sys.argv[1:]) -> None:
     except requests.exceptions.ConnectionError as error:  # pragma: no cover
         log.warning(error)
 
-    process(config, "statics", is_static=True)
-    process(config, "templates")
+    process(config, const.STATICS, is_static=True)
+    process(config, const.TEMPLATES)
 
 
 if __name__ == "__main__":  # pragma: no cover

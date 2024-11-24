@@ -85,6 +85,8 @@ COMMENT_FILETYPE = {
 
 # Keys used in config files
 MERGE = "merge"
+ENFORCE = "enforce"
+METHOD = "method"
 NONE = "none"
 ALL = "all"
 ONLY = "only"

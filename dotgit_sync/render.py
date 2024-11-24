@@ -24,6 +24,7 @@ _INDENT = "indent"
 _CONTENT = "content"
 _MARK = "DOTGIT-SYNC BLOCK"
 _YAML_MERGED = "YAML_MERGED"
+_ENFORCED = "ENFORCED"
 _BEGIN_MANAGED = f"{const.BEGIN} {_MARK} MANAGED"
 _END_MANAGED = f"{const.END} {_MARK} MANAGED"
 _BEGIN_EXCLUDED = f"{const.BEGIN} {_MARK} EXCLUDED"
@@ -289,7 +290,7 @@ def render_file(
 
 
 def render_json(
-    config: dict, dst: str, update: dict, is_yaml: bool = False
+    config: dict, dst: str, update: dict, ft: str, enforce: bool
 ) -> None:
     """Method that render json or yaml file from template.
 
@@ -297,29 +298,34 @@ def render_json(
         config: Dotgit Sync configuration
         dst: Path to the destination file to render
         update: Dictionnary from template
-        is_yaml: Boolean to specifiy if templates are yaml or json files
+        ft: filetype, either "yaml" or "json" is supported
+        enforce: Boolean to force content remplacement if True, else will let
+                 user new content in place
     """
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
     log.info(
         "Merging %s to %s",
         str(dst).replace(f"{config[const.OUTDIR]}/", ""),
-        "YAML" if is_yaml else "JSON",
+        "YAML" if ft == const.YAML else "JSON",
     )
 
     _create_dest_dir(dst)
 
     content = None
-    if pathlib.Path(dst).is_file():
+    if pathlib.Path(dst).is_file() and not enforce:
         with pathlib.Path(dst).open(encoding="utf-8") as file:
-            content = yaml.safe_load(file) if is_yaml else json5.load(file)
+            log.error(ft)
+            content = (
+                yaml.safe_load(file) if ft == const.YAML else json5.load(file)
+            )
 
     if isinstance(update, dict):
         content = utils.merge_json_dict(content, update)
-    else:  # isinstance(update, list):
+    else:  # isinstance(update, list)
         content = utils.merge_json_list(content, update)
 
     with pathlib.Path(dst).open("w", encoding="utf-8") as file:
-        if is_yaml:
+        if ft == const.YAML:
             marks = _get_mark_comment(const.YAML)
             begin = (
                 f"{marks[const.BEGIN]} {_BEGIN_MANAGED}{marks[const.END]} "
@@ -329,6 +335,9 @@ def render_json(
                 f"{marks[const.BEGIN]} {_END_MANAGED}{marks[const.END]} "
                 + f"{_YAML_MERGED}"
             )
+            if enforce:
+                begin += f"_{_ENFORCED}"
+                end += f"_{_ENFORCED}"
             file.write(f"{begin}\n")
             yaml.add_representer(str, _yaml_multiline_string_pipe)
             yaml.dump(
