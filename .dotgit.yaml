@@ -7,10 +7,19 @@ dotgit:
       url: https://framagit.org/rdeville-public/programs/dotgit-sync-templates
       ref: main
   yaml:
-    merge: only
-    only:
-      - .pre-commit-config.yaml
-      - gitlab-ci.yaml
+    merge:
+      method: only
+      only:
+        - .pre-commit-config.yaml
+        - gitlab-ci.yaml
+    enforce:
+      method: only
+      only:
+        - .pre-commit-config.yaml
+        - gitlab-ci.yaml
+  json:
+    enforce:
+      method: all
 
 # Repos description and template usage configuration
 # ------------------------------------------------------------------------------
