@@ -3,9 +3,10 @@
 # ------------------------------------------------------------------------------
 dotgit:
   yaml:
-    merge: only
-    only:
-      - fake_merge.yaml
+    merge:
+      method: only
+      only:
+        - fake_merge.yaml
 
 # Repos description and template usage configuration
 # ------------------------------------------------------------------------------
