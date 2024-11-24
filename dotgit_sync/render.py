@@ -11,7 +11,7 @@ import jinja2
 import json5
 import yaml
 
-from .utils import const, json as utils
+from .utils import const, jsonc as utils
 
 
 log = logging.getLogger(const.PKG_NAME)

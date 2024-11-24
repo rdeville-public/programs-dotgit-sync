@@ -5,7 +5,7 @@ import inspect
 import logging
 import pathlib
 
-from dotgit_sync.utils import json as utils
+from dotgit_sync.utils import jsonc as utils
 import pytest
 
 

@@ -2,7 +2,6 @@
 """Commit parser which looks for gitmojis to determine the type of commit."""
 
 import logging
-from typing import Tuple
 
 from git.objects.commit import Commit
 from pydantic.dataclasses import dataclass
@@ -26,7 +25,7 @@ GITMOJIS = "https://raw.githubusercontent.com/carloscuesta/gitmoji/master/packag
 
 def gitmoji_per_semver(
     semver: str | None = None
-) -> Tuple[str, ...]:
+) -> tuple[str, ...]:
     """Construct a typle of datas based on gitmojis definition.
 
     Args:
@@ -47,10 +46,10 @@ def gitmoji_per_semver(
 @dataclass
 class GitmojiParserOptions(ParserOptions):
     """Python Semantic Release parser option."""
-    major: Tuple[str, ...] = tuple(gitmoji_per_semver("major"))
-    minor: Tuple[str, ...] = tuple(gitmoji_per_semver("minor"))
-    patch: Tuple[str, ...] = tuple(gitmoji_per_semver("patch"))
-    other: Tuple[str, ...] = tuple(gitmoji_per_semver())
+    major: tuple[str, ...] = tuple(gitmoji_per_semver("major"))
+    minor: tuple[str, ...] = tuple(gitmoji_per_semver("minor"))
+    patch: tuple[str, ...] = tuple(gitmoji_per_semver("patch"))
+    other: tuple[str, ...] = tuple(gitmoji_per_semver())
     default_bump_level: LevelBump = LevelBump.NO_RELEASE
 
 

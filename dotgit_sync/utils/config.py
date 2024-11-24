@@ -42,7 +42,7 @@ def _validate_config(config_file: pathlib.Path) -> None:
         sys.exit(errno.ENODATA)
     except errors.CoreError as error:
         log.exception(error.msg)
-        if "No source file/data was loaded" in error.msg:
+        if "No source file/data was loaded" in str(error.msg):
             sys.exit(errno.ENODATA)
         else:
             sys.exit(errno.ENOENT)
@@ -73,7 +73,9 @@ def search_git_workdir(path: pathlib.Path) -> pathlib.Path:
     raise FileNotFoundError(error_msg)
 
 
-def get_merge_enforce(ft: str, config: dict, dst_path: pathlib.Path) -> dict:
+def get_merge_enforce(
+    ft: str, config: dict, dst_path: pathlib.Path
+) -> tuple[bool, bool]:
     """Return simple dictionnary to check enforce/merge config for json or yaml.
 
     Simply check configuration for a given key, yaml or json, and return a
@@ -81,9 +83,9 @@ def get_merge_enforce(ft: str, config: dict, dst_path: pathlib.Path) -> dict:
     dotgit config file.
 
     Args:
-      key: Filetype, either 'yaml' or 'json' are supported
+      ft: Filetype, either 'yaml' or 'json' are supported
       config: Dictionnary containing Dotgit Sync configuration
-      filename: Basename of the file output to render
+      dst_path: Basename of the file output to render
 
     Return:
       A dictionnary with following structure:
@@ -100,23 +102,15 @@ def get_merge_enforce(ft: str, config: dict, dst_path: pathlib.Path) -> dict:
     """
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
 
-    output = dict({const.ENFORCE: False, const.MERGE: False})
+    output = {const.ENFORCE: False, const.MERGE: False}
 
     for config_key in output:
-        if (
-            ft in config[const.PKG_NAME]
-            and config_key in config[const.PKG_NAME][ft]
-            and const.METHOD in config[const.PKG_NAME][ft][config_key]
-            and config[const.PKG_NAME][ft][config_key][const.METHOD]
-            == const.ALL
-        ):
-            output[config_key] = True
-        elif (
-            ft in config[const.PKG_NAME]
-            and config_key in config[const.PKG_NAME][ft]
-            and const.METHOD in config[const.PKG_NAME][ft][config_key]
-            and config[const.PKG_NAME][ft][config_key][const.METHOD]
-            == const.ONLY
+        try:
+            method = config[const.PKG_NAME][ft][config_key][const.METHOD]
+        except KeyError:
+            continue
+        if (method == const.ALL) or (
+            method == const.ONLY
             and dst_path in config[const.PKG_NAME][ft][config_key][const.ONLY]
         ):
             output[config_key] = True
@@ -184,7 +178,8 @@ def get_config(args: argparse.ArgumentParser) -> dict:
                 key in config[const.PKG_NAME]
                 and subkey in config[const.PKG_NAME][key]
                 and const.METHOD in config[const.PKG_NAME][key][subkey]
-                and config[const.PKG_NAME][key][subkey][const.METHOD] == const.ONLY
+                and config[const.PKG_NAME][key][subkey][const.METHOD]
+                == const.ONLY
                 and const.ONLY not in config[const.PKG_NAME][key][subkey]
             ):
                 error_msg = (

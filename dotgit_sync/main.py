@@ -19,7 +19,12 @@ from . import (
     logger,
     render,
 )
-from .utils import config as cfg_utils, const, templates as tpl_utils, json as json_utils
+from .utils import (
+    config as cfg_utils,
+    const,
+    jsonc as json_utils,
+    templates as tpl_utils,
+)
 
 
 log = logging.getLogger(const.PKG_NAME)
@@ -72,7 +77,7 @@ def process(config: dict, tpl_dir: str, is_static: bool = False) -> None:
         ft = filetype.get_filetype(sources[0])
         dst_path = pathlib.Path(config[const.OUTDIR]) / dst
 
-        if ft in [const.YAML, const.JSON]:
+        if ft in {const.YAML, const.JSON}:
             merge, enforce = cfg_utils.get_merge_enforce(
                 ft, config, dst_path.name
             )
