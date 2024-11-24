@@ -38,9 +38,9 @@ def init_logger(args: argparse.Namespace, log: logging.Logger) -> None:
         error_msg = f"Verbosity of {args.verbose} is not valid."
         raise LookupError(error_msg)
 
-    if re.match("json|Json|JSON*", args.log_format):
+    if re.match(r"json|Json|JSON*", args.log_format):
         stream_formatter = logging.Formatter(json_fmt)
-    elif re.match("string|String|STRING*", args.log_format):
+    elif re.match(r"string|String|STRING*", args.log_format):
         stream_formatter = logging.Formatter(str_fmt)
     else:
         error_msg = "Log format should be either `json` or `string`."

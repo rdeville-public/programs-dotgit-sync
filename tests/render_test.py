@@ -85,20 +85,20 @@ class TestRender:
         dest: pathlib.Path,
         update_file: pathlib.Path,
         target_file: pathlib.Path,
-        is_yaml: bool = False,
+        ft: str,
     ) -> None:
         config = {
             const.OUTDIR: self._output_dir,
             "description": "Program Description",
         }
-        if is_yaml:
+        if ft == const.YAML:
             update = yaml.safe_load(update_file.read_text())
             target = yaml.safe_load(target_file.read_text())
         else:
             update = json5.loads(update_file.read_text())
             target = json5.loads(target_file.read_text())
-        render.render_json(config, dest, update, is_yaml)
-        if is_yaml:
+        render.render_json(config, dest, update, ft, enforce=False)
+        if ft == const.YAML:
             content = yaml.safe_load(dest.read_text())
         else:
             content = json5.loads(dest.read_text())
@@ -298,14 +298,14 @@ class TestRender:
         target = (
             self._script_path / "fake_rendered" / "fake_json_no_custom_key.json"
         )
-        self._test_rendering_json_yaml(dest, update, target)
+        self._test_rendering_json_yaml(dest, update, target, const.JSON)
         target = (
             self._script_path
             / "fake_rendered"
             / "fake_json_with_custom_key.json"
         )
         shutil.copy(target, dest)
-        self._test_rendering_json_yaml(dest, update, target)
+        self._test_rendering_json_yaml(dest, update, target, const.JSON)
         dest.unlink()
         update = (
             self._script_path
@@ -319,7 +319,7 @@ class TestRender:
             / "fake_rendered"
             / "fake_list_json_no_custom_key.json"
         )
-        self._test_rendering_json_yaml(dest, update, target)
+        self._test_rendering_json_yaml(dest, update, target, const.JSON)
 
         dest = self._output_dir / "fake.yaml"
         update = (
@@ -332,11 +332,11 @@ class TestRender:
         target = (
             self._script_path / "fake_rendered" / "fake_yaml_no_custom_key.yaml"
         )
-        self._test_rendering_json_yaml(dest, update, target, True)
+        self._test_rendering_json_yaml(dest, update, target, const.YAML)
         target = (
             self._script_path
             / "fake_rendered"
             / "fake_yaml_with_custom_key.yaml"
         )
         shutil.copy(target, dest)
-        self._test_rendering_json_yaml(dest, update, target, True)
+        self._test_rendering_json_yaml(dest, update, target, const.YAML)

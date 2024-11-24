@@ -17,16 +17,19 @@ schema;dotgit:
               type: str
         regex;(^path$):
           type: str
-    yaml:
+    regex;(^yaml|json$):
       type: map
       map:
-        merge:
-          type: str
-          enum:
-            - none
-            - all
-            - only
-        only:
-          type: seq
-          seq:
-            - type: str
+        regex;(^merge|enforce$):
+          type: map
+          map:
+            method:
+              type: str
+              enum:
+                - none
+                - all
+                - only
+            only:
+              type: seq
+              seq:
+                - type: str

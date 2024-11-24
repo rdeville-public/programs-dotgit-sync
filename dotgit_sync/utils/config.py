@@ -42,7 +42,7 @@ def _validate_config(config_file: pathlib.Path) -> None:
         sys.exit(errno.ENODATA)
     except errors.CoreError as error:
         log.exception(error.msg)
-        if "No source file/data was loaded" in error.msg:
+        if "No source file/data was loaded" in str(error.msg):
             sys.exit(errno.ENODATA)
         else:
             sys.exit(errno.ENOENT)
@@ -71,6 +71,51 @@ def search_git_workdir(path: pathlib.Path) -> pathlib.Path:
 
     error_msg = f"Unable to find any `.git` repository amont parent from {path}"
     raise FileNotFoundError(error_msg)
+
+
+def get_merge_enforce(
+    ft: str, config: dict, dst_path: pathlib.Path
+) -> tuple[bool, bool]:
+    """Return simple dictionnary to check enforce/merge config for json or yaml.
+
+    Simply check configuration for a given key, yaml or json, and return a
+    dictionnary of booleans about merging en enforcing policy set in the main
+    dotgit config file.
+
+    Args:
+      ft: Filetype, either 'yaml' or 'json' are supported
+      config: Dictionnary containing Dotgit Sync configuration
+      dst_path: Basename of the file output to render
+
+    Return:
+      A dictionnary with following structure:
+
+      ```json
+      {
+        merge: boolean,
+        enforce: boolean
+      }
+      ```
+
+      Where value is 'True' or 'False' is either 'merge' or 'enforce' policy
+      should be apply to the file to render.
+    """
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+
+    output = {const.ENFORCE: False, const.MERGE: False}
+
+    for config_key in output:
+        try:
+            method = config[const.PKG_NAME][ft][config_key][const.METHOD]
+        except KeyError:
+            continue
+        if (method == const.ALL) or (
+            method == const.ONLY
+            and dst_path in config[const.PKG_NAME][ft][config_key][const.ONLY]
+        ):
+            output[config_key] = True
+
+    return output[const.MERGE], output[const.ENFORCE]
 
 
 def get_config(args: argparse.ArgumentParser) -> dict:
@@ -127,19 +172,23 @@ def get_config(args: argparse.ArgumentParser) -> dict:
         )
         raise ValueError(error_msg)
 
-    if (
-        const.YAML in config[const.PKG_NAME]
-        and const.MERGE in config[const.PKG_NAME][const.YAML]
-        and config[const.PKG_NAME][const.YAML][const.MERGE] == const.ONLY
-        and const.ONLY not in config[const.PKG_NAME][const.YAML]
-    ):
-        error_msg = (
-            "In your config file, if path "
-            + f"/config/{const.YAML}/{const.MERGE} is set to "
-            + f"'{const.ONLY}', key '{const.ONLY}' with a list of "
-            + "filename must be present"
-        )
-        raise KeyError(error_msg)
+    for key in [const.YAML, const.JSON]:
+        for subkey in [const.MERGE, const.ENFORCE]:
+            if (
+                key in config[const.PKG_NAME]
+                and subkey in config[const.PKG_NAME][key]
+                and const.METHOD in config[const.PKG_NAME][key][subkey]
+                and config[const.PKG_NAME][key][subkey][const.METHOD]
+                == const.ONLY
+                and const.ONLY not in config[const.PKG_NAME][key][subkey]
+            ):
+                error_msg = (
+                    "In your config file, if path "
+                    + f"/config/{key}/{subkey} is set to "
+                    + f"'{const.ONLY}', key '{const.ONLY}' with a list of "
+                    + "filename must be present"
+                )
+                raise KeyError(error_msg)
 
     config[const.OUTDIR] = args.outdir
     if const.CURR_YEAR not in config[const.LICENSES][const.DATE]:
