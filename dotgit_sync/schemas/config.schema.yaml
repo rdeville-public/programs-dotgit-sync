@@ -1,5 +1,10 @@
 ---
 map:
+  version:
+    type: str
+    enum:
+      - v0
+      - v1alpha1
   dotgit:
     include: dotgit
   name:

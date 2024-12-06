@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Set of constants use by dotgit sync."""
 
+import ordered_set
+
+
 PKG_NAME = "dotgit"
 
 # LOGGER
@@ -83,7 +86,7 @@ COMMENT_FILETYPE = {
     CURLY_HASHTAG: [J2],
 }
 
-# Keys used in config files
+# KEYS USED IN CONFIG FILES
 MERGE = "merge"
 ENFORCE = "enforce"
 METHOD = "method"
@@ -104,3 +107,11 @@ SECONDARIES = "secondaries"
 PRIMARY = "primary"
 TEMPLATES = "templates"
 STATICS = "statics"
+
+# NAME OF MIGRATIONS DIRECTORY
+MIGRATIONS = "migrations"
+VERSION = "version"
+CFG_VERSIONS = ordered_set.OrderedSet([
+    "v0",
+    "v1alpha1",
+])

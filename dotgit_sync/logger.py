@@ -2,51 +2,50 @@
 """Logger facility."""
 
 import argparse
-import logging
 import re
 
-
-_WARNING = 0
-_INFO = 1
-_DEBUG = 2
+import coloredlogs
 
 
-def init_logger(args: argparse.Namespace, log: logging.Logger) -> None:
+_WARNING_LVL = 0
+_INFO_LVL = 1
+_DEBUG_LVL = 2
+_WARNING = "WARNING"
+_INFO = "INFO"
+_DEBUG = "DEBUG"
+
+_STR_FMT = "%(asctime)-8s %(levelname)-8s %(name)-10s %(message)s"
+_JSON_FMT = """\
+{
+    "level":"%(levelname)s",
+    "time":"%(asctime)s",
+    "name":"%(name)s",
+    "message": "%(message)s"
+}\
+"""
+
+
+def init_logger(args: argparse.Namespace) -> None:
     """Initiliaze logger and format.
 
     Args:
         args: Arguments passed to programs
         log: Python logger
     """
-    str_fmt = "%(asctime)-8s %(levelname)-8s %(name)-10s %(message)s"
-    json_fmt = """\
-{
-    "time":"%(asctime)s",
-    "level":"%(levelname)s",
-    "name":"%(name)s",
-    "message": "%(message)s"
-}\
-"""
-
-    if args.verbose == _WARNING:
-        log.setLevel(logging.WARNING)
-    elif args.verbose == _INFO:
-        log.setLevel(logging.INFO)
-    elif args.verbose >= _WARNING:
-        log.setLevel(logging.DEBUG)
-    else:
-        error_msg = f"Verbosity of {args.verbose} is not valid."
-        raise LookupError(error_msg)
-
     if re.match(r"json|Json|JSON*", args.log_format):
-        stream_formatter = logging.Formatter(json_fmt)
+        coloredlogs.install(fmt=_JSON_FMT)
     elif re.match(r"string|String|STRING*", args.log_format):
-        stream_formatter = logging.Formatter(str_fmt)
+        coloredlogs.install(fmt=_STR_FMT)
     else:
         error_msg = "Log format should be either `json` or `string`."
         raise LookupError(error_msg)
 
-    stream_handler = logging.StreamHandler()
-    stream_handler.setFormatter(stream_formatter)
-
-    log.addHandler(stream_handler)
+    if args.verbose == _WARNING_LVL:
+        coloredlogs.set_level(_WARNING)
+    elif args.verbose == _INFO_LVL:
+        coloredlogs.set_level(_INFO)
+    elif args.verbose >= _DEBUG_LVL:
+        coloredlogs.set_level(_DEBUG)
+    else:
+        error_msg = f"Verbosity of {args.verbose} is not valid."
+        raise LookupError(error_msg)

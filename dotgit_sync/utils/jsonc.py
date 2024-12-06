@@ -25,8 +25,6 @@ def merge_json_dict(src: dict, update: dict) -> dict:
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
 
     for key, value in update.items():
-        if src is None:
-            src = {}
         if key not in src:
             src[key] = value
             continue

@@ -95,7 +95,7 @@ def process(config: dict, tpl_dir: str, is_static: bool = False) -> None:
 def main(args: argparse.Namespace = sys.argv[1:]) -> None:
     """Entrypoint method of the main module."""
     args = argparser.parser().parse_args(args)
-    logger.init_logger(args, log)
+    logger.init_logger(args)
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
 
     config = cfg_utils.get_config(args)

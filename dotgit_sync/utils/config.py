@@ -12,7 +12,7 @@ import sys
 
 from pykwalify import core, errors
 
-from . import const
+from . import const, migrate_config
 
 
 log = logging.getLogger(const.PKG_NAME)
@@ -129,6 +129,10 @@ def get_config(args: argparse.ArgumentParser) -> dict:
         Dictionnary containing Dotgit Sync configuration
     """
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+
+    if not migrate_config.check_migrations(args.config):
+        log.error("Need to migrate config file")
+        exit(1)
 
     config = _validate_config(args.config)
 
