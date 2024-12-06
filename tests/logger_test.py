@@ -6,12 +6,18 @@ import inspect
 import logging
 import pathlib
 
+import coloredlogs
 from dotgit_sync import logger
 import pytest
 
 
 log = logging.getLogger(__name__)
 _LOG_TRACE = f"{pathlib.Path(__file__).name}:{__name__}"
+
+# See : https://coloredlogs.readthedocs.io/en/latest/api.html
+_WARNING_LVL = 30
+_INFO_LVL = 20
+_DEBUG_LVL = 10
 
 
 class TestLogger:
@@ -28,7 +34,7 @@ class TestLogger:
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         test_log = logging.getLogger(logger_name)
         args = self.Args(verbosity, log_format)
-        logger.init_logger(args, test_log)
+        logger.init_logger(args)
         return test_log
 
     def test_init_logger_string(self) -> None:
@@ -36,42 +42,42 @@ class TestLogger:
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should accept format 'string', 'String' and 'STRING'")
 
-        test_log = self._set_logger(inspect.stack()[0][3], log_format="string")
-        assert test_log.level == logging.WARNING
+        self._set_logger(inspect.stack()[0][3], log_format="string")
+        assert coloredlogs.get_level() == _WARNING_LVL
 
-        test_log = self._set_logger(inspect.stack()[0][3], log_format="String")
-        assert test_log.level == logging.WARNING
+        self._set_logger(inspect.stack()[0][3], log_format="String")
+        assert coloredlogs.get_level() == _WARNING_LVL
 
-        test_log = self._set_logger(inspect.stack()[0][3], log_format="STRING")
-        assert test_log.level == logging.WARNING
+        self._set_logger(inspect.stack()[0][3], log_format="STRING")
+        assert coloredlogs.get_level() == _WARNING_LVL
 
     def test_init_logger_json(self) -> None:
         """Testing logger output format set to json."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should accept format 'json', 'Json' and 'JSON'")
 
-        test_log = self._set_logger(inspect.stack()[0][3], log_format="json")
-        assert test_log.level == logging.WARNING
+        self._set_logger(inspect.stack()[0][3], log_format="json")
+        assert coloredlogs.get_level() == _WARNING_LVL
 
-        test_log = self._set_logger(inspect.stack()[0][3], log_format="Json")
-        assert test_log.level == logging.WARNING
+        self._set_logger(inspect.stack()[0][3], log_format="Json")
+        assert coloredlogs.get_level() == _WARNING_LVL
 
-        test_log = self._set_logger(inspect.stack()[0][3], log_format="JSON")
-        assert test_log.level == logging.WARNING
+        self._set_logger(inspect.stack()[0][3], log_format="JSON")
+        assert coloredlogs.get_level() == _WARNING_LVL
 
     def test_init_logger_verbosity(self) -> None:
         """Testing logger output verbosity depending of number of arguments."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Should set verbosity to INFO for 1 '-v'")
 
-        test_log = self._set_logger(inspect.stack()[0][3], 1)
-        assert test_log.level == logging.INFO
+        self._set_logger(inspect.stack()[0][3], 1)
+        assert coloredlogs.get_level() == _INFO_LVL
 
-        test_log = self._set_logger(inspect.stack()[0][3], 2)
-        assert test_log.level == logging.DEBUG
+        self._set_logger(inspect.stack()[0][3], 2)
+        assert coloredlogs.get_level() == _DEBUG_LVL
 
-        test_log = self._set_logger(inspect.stack()[0][3], 3)
-        assert test_log.level == logging.DEBUG
+        self._set_logger(inspect.stack()[0][3], 3)
+        assert coloredlogs.get_level() == _DEBUG_LVL
 
     def test_init_logger_wrong_level(self) -> None:
         """Testing logger throw an error if negative verbosity level."""
