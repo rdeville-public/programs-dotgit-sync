@@ -1,9 +1,6 @@
 ---
 schema;maintainers:
   required: true
-  seq:
-    - map:
-        name:
-          type: str
-        mail:
-          include: required_email
+  map:
+    regex;(^.*$):
+      include: required_email

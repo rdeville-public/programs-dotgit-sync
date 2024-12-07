@@ -119,4 +119,5 @@ MIGRATIONS = "migrations"
 VERSION = "version"
 CFG_VERSIONS = ordered_set.OrderedSet([
     "v0",
+    "v1alpha1"
 ])
