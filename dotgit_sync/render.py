@@ -229,12 +229,8 @@ def _write_from_template(
     with pathlib.Path(dst).open("w", encoding="utf-8") as file:
         keys = list(contexts.keys())
         for idx, key in enumerate(keys):
-            if contexts[key][_INDENT]:
-                begin = f"{contexts[key][_INDENT]}{marks[const.BEGIN]}"
-                end = f"{contexts[key][_INDENT]}{marks[const.BEGIN]}"
-            else:
-                begin = f"{marks[const.BEGIN]}"
-                end = f"{marks[const.BEGIN]}"
+            begin = f"{marks[const.BEGIN]}"
+            end = f"{marks[const.BEGIN]}"
 
             if _TEMPLATE not in key:
                 if key not in {_BEFORE, _AFTER}:
@@ -290,7 +286,7 @@ def render_file(
 
 
 def render_json(
-    config: dict, dst: pathlib.Path, update: dict, ft: str, enforce: bool
+    config: dict, dst: pathlib.Path, update: dict | list, ft: str, enforce: bool
 ) -> None:
     """Method that render json or yaml file from template.
 

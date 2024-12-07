@@ -118,7 +118,7 @@ class TestRender:
                 render._CONTENT: "# Markdwon Title\n\nRender from jinja below :\n{{ description }}\n\n",  # noqa: E501, SLF001
             },
             "TAG_EXCLUDE": {
-                render._INDENT: "  ",  # noqa: SLF001
+                render._INDENT: "",  # noqa: SLF001
                 render._CONTENT: "Content Excluded from template\n\nCustomized by user\n\n",  # noqa: E501, SLF001
             },
             "templateTAG_EXCLUDE": {
@@ -150,11 +150,11 @@ class TestRender:
                 render._CONTENT: "# Markdwon Title\n\nRender from jinja below :\nProgram Description\n\n",  # noqa: E501, SLF001
             },
             "TAG_EXCLUDE": {
-                render._INDENT: "  ",  # noqa: SLF001
+                render._INDENT: "",  # noqa: SLF001
                 render._CONTENT: "Content Excluded from template\n\nCustomized by user\n\n",  # noqa: E501, SLF001
             },
             "templateTAG_EXCLUDE": {
-                render._INDENT: "  ",  # noqa: SLF001
+                render._INDENT: "",  # noqa: SLF001
                 render._CONTENT: "\n## Markdwon Subtitle\n\nWith some content\n",  # noqa: E501, SLF001
             },
             "after": {
@@ -186,7 +186,7 @@ class TestRender:
                     render._CONTENT: "# Markdwon Title\n\nRender from jinja below :\n{{ description }}\n\n",  # noqa: E501, SLF001
                 },
                 "TAG_EXCLUDE": {
-                    render._INDENT: "  ",  # noqa: SLF001
+                    render._INDENT: "",  # noqa: SLF001
                     render._CONTENT: "Content Excluded from template\n\nCustomized by user\n\n",  # noqa: E501, SLF001
                 },
                 "templateTAG_EXCLUDE": {
@@ -204,7 +204,7 @@ class TestRender:
             rendered_file,
             self._script_path
             / "fake_templates"
-            / "statics"
+            / const.TEMPLATES
             / "other_types"
             / "fake.md",
             {
@@ -217,20 +217,12 @@ class TestRender:
                     render._CONTENT: "# Markdwon Title\n\nRender from jinja below :\n{{ description }}\n\n",  # noqa: E501, SLF001
                 },
                 "TAG_EXCLUDE": {
-                    render._INDENT: "  ",  # noqa: SLF001
+                    render._INDENT: "",  # noqa: SLF001
                     render._CONTENT: "Content Excluded from template\n\nCustomized by user\n\n",  # noqa: E501, SLF001
                 },
                 "templateTAG_EXCLUDE": {
                     render._INDENT: "",  # noqa: SLF001
-                    render._CONTENT: "\n## Markdwon Subtitle\n\nWith some content\n\n",  # noqa: E501, SLF001
-                },
-                "ANOTHER_TAG_EXCLUDE": {
-                    render._INDENT: "",  # noqa: SLF001
-                    render._CONTENT: "Another Content Excluded from template\n\n",  # noqa: E501, SLF001
-                },
-                "templateANOTHER_TAG_EXCLUDE": {
-                    render._INDENT: "",  # noqa: SLF001
-                    render._CONTENT: "",  # noqa: SLF001
+                    render._CONTENT: "\n## Markdwon Subtitle\n\nWith some content\n",  # noqa: E501, SLF001
                 },
                 "after": {
                     render._INDENT: "",  # noqa: SLF001
@@ -290,7 +282,7 @@ class TestRender:
         update = (
             self._script_path
             / "fake_templates"
-            / "statics"
+            / const.TEMPLATES
             / "other_types"
             / "fake.json"
         )
@@ -309,7 +301,7 @@ class TestRender:
         update = (
             self._script_path
             / "fake_templates"
-            / "statics"
+            / const.TEMPLATES
             / "other_types"
             / "fake_list.json"
         )
@@ -324,7 +316,7 @@ class TestRender:
         update = (
             self._script_path
             / "fake_templates"
-            / "statics"
+            / const.TEMPLATES
             / "other_types"
             / "fake.yaml"
         )

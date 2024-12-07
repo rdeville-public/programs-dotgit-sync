@@ -38,12 +38,6 @@ def _validate_config(config: dict) -> None:
     except errors.SchemaError as error:
         log.exception(error.msg)
         sys.exit(errno.ENODATA)
-    except errors.CoreError as error:
-        log.exception(error.msg)
-        if "No source file/data was loaded" in str(error.msg):
-            sys.exit(errno.ENODATA)
-        else:
-            sys.exit(errno.ENOENT)
 
 
 def search_git_workdir(path: pathlib.Path) -> pathlib.Path:

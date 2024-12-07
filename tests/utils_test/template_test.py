@@ -46,34 +46,11 @@ class TestUtilsTemplate:
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Return path to templates and statics folder in source")
 
-        config = {const.PKG_NAME: {const.SOURCE: {const.PATH: self._tpl_dir}}}
+        config = {const.DOTGIT: {const.SOURCE: {const.PATH: self._tpl_dir}}}
         assert (
             utils.get_template_dir(config, const.TEMPLATES)
             == self._tpl_dir / const.TEMPLATES
         )
-        assert (
-            utils.get_template_dir(config, const.STATICS)
-            == self._tpl_dir / const.STATICS
-        )
-
-    def test_template_file_exists(self) -> None:
-        """Test a template file exists from template flavor and filename."""
-        log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
-        log.info("Return path to template file")
-
-        tpl_src = self._tpl_dir / const.STATICS / "all_types"
-        filename = "fake.json"
-        file_path = tpl_src / filename
-        assert utils.template_exists(filename, tpl_src) == file_path
-
-    def test_template_file_not_exists(self) -> None:
-        """Test a template file does not exist from template flavor and filename."""  # noqa: E501
-        log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
-        log.info("Return None as template file does not exists")
-
-        tpl_src = self._tpl_dir / const.STATICS / "all_types"
-        filename = "fake.fake"
-        assert utils.template_exists(filename, tpl_src) is None
 
     def test_process_dir_template(self) -> None:
         """Test building list of template files from a template flavor."""
@@ -90,6 +67,9 @@ class TestUtilsTemplate:
             pathlib.Path("folder_cfg/fake.toml"): [
                 (path / "folder_cfg" / "fake.toml").resolve(),
             ],
+            pathlib.Path("fake.md"): [
+                (path / "fake.md").resolve(),
+            ],
         }
         processed = {}
         utils._process_dir_template(path, "", processed)  # noqa: SLF001
@@ -104,22 +84,125 @@ class TestUtilsTemplate:
 
         path = self._tpl_dir / const.TEMPLATES
         process_target = {
+            pathlib.Path(".editorconfig"): [
+                pathlib.Path(path / "all_types" / ".editorconfig").resolve(),
+            ],
+            pathlib.Path(".envrc"): [
+                pathlib.Path(path / "all_types" / ".envrc").resolve(),
+            ],
+            pathlib.Path(".gitignore"): [
+                pathlib.Path(path / "all_types" / ".gitignore").resolve(),
+            ],
+            pathlib.Path("fake.bash"): [
+                pathlib.Path(path / "all_types" / "fake.bash").resolve(),
+            ],
+            pathlib.Path("fake.hbs"): [
+                pathlib.Path(path / "all_types" / "fake.hbs").resolve(),
+            ],
+            pathlib.Path("fake.in"): [
+                pathlib.Path(path / "all_types" / "fake.in").resolve(),
+            ],
+            pathlib.Path("fake.j2"): [
+                pathlib.Path(path / "all_types" / "fake.j2").resolve(),
+            ],
+            pathlib.Path("fake.js"): [
+                pathlib.Path(path / "all_types" / "fake.js").resolve(),
+            ],
             pathlib.Path("fake.json"): [
-                (path / "all_types" / "fake.json").resolve(),
+                pathlib.Path(path / "all_types" / "fake.json").resolve(),
+                pathlib.Path(path / "other_types" / "fake.json").resolve(),
+            ],
+            pathlib.Path("fake.jsonc"): [
+                pathlib.Path(path / "all_types" / "fake.jsonc").resolve(),
+            ],
+            pathlib.Path("fake.markdown"): [
+                pathlib.Path(path / "all_types" / "fake.markdown").resolve(),
+            ],
+            pathlib.Path("fake.markdownlintignore"): [
+                pathlib.Path(
+                    path / "all_types" / "fake.markdownlintignore"
+                ).resolve(),
             ],
             pathlib.Path("fake.md"): [
-                (path / "other_types" / "fake.md").resolve(),
+                pathlib.Path(path / "all_types" / "fake.md").resolve(),
+                pathlib.Path(path / "few_types" / "fake.md").resolve(),
+                pathlib.Path(path / "other_types" / "fake.md").resolve(),
+            ],
+            pathlib.Path("fake.mkdown"): [
+                pathlib.Path(path / "all_types" / "fake.mkdown").resolve(),
+            ],
+            pathlib.Path("fake.nix"): [
+                pathlib.Path(path / "all_types" / "fake.nix").resolve(),
+            ],
+            pathlib.Path("fake.py"): [
+                pathlib.Path(path / "all_types" / "fake.py").resolve(),
+            ],
+            pathlib.Path("fake.sh"): [
+                pathlib.Path(path / "all_types" / "fake.sh").resolve(),
             ],
             pathlib.Path("fake.toml"): [
-                (path / "few_types" / "fake.toml").resolve(),
-                (path / "other_types" / "fake.toml").resolve(),
+                pathlib.Path(path / "all_types" / "fake.toml").resolve(),
+                pathlib.Path(path / "few_types" / "fake.toml").resolve(),
+                pathlib.Path(path / "other_types" / "fake.toml").resolve(),
             ],
-            pathlib.Path("folder_cfg/fake.toml"): [
-                (path / "few_types" / "folder_cfg" / "fake.toml").resolve(),
+            pathlib.Path("fake.ts"): [
+                pathlib.Path(path / "all_types" / "fake.ts").resolve(),
+            ],
+            pathlib.Path("fake.txt"): [
+                pathlib.Path(path / "all_types" / "fake.txt").resolve(),
+            ],
+            pathlib.Path("fake.yaml"): [
+                pathlib.Path(path / "all_types" / "fake.yaml").resolve(),
+                pathlib.Path(path / "other_types" / "fake.yaml").resolve(),
+            ],
+            pathlib.Path("fake.yml"): [
+                pathlib.Path(path / "all_types" / "fake.yml").resolve(),
+            ],
+            pathlib.Path("fake.zsh"): [
+                pathlib.Path(path / "all_types" / "fake.zsh").resolve(),
+            ],
+            pathlib.Path("fake_empty.json"): [
+                pathlib.Path(
+                    path / "other_types" / "fake_empty.json"
+                ).resolve(),
+            ],
+            pathlib.Path("fake_list.json"): [
+                pathlib.Path(path / "all_types" / "fake_list.json").resolve(),
+                pathlib.Path(path / "other_types" / "fake_list.json").resolve(),
+            ],
+            pathlib.Path("folder_cfg") / "fake.toml": [
+                pathlib.Path(
+                    path / "few_types" / "folder_cfg" / "fake.toml"
+                ).resolve(),
+            ],
+            pathlib.Path("main/another_fake.md"): [
+                pathlib.Path(
+                    path / "other_types" / "main" / "another_fake.md"
+                ).resolve(),
+            ],
+            pathlib.Path("main/fake.json"): [
+                pathlib.Path(
+                    path / "other_types" / "main" / "fake.json"
+                ).resolve(),
+            ],
+            pathlib.Path("main/fake.md"): [
+                pathlib.Path(
+                    path / "other_types" / "main" / "fake.md"
+                ).resolve(),
+            ],
+            pathlib.Path("main/fake.yaml"): [
+                pathlib.Path(
+                    path / "other_types" / "main" / "fake.yaml"
+                ).resolve(),
+            ],
+            pathlib.Path("main/fake_merge.yaml"): [
+                pathlib.Path(
+                    path / "other_types" / "main" / "fake_merge.yaml"
+                ).resolve(),
             ],
         }
         config = {
-            const.PKG_NAME: {
+            const.DOTGIT: {
                 const.SOURCE: {const.PATH: self._tpl_dir},
             },
             const.TEMPLATES: [
@@ -139,7 +222,7 @@ class TestUtilsTemplate:
 
         wrong_dir = "wrong_tpl"
         config = {
-            const.PKG_NAME: {
+            const.DOTGIT: {
                 const.SOURCE: {const.PATH: self._tpl_dir},
             },
             const.TEMPLATES: [
@@ -166,7 +249,7 @@ class TestUtilsTemplate:
         )
         repo = git.Repo.clone_from(repo_workdir, repo_dest)
         config = {
-            const.PKG_NAME: {
+            const.DOTGIT: {
                 const.SOURCE: {
                     const.GIT: {const.URL: repo.working_dir},
                 },
@@ -174,7 +257,7 @@ class TestUtilsTemplate:
         }
         utils.clone_template_repo(config)
         cloned_repo = git.Repo(
-            pathlib.Path(config[const.PKG_NAME][const.SOURCE][const.PATH])
+            pathlib.Path(config[const.DOTGIT][const.SOURCE][const.PATH])
         )
         assert repo.head.commit == cloned_repo.head.commit
         shutil.rmtree(cloned_repo.working_dir)
@@ -189,7 +272,7 @@ class TestUtilsTemplate:
         ref = "v0.0.0"
 
         config = {
-            const.PKG_NAME: {
+            const.DOTGIT: {
                 const.SOURCE: {
                     const.GIT: {const.URL: url, const.REF: ref},
                 },
@@ -197,7 +280,7 @@ class TestUtilsTemplate:
         }
         utils.clone_template_repo(config)
         cloned_repo = git.Repo(
-            pathlib.Path(config[const.PKG_NAME][const.SOURCE][const.PATH])
+            pathlib.Path(config[const.DOTGIT][const.SOURCE][const.PATH])
         )
         assert (
             str(cloned_repo.head.commit)

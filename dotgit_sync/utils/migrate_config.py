@@ -101,6 +101,10 @@ def check_migrations(args: argparse.Namespace) -> tuple[bool, dict]:
     with args.config.open() as stream:
         config = yaml.safe_load(stream)
 
+    if config is None:
+        err_msg = "Config file exists but is empty"
+        raise TypeError(err_msg)
+
     git_root_dir = cfg_utils.search_git_workdir(pathlib.Path.cwd())
     config_file_path = str(args.config).replace(f"{git_root_dir!s}/", "")
 

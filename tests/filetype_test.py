@@ -105,13 +105,13 @@ class TestFiletype:
         for ft in const.FILETYPES:
             self._test_all_const_filetype(ft)
 
-    def test_all_static_test_files(self) -> None:
+    def test_all_test_files(self) -> None:
         """Test all filetypes in fake template folder statics."""
         log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
         log.info("Ensure all files in fake statics template have a filetype")
 
         fake_tpl_path = (
-            self._script_path / "fake_templates" / "statics" / "all_types"
+            self._script_path / "fake_templates" / const.TEMPLATES / "all_types"
         )
         for file_name in fake_tpl_path.iterdir():
             file_path = fake_tpl_path / file_name

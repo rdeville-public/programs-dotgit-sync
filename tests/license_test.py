@@ -41,8 +41,7 @@ class TestLicenses:
                 const.CURR_YEAR: 2100,
             },
             const.COPYRIGHT: {
-                "owner": "Full Name",
-                "email": "mail@domain.tld",
+                "Full Name": "mail@domain.tld",
             },
             const.PRIMARY: "MIT",
             const.SECONDARIES: [

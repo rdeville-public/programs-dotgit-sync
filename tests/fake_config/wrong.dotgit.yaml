@@ -1,6 +1,7 @@
 ---
 # Repos description and template usage configuration
 # ------------------------------------------------------------------------------
+version: v1alpha1
 name: Program Name
 slug: program-name
 description: Program description
@@ -8,6 +9,5 @@ licenses:
   date:
     first_year: "1970"
   copyright:
-    owner: &fullname Full Name
-    email: &email mail@domain.tld
+    Full Name: mail@domain.tld
   primary: MIT
