@@ -117,7 +117,4 @@ STATICS = "statics"
 # NAME OF MIGRATIONS DIRECTORY
 MIGRATIONS = "migrations"
 VERSION = "version"
-CFG_VERSIONS = ordered_set.OrderedSet([
-    "v0",
-    "v1alpha1"
-])
+CFG_VERSIONS = ordered_set.OrderedSet(["v0", "v1alpha1"])

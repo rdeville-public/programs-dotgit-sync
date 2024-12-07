@@ -6,12 +6,10 @@ import datetime
 import errno
 import inspect
 import logging
-import os
 import pathlib
 import sys
 
 from pykwalify import core, errors
-import pykwalify
 
 from . import const, migrate_config
 
@@ -25,7 +23,7 @@ def _get_schema_files() -> list:
 
     schemas = []
     schemas_dir = pathlib.Path(__file__).parent.parent / "schemas"
-    for file in os.listdir(schemas_dir):
+    for file in schemas_dir.iterdir():
         schemas += [str(pathlib.Path(schemas_dir) / file)]
     return schemas
 
@@ -62,7 +60,7 @@ def search_git_workdir(path: pathlib.Path) -> pathlib.Path:
     current_path = path
 
     while current_path != pathlib.Path("/"):
-        if ".git" in os.listdir(current_path):
+        if current_path / ".git" in current_path.iterdir():
             return current_path
         current_path = current_path.parent
 
@@ -118,7 +116,7 @@ def get_merge_enforce(
     return output[const.MERGE], output[const.ENFORCE]
 
 
-def get_config(args: argparse.ArgumentParser) -> dict:
+def get_config(args: argparse.Namespace) -> dict:
     """Gather Dotgit Sync configuration from file and args and return it.
 
     Args:
@@ -134,14 +132,16 @@ def get_config(args: argparse.ArgumentParser) -> dict:
 
     if migration_required and not args.migrate:
         log.error(
-            f"Migration required from {config[const.VERSION]} to {const.CFG_VERSIONS[-1]}."
+            "Migration required from %s to %s.",
+            config[const.VERSION],
+            const.CFG_VERSIONS[-1],
         )
         log.error(
             "Use  `--migrate` to update your config file to latest version."
         )
-        exit(1)
+        sys.exit(1)
     elif migration_required and args.migrate:
-        migrate_config.process_migration(args, config)
+        config = migrate_config.process_migration(args)
 
     _validate_config(config)
 
@@ -203,7 +203,7 @@ def get_config(args: argparse.ArgumentParser) -> dict:
                 )
                 raise KeyError(error_msg)
 
-    config[const.OUTDIR] = args.outdir
+    config[const.OUTDIR] = pathlib.Path().cwd() / args.outdir
     if const.CURR_YEAR not in config[const.LICENSES][const.DATE]:
         config[const.LICENSES][const.DATE][const.CURR_YEAR] = (
             datetime.datetime.now(tz=datetime.timezone.utc).strftime("%Y")

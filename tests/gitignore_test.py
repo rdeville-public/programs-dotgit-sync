@@ -17,7 +17,7 @@ _LOG_TRACE = f"{pathlib.Path(__file__).name}:{__name__}"
 # This method will be used by the mock to replace requests.get
 def mocked_requests_get(*args: dict, **kwargs: dict):  # noqa: ARG001, ANN201
     """Method mocking request to gitignore.io."""
-    _script_path = pathlib.Path(__file__).parent
+    script_path = pathlib.Path(__file__).parent
 
     class MockResponse:
         def __init__(self, text: str, status_code: int) -> None:
@@ -26,7 +26,7 @@ def mocked_requests_get(*args: dict, **kwargs: dict):  # noqa: ARG001, ANN201
 
     if args[0] == f"{gitignore.GITIGNORE_API}vs":
         target_content = (
-            _script_path / "fake_gitignore" / "query.vs.full.gitignore"
+            script_path / "fake_gitignore" / "query.vs.full.gitignore"
         ).read_text(encoding="utf-8")
         return MockResponse(target_content, 200)
     return MockResponse(None, 404)

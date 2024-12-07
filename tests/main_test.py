@@ -3,7 +3,6 @@
 
 import inspect
 import logging
-import os
 import pathlib
 import shutil
 
@@ -26,7 +25,7 @@ class TestMain:
     def _assert_rendering(
         render_dir: pathlib.Path, output_dir: pathlib.Path
     ) -> None:
-        for file in os.listdir(render_dir):
+        for file in render_dir.iterdir():
             assert (render_dir / file).read_text() == (
                 output_dir / file
             ).read_text()

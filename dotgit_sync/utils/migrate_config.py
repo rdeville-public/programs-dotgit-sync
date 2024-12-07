@@ -1,18 +1,17 @@
 #!/usr/bin/env python3
-"""Set of utility method to process migration of config file"""
+"""Set of utility method to process migration of config file."""
 
+import argparse
 import inspect
 import logging
 import pathlib
 import re
-import argparse
-from typing import Tuple
 
 from ruamel.yaml import ruamel
 import yaml
 
 from .. import migrations
-from . import const, config as cfg_utils
+from . import config as cfg_utils, const
 
 
 log = logging.getLogger(const.PKG_NAME)
@@ -23,18 +22,19 @@ _MIGRATIONS_DIR = pathlib.Path(__file__).parent.parent / const.MIGRATIONS
 
 def _print_v0_warning(config_file_path: str) -> None:
     log.warning(
-        f"Your config file `{config_file_path}` does not have required key `version`"
+        "Your config file `%s` does not have required key `version`",
+        config_file_path,
     )
     log.warning(
-        f"Program will assume you use a old config file structure and will be set to {const.CFG_VERSIONS[0]}"
+        "Program assume it's an old config file structure, will be set to %s",
+        const.CFG_VERSIONS[0],
     )
-    log.warning(
-        "You should update your config file, to do so, you can :"
-    )
+    log.warning("You should update your config file, to do so, you can :")
     log.warning(" * Add the key `version` to your config file")
     log.warning(
         " * Use `--migrate` to update your config file to latest version."
     )
+
 
 def _list_migrations() -> list[pathlib.Path]:
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
@@ -67,20 +67,31 @@ def _check_missing_migrations() -> None:
         migration_name = f"{from_version}_{to_version}"
 
         if migration_name not in migration_names:
-            raise FileNotFoundError(
-                f"Missing migration {from_version}_{to_version}.py"
-            )
+            msg = f"Missing migration {from_version}_{to_version}.py"
+            raise FileNotFoundError(msg)
 
         migration_names.pop(migration_names.index(migration_name))
 
     if len(migration_names) != 0:
         [
-            log.warning(f"Migration {migration_name} does not seem to be used")
+            log.warning("Migration %s does not seem to be used", migration_name)
             for migration_name in migration_names
         ]
 
 
-def check_migrations(args: argparse.Namespace) -> Tuple[bool, dict]:
+def check_migrations(args: argparse.Namespace) -> tuple[bool, dict]:
+    """Check migrations to apply.
+
+    Check if there is no missing migrations and if there is migrations to apply
+    to update configuration file struture.
+
+    Args:
+        args: Arguments passed to programs
+
+    Returns:
+        bool: True if there is migrations to apply, False otherwise
+        dict: The content of the configuration from the dotgit config file
+    """
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
 
     last_version = const.CFG_VERSIONS[-1]
@@ -91,7 +102,7 @@ def check_migrations(args: argparse.Namespace) -> Tuple[bool, dict]:
         config = yaml.safe_load(stream)
 
     git_root_dir = cfg_utils.search_git_workdir(pathlib.Path.cwd())
-    config_file_path = str(args.config).replace(f"{str(git_root_dir)}/", "")
+    config_file_path = str(args.config).replace(f"{git_root_dir!s}/", "")
 
     if const.VERSION not in config:
         if not args.migrate:
@@ -126,12 +137,20 @@ def _compute_migrations_to_process(config: dict) -> list[str]:
     return migrations_to_apply
 
 
-def process_migration(args: argparse.Namespace, config: dict) -> dict:
+def process_migration(args: argparse.Namespace) -> dict:
+    """Apply migrations to upgrade config and write new config structure.
+
+    Args:
+        args: Arguments passed to programs
+
+    Returns:
+        dict: The content of the configuration
+    """
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
     log.info("Running migrations")
 
     yaml = ruamel.yaml.YAML()
-    with open(args.config) as stream:
+    with args.config.open(encoding="utf-8") as stream:
         config = yaml.load(stream)
 
     migrations_list = _compute_migrations_to_process(config)
@@ -139,7 +158,7 @@ def process_migration(args: argparse.Namespace, config: dict) -> dict:
     for migration in migrations_list:
         getattr(migrations, f"{migration}").up(config)
 
-    with open(args.config, "w") as stream:
+    with args.config.open("w", encoding="utf-8") as stream:
         yaml.indent(mapping=2, sequence=0, offset=2)
         yaml.dump(config, stream)
 

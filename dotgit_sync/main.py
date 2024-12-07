@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 """Entrypoint of Dotgit Sync."""
 
-import argparse
 import inspect
 import logging
 import pathlib
@@ -32,7 +31,11 @@ _LOG_TRACE = f"{pathlib.Path(__file__).name}:{__name__}"
 
 
 def _process_file(
-    config: dict, dst: str, sources: list[str], ft: str, is_static: bool = True
+    config: dict,
+    dst: pathlib.Path,
+    sources: list[str],
+    ft: str,
+    is_static: bool = True,
 ) -> None:
     content = ""
     for src in sources:
@@ -92,9 +95,9 @@ def process(config: dict, tpl_dir: str, is_static: bool = False) -> None:
             _process_file(config, dst_path, sources, ft, is_static=is_static)
 
 
-def main(args: argparse.Namespace = sys.argv[1:]) -> None:
+def main(argv: list[str] = sys.argv[1:]) -> None:
     """Entrypoint method of the main module."""
-    args = argparser.parser().parse_args(args)
+    args = argparser.parser().parse_args(argv)
     logger.init_logger(args)
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
 
@@ -109,7 +112,6 @@ def main(args: argparse.Namespace = sys.argv[1:]) -> None:
     except requests.exceptions.ConnectionError as error:  # pragma: no cover
         log.warning(error)
 
-    process(config, const.STATICS, is_static=True)
     process(config, const.TEMPLATES)
 
 

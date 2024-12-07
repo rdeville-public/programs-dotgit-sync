@@ -3,7 +3,6 @@
 
 import inspect
 import logging
-import os
 import pathlib
 
 from dotgit_sync import filetype
@@ -74,10 +73,10 @@ class TestFiletype:
         exts = const.FILETYPES[target_ft]
         files = []
         fake_tpl_path = pathlib.Path(self._script_path) / "fake_templates"
-        for tpl_dir in os.listdir(fake_tpl_path):
+        for tpl_dir in fake_tpl_path.iterdir():
             tpl_dir_path = pathlib.Path(fake_tpl_path) / tpl_dir / "all_types"
-            for file_name in os.listdir(tpl_dir_path):
-                if "." + file_name.split(".")[-1] in exts:
+            for file_name in tpl_dir_path.iterdir():
+                if "." + file_name.name.split(".")[-1] in exts:
                     files.append(pathlib.Path(tpl_dir_path) / file_name)
         return exts, files
 
@@ -112,12 +111,9 @@ class TestFiletype:
         log.info("Ensure all files in fake statics template have a filetype")
 
         fake_tpl_path = (
-            pathlib.Path(self._script_path)
-            / "fake_templates"
-            / "statics"
-            / "all_types"
+            self._script_path / "fake_templates" / "statics" / "all_types"
         )
-        for file_name in os.listdir(fake_tpl_path):
-            file_path = pathlib.Path(fake_tpl_path) / file_name
+        for file_name in fake_tpl_path.iterdir():
+            file_path = fake_tpl_path / file_name
             ft = filetype.get_filetype(file_path)
             assert ft in const.FILETYPES

@@ -200,9 +200,9 @@ def _merge_contexts(contexts: dict, tpl_contexts: dict) -> dict:
 def _write_from_template(
     config: dict,
     content: str,
-    dst: str,
+    dst: pathlib.Path,
     ft: str,
-    tpl_dir: pathlib.Path = "",
+    tpl_dir: pathlib.Path = pathlib.Path(),
     is_static: bool = False,
 ) -> None:
     """Method that render any file from template.
@@ -266,10 +266,10 @@ def _write_from_template(
 
 def render_file(
     config: dict,
-    dst: str,
+    dst: pathlib.Path,
     content: str,
     ft: str,
-    tpl_dir: pathlib.Path = "",
+    tpl_dir: pathlib.Path = pathlib.Path(),
     is_static: bool = False,
 ) -> None:
     """Method that render any file from template.
@@ -290,7 +290,7 @@ def render_file(
 
 
 def render_json(
-    config: dict, dst: str, update: dict, ft: str, enforce: bool
+    config: dict, dst: pathlib.Path, update: dict, ft: str, enforce: bool
 ) -> None:
     """Method that render json or yaml file from template.
 

@@ -4,7 +4,6 @@
 import copy
 import inspect
 import logging
-import os
 import pathlib
 import shutil
 
@@ -54,7 +53,7 @@ class TestLicenses:
 
     @pytest.fixture(autouse=True)
     def _remove_rendered_files(self) -> None:
-        for node in os.listdir(self._output_dir):
+        for node in self._output_dir.iterdir():
             node_path = pathlib.Path(self._output_dir) / node
             if node_path.is_dir():
                 shutil.rmtree(node_path)

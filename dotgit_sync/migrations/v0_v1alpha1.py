@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Configuration file migration"""
+"""Configuration file migration."""
 
 import inspect
-import pathlib
 import logging
+import pathlib
 
 from ..utils import const
+
 
 _FROM = "v0"
 _TO = "v1alpha1"
@@ -15,10 +16,9 @@ _LOG_TRACE = f"{pathlib.Path(__file__).name}:{__name__}"
 
 
 def up(config: dict) -> None:
+    """Upgrade from missing `v0` to `v1alpha1`."""
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
-    """Upgrade from missing `v0` to `v1alpha1`"""
-
-    log.info(f"Process migration {_FROM} to {_TO}")
+    log.info("Process migration %s to %s", _FROM, _TO)
 
     # Update maintainer key
     new = {}
@@ -28,8 +28,9 @@ def up(config: dict) -> None:
 
     # Update licenses.copyright key
     new = {
-        config[const.LICENSES][const.COPYRIGHT][const.OWNER]:
-        config[const.LICENSES][const.COPYRIGHT][const.EMAIL]
+        config[const.LICENSES][const.COPYRIGHT][const.OWNER]: config[
+            const.LICENSES
+        ][const.COPYRIGHT][const.EMAIL]
     }
     config[const.LICENSES][const.COPYRIGHT] = new
 

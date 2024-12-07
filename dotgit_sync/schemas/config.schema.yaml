@@ -20,8 +20,6 @@ map:
     include: licenses
   gitignore:
     include: gitignore
-  statics:
-    include: list_str
   templates:
     include: list_str
   regex;(.*):

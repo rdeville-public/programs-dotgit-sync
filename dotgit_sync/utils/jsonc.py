@@ -12,7 +12,7 @@ log = logging.getLogger(const.PKG_NAME)
 _LOG_TRACE = f"{pathlib.Path(__file__).name}:{__name__}"
 
 
-def merge_json_dict(src: dict, update: dict) -> dict:
+def merge_json_dict(src: dict | None, update: dict) -> dict:
     """Deeply merge json dictionary.
 
     Args:
@@ -23,6 +23,8 @@ def merge_json_dict(src: dict, update: dict) -> dict:
         The merged dictionary
     """
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+    if src is None:
+        return update
 
     for key, value in update.items():
         if key not in src:

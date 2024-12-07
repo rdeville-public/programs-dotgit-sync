@@ -72,13 +72,13 @@ class TestUtilsConfig:
 
     @pytest.fixture(autouse=True)
     def _prepare_fake_repo(self) -> None:
-        for node in os.listdir(self._output_dir):
-            node_path = pathlib.Path(self._output_dir) / node
+        for node in self._output_dir.iterdir():
+            node_path = self._output_dir / node
             if node_path.is_dir():
                 shutil.rmtree(node_path)
             elif node_path.is_file() and node_path.name != ".gitkeep":
                 node_path.unlink()
-        (pathlib.Path(self._output_dir) / ".git").mkdir()
+        (self._output_dir / ".git").mkdir()
         shutil.copy(
             self._config_dir / "valid.with_source_path.dotgit.yaml",
             self._output_dir / ".dotgit.yaml",
