@@ -1,4 +1,29 @@
-{%- macro copyright_header(name, description, date, copyright) -%}
+{%- macro owners_string(copyright) -%}
+{%- set ns = namespace() %}
+{%- set ns.owners = "" %}
+{%- set ns.first = True %}
+{%- for owner,_ in copyright.items() %}
+{%- if ns.first %}
+{%- set ns.owners = owner %}
+{%- set ns.first = False %}
+{%- else %}
+{%- set ns.owners = ns.owners + "," + owner %}
+{%- endif %}
+{%- endfor %}
+{{ ns.owners }}
+{%- endmacro %}
+
+
+{%- macro owners_mail_list(copyright) -%}
+{%- set owners = "" %}
+{%- set first = True %}
+{%- for owner, mail in copyright.items() %}
+* {{ owners }} <{{ mail }}>
+{%- endfor %}
+{%- endmacro %}
+
+
+{%- macro header(name, description, date, copyright) -%}
 {%- if description -%}
 {{- name }} - {{ description }}
 {%- else %}
@@ -11,4 +36,5 @@ Copyright © {{ licenses.date.current_year }} {{ licenses.copyright.owner }}
 
 Copyright © {{ licenses.date.first_year }} - {{ licenses.date.current_year }} {{ licenses.copyright.owner }}
 {%- endif %}
+{{- owners_string(licenses.copyright) }}
 {%- endmacro %}
