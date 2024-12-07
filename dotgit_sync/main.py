@@ -100,7 +100,7 @@ def main(args: argparse.Namespace = sys.argv[1:]) -> None:
 
     config = cfg_utils.get_config(args)
 
-    if const.GIT in config[const.PKG_NAME][const.SOURCE]:  # pragma: no cover
+    if const.GIT in config[const.DOTGIT][const.SOURCE]:  # pragma: no cover
         tpl_utils.clone_template_repo(config)
 
     licenses.process(config)

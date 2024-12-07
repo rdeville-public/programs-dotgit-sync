@@ -2,6 +2,7 @@
 map:
   version:
     type: str
+    required: true
     enum:
       - v0
       - v1alpha1

@@ -4,7 +4,7 @@
 import ordered_set
 
 
-PKG_NAME = "dotgit"
+PKG_NAME = "dotgit_sync"
 
 # LOGGER
 # This const variable will be set by config_logger in logger.py
@@ -87,6 +87,7 @@ COMMENT_FILETYPE = {
 }
 
 # KEYS USED IN CONFIG FILES
+DOTGIT = "dotgit"
 MERGE = "merge"
 ENFORCE = "enforce"
 METHOD = "method"
@@ -102,7 +103,12 @@ GIT = "git"
 URL = "url"
 REF = "ref"
 PATH = "path"
+MAINTAINERS = "maintainers"
+NAME = "name"
+MAIL = "mail"
 COPYRIGHT = "copyright"
+OWNER = "owner"
+EMAIL = "email"
 SECONDARIES = "secondaries"
 PRIMARY = "primary"
 TEMPLATES = "templates"
@@ -113,5 +119,4 @@ MIGRATIONS = "migrations"
 VERSION = "version"
 CFG_VERSIONS = ordered_set.OrderedSet([
     "v0",
-    "v1alpha1",
 ])

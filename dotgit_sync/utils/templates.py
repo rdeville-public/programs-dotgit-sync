@@ -24,21 +24,21 @@ def clone_template_repo(config: dict) -> None:
     """
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
 
-    config[const.PKG_NAME][const.SOURCE][const.PATH] = tempfile.mkdtemp()
-    git_url = config[const.PKG_NAME][const.SOURCE][const.GIT][const.URL]
+    config[const.DOTGIT][const.SOURCE][const.PATH] = tempfile.mkdtemp()
+    git_url = config[const.DOTGIT][const.SOURCE][const.GIT][const.URL]
 
     log.debug("Cloning template source from %s", git_url)
     repo = git.Repo.clone_from(
-        git_url, config[const.PKG_NAME][const.SOURCE][const.PATH]
+        git_url, config[const.DOTGIT][const.SOURCE][const.PATH]
     )
 
-    if "ref" in config[const.PKG_NAME][const.SOURCE][const.GIT]:
+    if "ref" in config[const.DOTGIT][const.SOURCE][const.GIT]:
         log.debug(
             "Checkout to ref :%s",
-            config[const.PKG_NAME][const.SOURCE][const.GIT][const.REF],
+            config[const.DOTGIT][const.SOURCE][const.GIT][const.REF],
         )
         repo.git.checkout(
-            config[const.PKG_NAME][const.SOURCE][const.GIT][const.REF]
+            config[const.DOTGIT][const.SOURCE][const.GIT][const.REF]
         )
 
 
@@ -57,8 +57,7 @@ def get_template_dir(config: dict, tpl_type: str) -> pathlib.Path:
     if tpl_type == const.LICENSES:
         return pathlib.Path(__file__).parent.parent / const.TEMPLATES / tpl_type
     return (
-        pathlib.Path(config[const.PKG_NAME][const.SOURCE][const.PATH])
-        / tpl_type
+        pathlib.Path(config[const.DOTGIT][const.SOURCE][const.PATH]) / tpl_type
     )
 
 

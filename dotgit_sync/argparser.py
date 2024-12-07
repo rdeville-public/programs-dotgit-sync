@@ -60,6 +60,16 @@ location.
     )
 
     parser.add_argument(
+        "--migrate",
+        help="""\
+Run migrations to upgrade .dotgit.yaml configuration file.
+""",
+        type=bool,
+        action=argparse.BooleanOptionalAction,
+        default=False,
+    )
+
+    parser.add_argument(
         "-o",
         "--outdir",
         help="""\
