@@ -1,6 +1,31 @@
 <!-- markdownlint-disable-file -->
 # CHANGELOG
 
+## v0.8.0 (2024-12-08)
+
+### ✨ Minor
+
+  * ✨ Update schema to v1alpha1 with migration by Romain Deville ([`d1e0f63`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/d1e0f636f58c8f1298dd9e06eaa0bbcdc942db7c)) 🔏
+  * ✨ Add DGS config migration mecanic by Romain Deville ([`4858210`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/485821007b96190363d2ef1b083559c94d9d003f)) 🔏
+  * ✨ Add colored loggers by Romain Deville ([`5e88afb`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/5e88afb985c9df44890e5bcf706a12c230f0bd6a)) 🔏
+
+### 🩹 Patch
+
+  * ➕ Update python dependencies by Romain Deville ([`080f9e3`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/080f9e362da4ba5d875eee85d9ec2c57686705bd)) 🔏
+  * ➕ Add python dependencies by Romain Deville ([`12f765e`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/12f765e95291de243c4b07978e04d528c3874167)) 🔏
+  * ⬆️ Update poetry.lock by Romain Deville ([`83d07a3`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/83d07a3e906c08f7d22dde713bbe115c169e7cd9)) 🔏
+  * ⬆️ Update devbox.lock by Romain Deville ([`d3907e5`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/d3907e56e8b8b3dfe490175da4d9c0bf0c573ceb)) 🔏
+
+### 🔊 Others
+
+  * ✅ Add migrate_config related tests by Romain Deville ([`64c4a84`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/64c4a8480b69c20e11390d2e4ff485a9d97e62ff)) 🔏
+  * ✅ Update test du to config schema update to v1alpha1 by Romain Deville ([`d501b5f`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/d501b5ff28d8eb53050c58c9de30b9bf8fe8fbbf)) 🔏
+  * ✅ Update logger related tests by Romain Deville ([`fa5105d`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/fa5105d2ed55f10c230a1b8a484d26ee58c1bec4)) 🔏
+  * 📄 Update template license due to schema update by Romain Deville ([`4e943c8`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/4e943c8184ca5dd6aa589769141326b222391c3e)) 🔏
+  * 🔀 Add migration mecanism and minor fixes (!34) by Romain Deville ([`3b906cd`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/3b906cd2630c8e4a5c656fa00ac66621471780e5))
+  * 🔨 Add ruff pkg to devbox by Romain Deville ([`3945943`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/394594393a3312894e5fcb0f90b63104dad00628)) 🔏
+  * 🚨 Fix ruff linter warning by Romain Deville ([`e4587f7`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/e4587f73711c384d669e7e17ddd3ba8fd31e84e5)) 🔏
+
 ## v0.7.0 (2024-11-25)
 
 ### ✨ Minor
@@ -19,6 +44,7 @@
 ### 🔊 Others
 
   * ✅ Update already passing tests with new feature by Romain Deville ([`c8e6cd6`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/c8e6cd60b46a5e3dbb7d9d96a7f2983792602ff9)) 🔏
+  * 🔖 v0.7.0 (NO-CI) by Python Semantic Release [bot] ([`bc21bb3`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/bc21bb3ce2bba4226ebd85520338f9f28dd76d30))
   * 🚨 Fix linters warnings by Romain Deville ([`73ff25d`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/73ff25db9f8613b42991b05e32627d00ca5eac2e)) 🔏
 
 ## v0.6.6 (2024-11-23)
