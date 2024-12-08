@@ -56,10 +56,7 @@ def _process_json(
             update = (
                 yaml.safe_load(file) if ft == const.YAML else json5.load(file)
             )
-        if isinstance(update, dict):
-            content = json_utils.merge_json_dict(content, update)
-        else:  # isinstance(update, list)
-            content = json_utils.merge_json_list(content, update)
+        content = json_utils.merge_json_dict(content, update)
     render.render_json(config, dst, content, ft, enforce)
 
 

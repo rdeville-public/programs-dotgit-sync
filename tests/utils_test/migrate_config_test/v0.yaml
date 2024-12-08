@@ -1,0 +1,48 @@
+# DotGit Sync Configuration
+# ------------------------------------------------------------------------------
+version: v0
+dotgit:
+  source:
+    path: ./
+  yaml:
+    merge:
+      method: only
+      only:
+        - .pre-commit-config.yaml
+        - gitlab-ci.yaml
+    enforce:
+      method: only
+      only:
+        - .pre-commit-config.yaml
+        - gitlab-ci.yaml
+  json:
+    enforce:
+      method: all
+
+# Repos description and template usage configuration
+# ------------------------------------------------------------------------------
+name: Program Name
+slug: program-slug
+description: |-
+  Program Description
+licenses:
+  date:
+    first_year: '2023'
+  copyright:
+    owner: Full Name
+    email: contact@domain.tld
+  primary: MIT
+  secondaries:
+    - BEERWARE
+maintainers:
+  - name: Full Name
+    mail: contact@domain.tld
+gitignore:
+  templates:
+    - base
+statics:
+  - foo
+  - bar
+templates:
+  - foo
+  - baz

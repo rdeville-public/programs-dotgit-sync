@@ -342,3 +342,24 @@ class TestUtilsConfig:
             + "filename must be present"
         )
         assert error.match(error_msg)
+
+    def test_config_required_migrations(self) -> None:
+        """Test yaml configuration require migration."""
+        log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+        log.info("Should log an error and exit")
+
+        cfg_filepath = (
+            pathlib.Path.cwd()
+            / ".."
+            / "migrations_test"
+            / "v0_test"
+            / "from.yaml"
+        )
+        self._args = argparser.parser().parse_args(["-c", str(cfg_filepath)])
+        with pytest.raises(SystemExit) as error:
+            utils.get_config(self._args)
+        error_msg = (
+            "Use  `--migrate` to update your config file to latest version."
+        )
+        assert error.type is SystemExit
+        assert error_msg in self._caplog.text

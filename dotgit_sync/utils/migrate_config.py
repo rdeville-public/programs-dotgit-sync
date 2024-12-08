@@ -47,7 +47,7 @@ def _list_migrations() -> list[pathlib.Path]:
         and re.match(r".*.py", inode.name)
     ]
 
-    migrations.sort(key=lambda file: (_MIGRATIONS_DIR / file).stat().st_mtime)
+    migrations.sort(key=lambda file: (_MIGRATIONS_DIR / file).stat().st_ctime)
 
     return migrations
 
@@ -56,8 +56,9 @@ def _check_missing_migrations() -> None:
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
 
     migrations = _list_migrations()
-    migrations.pop(0)
     migration_names = [migration.stem for migration in migrations]
+
+    migration_names.pop(migration_names.index("v0"))
 
     nb_versions = len(const.CFG_VERSIONS)
 
@@ -77,6 +78,25 @@ def _check_missing_migrations() -> None:
             log.warning("Migration %s does not seem to be used", migration_name)
             for migration_name in migration_names
         ]
+
+
+def _compute_migrations_to_process(config: dict) -> list[str]:
+    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+
+    migrations = [migration.stem for migration in _list_migrations()]
+
+    if const.VERSION not in config:
+        return migrations
+
+    version_idx = migrations.index(config[const.VERSION])
+    migrations_to_apply = []
+
+    for idx in range(version_idx, len(const.CFG_VERSIONS) - 1):
+        from_version = const.CFG_VERSIONS[idx]
+        to_version = const.CFG_VERSIONS[idx + 1]
+        migrations_to_apply.append(f"{from_version}_{to_version}")
+
+    return migrations_to_apply
 
 
 def check_migrations(args: argparse.Namespace) -> tuple[bool, dict]:
@@ -122,25 +142,6 @@ def check_migrations(args: argparse.Namespace) -> tuple[bool, dict]:
     return True, config
 
 
-def _compute_migrations_to_process(config: dict) -> list[str]:
-    log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
-
-    migrations = [migration.stem for migration in _list_migrations()]
-
-    if const.VERSION not in config:
-        return migrations
-
-    version_idx = migrations.index(config[const.VERSION])
-    migrations_to_apply = []
-
-    for idx in range(version_idx, len(const.CFG_VERSIONS) - 1):
-        from_version = const.CFG_VERSIONS[idx]
-        to_version = const.CFG_VERSIONS[idx + 1]
-        migrations_to_apply.append(f"{from_version}_{to_version}")
-
-    return migrations_to_apply
-
-
 def process_migration(args: argparse.Namespace) -> dict:
     """Apply migrations to upgrade config and write new config structure.
 
@@ -160,7 +161,7 @@ def process_migration(args: argparse.Namespace) -> dict:
     migrations_list = _compute_migrations_to_process(config)
 
     for migration in migrations_list:
-        getattr(migrations, f"{migration}").up(config)
+        config = getattr(migrations, f"{migration}").up(config)
 
     with args.config.open("w", encoding="utf-8") as stream:
         yaml.indent(mapping=2, sequence=0, offset=2)

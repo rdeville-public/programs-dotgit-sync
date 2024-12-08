@@ -55,10 +55,7 @@ def _init_jinja_env(tpl_dir: str or None = None) -> jinja2.Environment:
         trim_blocks=False,
         autoescape=True,
     )
-    if tpl_dir:
-        jinja_env.loader = jinja2.FileSystemLoader(tpl_dir)
-    else:
-        jinja_env.loader = jinja2.BaseLoader()
+    jinja_env.loader = jinja2.FileSystemLoader(tpl_dir)
 
     return jinja_env
 

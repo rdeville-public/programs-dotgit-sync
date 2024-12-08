@@ -15,7 +15,7 @@ log = logging.getLogger(const.PKG_NAME)
 _LOG_TRACE = f"{pathlib.Path(__file__).name}:{__name__}"
 
 
-def up(config: dict) -> None:
+def up(config: dict) -> dict:
     """Upgrade from missing `v0` to `v1alpha1`."""
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
     log.info("Process migration %s to %s", _FROM, _TO)
@@ -40,5 +40,9 @@ def up(config: dict) -> None:
         if template not in config[const.TEMPLATES]:
             config[const.TEMPLATES].append(template)
 
+    del config[const.STATICS]
+
     # Update version to latest
     config[const.VERSION] = _TO
+
+    return config
