@@ -1,6 +1,16 @@
 <!-- markdownlint-disable-file -->
 # CHANGELOG
 
+## v0.8.1 (2024-12-08)
+
+### 🩹 Patch
+
+  * 🐛 fix template rendering when using local path by Romain Deville ([`6e603de`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/6e603def510e775fa24696583fcc4f33c7f74aad)) 🔏
+
+### 🔊 Others
+
+  * 🔀 fix template rendering when using local path (!35) by Romain Deville ([`2d283c6`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/2d283c639210162a12dd975832441b0908b74bf6))
+
 ## v0.8.0 (2024-12-08)
 
 ### ✨ Minor
@@ -23,6 +33,7 @@
   * ✅ Update logger related tests by Romain Deville ([`fa5105d`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/fa5105d2ed55f10c230a1b8a484d26ee58c1bec4)) 🔏
   * 📄 Update template license due to schema update by Romain Deville ([`4e943c8`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/4e943c8184ca5dd6aa589769141326b222391c3e)) 🔏
   * 🔀 Add migration mecanism and minor fixes (!34) by Romain Deville ([`3b906cd`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/3b906cd2630c8e4a5c656fa00ac66621471780e5))
+  * 🔖 v0.8.0 (NO-CI) by Python Semantic Release [bot] ([`e781a86`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/e781a865fe769c2966eb4b6cbe536631b1549ac6))
   * 🔨 Add ruff pkg to devbox by Romain Deville ([`3945943`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/394594393a3312894e5fcb0f90b63104dad00628)) 🔏
   * 🚨 Fix ruff linter warning by Romain Deville ([`e4587f7`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/e4587f73711c384d669e7e17ddd3ba8fd31e84e5)) 🔏
 
