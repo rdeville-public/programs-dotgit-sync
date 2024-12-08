@@ -3,7 +3,6 @@
 
 import inspect
 import logging
-import os
 import pathlib
 
 from . import render
@@ -18,7 +17,10 @@ _COPYRIGHT = "COPYRIGHT"
 
 
 def _render_license(
-    config: dict, dirs: os.path, license_name: str, is_primary: bool = False
+    config: dict,
+    dirs: pathlib.Path,
+    license_name: str,
+    is_primary: bool = False,
 ) -> None:
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
 

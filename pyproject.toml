@@ -30,8 +30,10 @@ packages = [
   { include = "dotgit_sync" },
 ]
 include = [
+  "dotgit_sync/migrations",
   "dotgit_sync/schemas",
   "dotgit_sync/templates",
+  "dotgit_sync/utils",
   "LICENSE*",
   "CHANGELOG.md",
   "AUTHORS"

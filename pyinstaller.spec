@@ -9,8 +9,10 @@ a = Analysis(
     pathex=["dotgit_sync"],
     binaries=[],
     datas=[
+        ("dotgit_sync/migrations", "dotgit_sync/schemas"),
         ("dotgit_sync/schemas", "dotgit_sync/schemas"),
         ("dotgit_sync/templates", "dotgit_sync/templates"),
+        ("dotgit_sync/utils", "dotgit_sync/utils"),
         ("LICENSE*", "."),
         ("README.md", "."),
         ("CHANGELOG.md", "."),

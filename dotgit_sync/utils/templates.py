@@ -84,12 +84,12 @@ def template_exists(
 
 
 def _process_dir_template(
-    path: pathlib.Path, parent: pathlib.Path, processed: dict
+    path: pathlib.Path, parent: str, processed: dict
 ) -> None:
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
 
     for node in path.iterdir():
-        file_path = (path / node).resolve()
+        file_path = node.resolve()
         key = pathlib.Path(parent) / node.name
 
         if file_path.is_file():
@@ -97,7 +97,7 @@ def _process_dir_template(
                 processed[key] = []
             processed[key].append(file_path)
         else:  # pathlib.Path(file_path).is_dir():
-            _process_dir_template(file_path, key, processed)
+            _process_dir_template(file_path, str(key), processed)
 
 
 def compute_template_files(
@@ -121,4 +121,4 @@ def compute_template_files(
                 tpl_type,
             )
         else:
-            _process_dir_template(tpl_src / curr_dir, pathlib.Path(), processed)
+            _process_dir_template(tpl_src / curr_dir, "", processed)
