@@ -55,7 +55,7 @@ class TestRender:
     ) -> None:
         contexts = render._merge_contexts(  # noqa: SLF001
             render._extract_context_from_rendered_file(  # noqa: SLF001
-                str(rendered_file), marks
+                rendered_file, marks
             ),
             render._extract_context_from_template(  # noqa: SLF001
                 str(tpl_file.read_text()), marks
@@ -138,7 +138,7 @@ class TestRender:
         )
         marks = render._get_mark_comment(const.MD)  # noqa: SLF001
         context = render._extract_context_from_rendered_file(  # noqa: SLF001
-            str(fake_rendered_file), marks
+            fake_rendered_file, marks
         )
         target_context = {
             "before": {

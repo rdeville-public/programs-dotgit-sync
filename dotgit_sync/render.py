@@ -98,7 +98,9 @@ def _extract_context_from_template(content: str, marks: dict) -> dict:
     return contexts
 
 
-def _extract_context_from_rendered_file(dest: str, marks: dict) -> dict:
+def _extract_context_from_rendered_file(
+    dest: pathlib.Path, marks: dict
+) -> dict:
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
     contexts = {}
     curr_context = _BEFORE
@@ -117,13 +119,13 @@ def _extract_context_from_rendered_file(dest: str, marks: dict) -> dict:
 
     re_begin = r"(\s+)?" + re.escape(f"{marks[const.BEGIN]} {begin}")
 
-    if not pathlib.Path(dest).exists():
+    if not dest.exists():
         return contexts
 
     contexts[curr_context] = {}
     contexts[curr_context][_INDENT] = ""
     contexts[curr_context][_CONTENT] = ""
-    content = pathlib.Path(dest).read_text(encoding="utf-8")
+    content = dest.read_text(encoding="utf-8")
     for line in content.splitlines():
         search = re.search(re_begin_excluded, line)
         if search:
