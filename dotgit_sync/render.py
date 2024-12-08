@@ -309,7 +309,6 @@ def render_json(
     content = None
     if pathlib.Path(dst).is_file() and not enforce:
         with pathlib.Path(dst).open(encoding="utf-8") as file:
-            log.error(ft)
             content = (
                 yaml.safe_load(file) if ft == const.YAML else json5.load(file)
             )
