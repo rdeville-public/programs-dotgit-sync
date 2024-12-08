@@ -1,0 +1,23 @@
+---
+# DotGit Sync Configuration
+# ------------------------------------------------------------------------------
+version: v0
+dotgit:
+  source:
+    path: ./
+
+# Repos description and template usage configuration
+# ------------------------------------------------------------------------------
+licenses:
+  copyright:
+    owner: Full Name
+    email: mail@domain.tld
+maintainers:
+  - name: Full Name
+    mail: mail@domain.tld
+statics:
+  - foo
+  - bar
+templates:
+  - foo
+  - baz

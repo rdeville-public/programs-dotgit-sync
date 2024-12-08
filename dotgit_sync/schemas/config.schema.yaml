@@ -1,5 +1,11 @@
 ---
 map:
+  version:
+    type: str
+    required: true
+    enum:
+      - v0
+      - v1alpha1
   dotgit:
     include: dotgit
   name:
@@ -14,8 +20,6 @@ map:
     include: licenses
   gitignore:
     include: gitignore
-  statics:
-    include: list_str
   templates:
     include: list_str
   regex;(.*):

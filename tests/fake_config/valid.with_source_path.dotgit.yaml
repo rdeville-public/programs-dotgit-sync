@@ -1,6 +1,7 @@
 ---
 # DotGit Sync Configuration
 # ------------------------------------------------------------------------------
+version: v1alpha1
 dotgit:
   source:
     # Path relative to fake_repo
@@ -15,9 +16,7 @@ licenses:
   date:
     first_year: "1970"
   copyright:
-    owner: &fullname Full Name
-    email: &email mail@domain.tld
+    Full Name: mail@domain.tld
   primary: MIT
 maintainers:
-  - name: *fullname
-    mail: *email
+  Full Name: mail@domain.tld

@@ -29,8 +29,7 @@ class TestUtilsConfig:
     _config_file = _config_dir / "valid.with_source_path.dotgit.yaml"
     _config_licenses: ClassVar[dict] = {
         "copyright": {
-            "email": "mail@domain.tld",
-            "owner": "Full Name",
+            "Full Name": "mail@domain.tld",
         },
         const.DATE: {
             const.CURR_YEAR: datetime.datetime.now(
@@ -49,12 +48,7 @@ class TestUtilsConfig:
             },
         },
     }
-    _config_maintainers: ClassVar[dict] = [
-        {
-            "mail": "mail@domain.tld",
-            "name": "Full Name",
-        },
-    ]
+    _config_maintainers: ClassVar[dict] = {"Full Name": "mail@domain.tld"}
     _config_name: ClassVar[str] = "Program Name"
     _config_slug: ClassVar[str] = "program-name"
     _config_desc: ClassVar[str] = "Program description"
@@ -72,13 +66,13 @@ class TestUtilsConfig:
 
     @pytest.fixture(autouse=True)
     def _prepare_fake_repo(self) -> None:
-        for node in os.listdir(self._output_dir):
-            node_path = pathlib.Path(self._output_dir) / node
+        for node in self._output_dir.iterdir():
+            node_path = self._output_dir / node
             if node_path.is_dir():
                 shutil.rmtree(node_path)
             elif node_path.is_file() and node_path.name != ".gitkeep":
                 node_path.unlink()
-        (pathlib.Path(self._output_dir) / ".git").mkdir()
+        (self._output_dir / ".git").mkdir()
         shutil.copy(
             self._config_dir / "valid.with_source_path.dotgit.yaml",
             self._output_dir / ".dotgit.yaml",
@@ -97,11 +91,12 @@ class TestUtilsConfig:
         )
 
         cfg_path = self._script_path / "foo.yaml"
-        with pytest.raises(SystemExit) as exit_code:
-            utils._validate_config(cfg_path)  # noqa : SLF001
-        error_msg = f"Provided source_file do not exists on disk: {cfg_path}"
-        assert error_msg in self._caplog.text
-        assert exit_code.value.code == errno.ENOENT
+        self._args = argparser.parser().parse_args(["-c", str(cfg_path)])
+        with pytest.raises(FileNotFoundError) as exit_code:
+            utils.get_config(self._args)
+        error_msg = "No such file or directory"
+        assert error_msg in exit_code.value.strerror
+        assert exit_code.value.errno == errno.ENOENT
 
     def test_config_file_empty(self) -> None:
         """Test program exit if config file is empty."""
@@ -111,11 +106,11 @@ class TestUtilsConfig:
         )
 
         cfg_path = self._config_dir / "empty.dotgit.yaml"
-        with pytest.raises(SystemExit) as exit_code:
-            utils._validate_config(cfg_path)  # noqa : SLF001
-        error_msg = "No source file/data was loaded"
-        assert error_msg in self._caplog.text
-        assert exit_code.value.code == errno.ENODATA
+        self._args = argparser.parser().parse_args(["-c", str(cfg_path)])
+        with pytest.raises(TypeError) as exit_code:
+            utils.get_config(self._args)
+        error_msg = "Config file exists but is empty"
+        assert error_msg in str(exit_code.value)
 
     def test_config_file_schema_not_respected(self) -> None:
         """Test program exit if config file does not respect schema."""
@@ -123,8 +118,9 @@ class TestUtilsConfig:
         log.info("Should throw an error and exit as config file is invalid")
 
         cfg_path = self._config_dir / "wrong.dotgit.yaml"
+        self._args = argparser.parser().parse_args(["-c", str(cfg_path)])
         with pytest.raises(SystemExit) as exit_code:
-            utils._validate_config(cfg_path)  # noqa : SLF001
+            utils.get_config(self._args)
         error_msg = "[\"Cannot find required key 'maintainers'. Path: ''\"]"
         assert error_msg in self._caplog.text
         assert exit_code.value.code == errno.ENODATA
@@ -135,9 +131,12 @@ class TestUtilsConfig:
         log.info("Should return the configuration read from the config file")
 
         cfg_path = self._config_dir / "valid.minimal.dotgit.yaml"
-        assert utils._validate_config(cfg_path) == yaml.safe_load(  # noqa : SLF001
-            cfg_path.read_text()
-        )
+        self._args = argparser.parser().parse_args(["-c", str(cfg_path)])
+        config = utils.get_config(self._args)
+        # Remove output dir key as dynamically generated if not specifed
+        del config[const.OUTDIR]
+
+        assert config == yaml.safe_load(cfg_path.read_text())
 
     def test_search_found_git_parent(self) -> None:
         """Test program found is able to find .git parent folder."""
@@ -169,14 +168,16 @@ class TestUtilsConfig:
         log.info("Should throw an error as unable to find config file")
 
         os.chdir(self._output_dir)
+        log.error(self._output_dir)
         self._args = argparser.parser().parse_args([])
+
         cfg_path = self._output_dir / ".dotgit.yaml"
         cfg_path.unlink()
-        with pytest.raises(SystemExit) as exit_code:
+        with pytest.raises(FileNotFoundError) as exit_code:
             utils.get_config(self._args)
-        error_msg = f"Provided source_file do not exists on disk: {cfg_path}"
-        assert error_msg in self._caplog.text
-        assert exit_code.value.code == errno.ENOENT
+        error_msg = "No such file or directory"
+        assert error_msg in exit_code.value.strerror
+        assert exit_code.value.errno == errno.ENOENT
 
     def test_get_config_no_args_config_file(self) -> None:
         """Test reading of config file."""
@@ -187,7 +188,8 @@ class TestUtilsConfig:
         self._args = argparser.parser().parse_args([])
         target_config = (
             {
-                const.PKG_NAME: {
+                const.VERSION: const.CFG_VERSIONS[-1],
+                const.DOTGIT: {
                     const.SOURCE: {const.PATH: "../fake_templates"},
                 },
             }
@@ -208,7 +210,8 @@ class TestUtilsConfig:
         ])
         target_config = (
             {
-                const.PKG_NAME: {
+                const.VERSION: const.CFG_VERSIONS[-1],
+                const.DOTGIT: {
                     const.SOURCE: {const.PATH: "../fake_templates"},
                 },
             }
@@ -222,7 +225,8 @@ class TestUtilsConfig:
         self._args = argparser.parser().parse_args(["-c", str(cfg_path)])
         target_config = (
             {
-                const.PKG_NAME: {
+                const.VERSION: const.CFG_VERSIONS[-1],
+                const.DOTGIT: {
                     const.SOURCE: {const.PATH: "../fake_templates"},
                 },
             }
@@ -245,7 +249,8 @@ class TestUtilsConfig:
         self._args = argparser.parser().parse_args(["-d", str(tpl_path)])
         target_config = (
             {
-                const.PKG_NAME: {
+                const.VERSION: const.CFG_VERSIONS[-1],
+                const.DOTGIT: {
                     const.SOURCE: {
                         const.PATH: tpl_path,
                     },
@@ -260,7 +265,8 @@ class TestUtilsConfig:
         self._args = argparser.parser().parse_args(["-g", str(tpl_path)])
         target_config = (
             {
-                const.PKG_NAME: {
+                const.VERSION: const.CFG_VERSIONS[-1],
+                const.DOTGIT: {
                     const.SOURCE: {
                         const.GIT: {
                             const.URL: str(tpl_path),
@@ -285,10 +291,11 @@ class TestUtilsConfig:
             self._output_dir / ".dotgit.yaml",
         )
 
+        self._args = argparser.parser().parse_args([])
         with pytest.raises(ValueError) as error:
             utils.get_config(self._args)
-        git_config = f"{const.PKG_NAME}/{const.SOURCE}/{const.GIT}"
-        path_config = f"{const.PKG_NAME}/{const.SOURCE}/{const.PATH}"
+        git_config = f"{const.DOTGIT}/{const.SOURCE}/{const.GIT}"
+        path_config = f"{const.DOTGIT}/{const.SOURCE}/{const.PATH}"
         error_msg = (
             f"Path {git_config} and {path_config} in config or as "
             + "args can't be used together."
@@ -302,9 +309,11 @@ class TestUtilsConfig:
 
         os.chdir(self._output_dir)
         shutil.copy(
-            self._config_dir / "valid.minimal.dotgit.yaml",
+            self._config_dir / "wrong.without_source.dotgit.yaml",
             self._output_dir / ".dotgit.yaml",
         )
+
+        self._args = argparser.parser().parse_args([])
         with pytest.raises(ValueError) as error:
             utils.get_config(self._args)
         error_msg = (
@@ -333,3 +342,24 @@ class TestUtilsConfig:
             + "filename must be present"
         )
         assert error.match(error_msg)
+
+    def test_config_required_migrations(self) -> None:
+        """Test yaml configuration require migration."""
+        log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
+        log.info("Should log an error and exit")
+
+        cfg_filepath = (
+            pathlib.Path.cwd()
+            / ".."
+            / "migrations_test"
+            / "v0_test"
+            / "from.yaml"
+        )
+        self._args = argparser.parser().parse_args(["-c", str(cfg_filepath)])
+        with pytest.raises(SystemExit) as error:
+            utils.get_config(self._args)
+        error_msg = (
+            "Use  `--migrate` to update your config file to latest version."
+        )
+        assert error.type is SystemExit
+        assert error_msg in self._caplog.text

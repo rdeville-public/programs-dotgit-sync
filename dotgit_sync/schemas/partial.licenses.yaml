@@ -5,7 +5,7 @@ schema;licenses:
     date:
       required: true
       map:
-        first_year: &date
+        first_year:
           type: date
           required: true
           format: "%Y"
@@ -15,10 +15,7 @@ schema;licenses:
     copyright:
       required: true
       map:
-        owner:
-          required: true
-          type: str
-        email:
+        regex;(^.*$):
           include: required_email
     primary:
       required: true

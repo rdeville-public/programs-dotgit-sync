@@ -1,3 +1,9 @@
 {
-  "key": "value"
+  "key": "Fake JSON Content Value",
+  "dict": {
+    "list": [
+      "a_string",
+      "another_string"
+    ]
+  }
 }

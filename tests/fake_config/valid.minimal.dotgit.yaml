@@ -1,4 +1,11 @@
 ---
+# DotGit Sync Configuration
+# ------------------------------------------------------------------------------
+version: v1alpha1
+dotgit:
+  source:
+    path: ./
+
 # Repos description and template usage configuration
 # ------------------------------------------------------------------------------
 name: Program Name
@@ -9,9 +16,7 @@ licenses:
     first_year: "1970"
     current_year: "2100"
   copyright:
-    owner: &fullname Full Name
-    email: &email mail@domain.tld
+    Full Name: mail@domain.tld
   primary: MIT
 maintainers:
-  - name: *fullname
-    mail: *email
+  Full Name: mail@domain.tld

@@ -1,5 +1,5 @@
-{%- from "./copyright.j2" import copyright_header with context -%}
-{{- copyright_header(name, description, date, licenses.copyright) }}
+{%- from "./copyright.j2" import header with context -%}
+{{- header(name, description, date, licenses.copyright) }}
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the "Software"),

@@ -1,6 +1,7 @@
 ---
 # DotGit Sync Configuration
 # ------------------------------------------------------------------------------
+version: v1alpha1
 dotgit:
   yaml:
     merge:
@@ -18,21 +19,17 @@ licenses:
     first_year: "1970"
     current_year: "2100"
   copyright:
-    owner: &fullname Full Name
-    email: &email mail@domain.tld
+    Full Name: mail@domain.tld
   primary: MIT
   secondaries:
     - BEERWARE
 maintainers:
-  - name: *fullname
-    mail: *email
+  Full Name: mail@domain.tld
 gitignore:
   query:
     - vim
-statics:
-  - main
-  - another_main
 templates:
+  - another_main
   - main
 
 # Everything below is only used as variables in templates

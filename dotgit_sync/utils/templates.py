@@ -3,7 +3,6 @@
 
 import inspect
 import logging
-import os
 import pathlib
 import tempfile
 
@@ -24,21 +23,21 @@ def clone_template_repo(config: dict) -> None:
     """
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
 
-    config[const.PKG_NAME][const.SOURCE][const.PATH] = tempfile.mkdtemp()
-    git_url = config[const.PKG_NAME][const.SOURCE][const.GIT][const.URL]
+    config[const.DOTGIT][const.SOURCE][const.PATH] = tempfile.mkdtemp()
+    git_url = config[const.DOTGIT][const.SOURCE][const.GIT][const.URL]
 
     log.debug("Cloning template source from %s", git_url)
     repo = git.Repo.clone_from(
-        git_url, config[const.PKG_NAME][const.SOURCE][const.PATH]
+        git_url, config[const.DOTGIT][const.SOURCE][const.PATH]
     )
 
-    if "ref" in config[const.PKG_NAME][const.SOURCE][const.GIT]:
+    if "ref" in config[const.DOTGIT][const.SOURCE][const.GIT]:
         log.debug(
             "Checkout to ref :%s",
-            config[const.PKG_NAME][const.SOURCE][const.GIT][const.REF],
+            config[const.DOTGIT][const.SOURCE][const.GIT][const.REF],
         )
         repo.git.checkout(
-            config[const.PKG_NAME][const.SOURCE][const.GIT][const.REF]
+            config[const.DOTGIT][const.SOURCE][const.GIT][const.REF]
         )
 
 
@@ -57,12 +56,13 @@ def get_template_dir(config: dict, tpl_type: str) -> pathlib.Path:
     if tpl_type == const.LICENSES:
         return pathlib.Path(__file__).parent.parent / const.TEMPLATES / tpl_type
     return (
-        pathlib.Path(config[const.PKG_NAME][const.SOURCE][const.PATH])
-        / tpl_type
+        pathlib.Path(config[const.DOTGIT][const.SOURCE][const.PATH]) / tpl_type
     )
 
 
-def template_exists(filename: str, tpl_src: str) -> pathlib.Path | None:
+def template_exists(
+    filename: str, tpl_src: pathlib.Path
+) -> pathlib.Path | None:
     """Check if a specific file exists in template subfolder.
 
     Args:
@@ -74,7 +74,7 @@ def template_exists(filename: str, tpl_src: str) -> pathlib.Path | None:
     """
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
 
-    for inode in os.listdir(tpl_src):
+    for inode in tpl_src.iterdir():
         tplpath = pathlib.Path(tpl_src) / inode
         if tplpath.is_file() and str.lower(filename) == str.lower(
             pathlib.Path(inode).name
@@ -84,14 +84,15 @@ def template_exists(filename: str, tpl_src: str) -> pathlib.Path | None:
 
 
 def _process_dir_template(
-    path: pathlib.Path, parent: str, processed: dict
+    path: pathlib.Path, parent: pathlib.Path, processed: dict
 ) -> None:
     log.debug("%s.%s()", _LOG_TRACE, inspect.stack()[0][3])
 
-    for node in os.listdir(path.resolve()):
-        file_path = (pathlib.Path(path) / node).resolve()
-        key = pathlib.Path(parent) / node
-        if pathlib.Path(file_path).is_file():
+    for node in path.iterdir():
+        file_path = (path / node).resolve()
+        key = pathlib.Path(parent) / node.name
+
+        if file_path.is_file():
             if key not in processed:
                 processed[key] = []
             processed[key].append(file_path)
@@ -113,13 +114,11 @@ def compute_template_files(
 
     tpl_src = get_template_dir(config, tpl_type)
     for curr_dir in config[tpl_type]:
-        if not pathlib.Path(pathlib.Path(tpl_src) / curr_dir).exists():
+        if not (tpl_src / curr_dir).exists():
             log.warning(
                 "Directory '%s' of type '%s' is not in template source",
                 curr_dir,
                 tpl_type,
             )
         else:
-            _process_dir_template(
-                pathlib.Path(tpl_src) / curr_dir, "", processed
-            )
+            _process_dir_template(tpl_src / curr_dir, pathlib.Path(), processed)
