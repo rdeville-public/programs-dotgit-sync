@@ -1,6 +1,7 @@
 ---
 # DotGit Sync Configuration
 # ------------------------------------------------------------------------------
+version: v1alpha1
 dotgit:
   source:
     git:
@@ -26,24 +27,22 @@ dotgit:
 name: DotGit Sync
 slug: dotgit-sync
 description: |-
-  Repository helping to manage dotfile for accross git repos in an unified ways.
+  Repository helping to manage dotfile for across git repos in an unified ways.
 licenses:
   date:
     first_year: "2023"
   copyright:
-    owner: &fullname Romain Deville
-    email: &email code@romaindeville.fr
+    Romain Deville: code@romaindeville.fr
   primary: MIT
   secondaries:
     - BEERWARE
 maintainers:
-  - name: *fullname
-    mail: *email
+  Romain Deville: code@romaindeville.fr
 gitignore:
   templates:
     - base
     - python
-statics:
+templates:
   - base
   - base-ci-gitlab
   - base-pre-commit
@@ -53,17 +52,12 @@ statics:
   - markdown-ci-gitlab
   - python
   - python-ci-gitlab
-templates:
-  - base
-  - python
-  - nix-flake
-  - nix-home-manager-module
 
 # Everything below is only used as variables in templates
 # ------------------------------------------------------------------------------
-code_of_conduct:
-  abuse: abuse+code@romaindeville.fr
 extra:
+  code_of_conduct:
+    abuse: abuse+code@romaindeville.fr
   maintainers:
     Romain Deville:
       socials:
