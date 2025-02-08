@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Module testing dotgit.gitignore."""
 
+from dataclasses import dataclass
 import inspect
 import logging
 import pathlib
@@ -19,6 +20,7 @@ def mocked_requests_get(*args: dict, **kwargs: dict):  # noqa: ARG001, ANN201
     """Method mocking request to gitignore.io."""
     script_path = pathlib.Path(__file__).parent
 
+    @dataclass
     class MockResponse:
         def __init__(self, text: str, status_code: int) -> None:
             self.text = text

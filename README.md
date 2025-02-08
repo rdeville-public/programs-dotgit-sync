@@ -1,5 +1,6 @@
 <!-- markdownlint-disable MD013 MD033 MD043 -->
 <!-- BEGIN DOTGIT-SYNC BLOCK MANAGED -->
+<!-- markdownlint-disable -->
 # 👋 Welcome to DotGit Sync
 
 <center>
@@ -35,7 +36,7 @@
 [changelog_badge]: https://img.shields.io/badge/Changelog-Python%20Semantic%20Release-yellow
 [changelog_badge_url]: https://github.com/python-semantic-release/python-semantic-release
 
-Repository helping to manage dotfile for accross git repos in an unified ways.
+Repository helping to manage dotfile for across git repos in an unified ways.
 
 ---
 <!-- BEGIN DOTGIT-SYNC BLOCK EXCLUDED CUSTOM_README -->
@@ -82,7 +83,8 @@ You can also take a look at the [CONTRIBUTING.md][contributing].
 
 ## 📝 License
 
-Copyright © 2023 - 2024 [Romain Deville](code@romaindeville.fr)
+Copyright © 2023 - 2025
+ * [Romain Deville \<code@romaindeville.fr\>](code@romaindeville.fr)
 
 This project is under following licenses (**OR**) :
 

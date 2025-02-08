@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "dotgit-sync"
-description = "Repository helping to manage dotfile for accross git repos in an unified ways."
+description = "Repository helping to manage dotfile for across git repos in an unified ways."
 authors = [
   "Romain Deville <code@romaindeville.fr>",
 ]

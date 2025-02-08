@@ -1,5 +1,6 @@
 <!-- markdownlint-disable MD043 -->
 <!-- BEGIN DOTGIT-SYNC BLOCK MANAGED -->
+<!-- markdownlint-disable -->
 # Contributor Covenant Code of Conduct
 
 ## Our Pledge

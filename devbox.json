@@ -4,17 +4,13 @@
     "pre-commit": "3.7.1",
     "yq-go": "4.44.1",
     "python312": "latest",
-    "poetry": "latest",
-    "python312Packages.ruff": "latest"
-  },
-  "env": {
-    "VENV_DIR": ".devbox/virtenv/dotgit-sync/"
+    "poetry": "latest"
   },
   "shell": {
     "init_hook": [
-      "./devbox/init_hook/pre-commit.sh",
+      "./.devbox/init_hook/pre-commit.sh",
       "source \"${VENV_DIR}/bin/activate\"",
-      "./devbox/init_hook/python.sh"
+      "./.devbox/init_hook/python.sh"
     ]
   }
 }
