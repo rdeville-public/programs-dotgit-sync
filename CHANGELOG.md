@@ -1,6 +1,24 @@
 <!-- markdownlint-disable-file -->
 # CHANGELOG
 
+## v0.8.2 (2025-02-08)
+
+### 🩹 Patch
+
+  * ⬆️ Upgrade lock files and dotgit files from DGS Template (!37) by Romain Deville ([`92c5b26`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/92c5b268fa0d55f005a1479ca0a74cf8453e24c0))
+  * ⬆️ Upgrade poetry.lock by Romain Deville ([`c8470bb`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/c8470bb520c27b324136a74fd6cb5d58a8ec2225)) 🔏
+  * ⬆️ Upgrade devbox.lock by Romain Deville ([`1735257`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/1735257b02d5598000996d82e89245c17cbd9e64)) 🔏
+  * ⬆️ Upgrade flake.lock by Romain Deville ([`f130e2a`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/f130e2a2587a23ff9660d999edfd5f24106a9dda)) 🔏
+  * ⬆️ Update dotgit files from DGS Templates by Romain Deville ([`506e817`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/506e817bdf74b0dd0dbb36a01a0104ca7f4ec56a)) 🔏
+  * 🔧(dgs): Update .dotgit.yaml to latest version by Romain Deville ([`421754e`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/421754eec612f858a8f819d26664ead3377af6e6)) 🔏
+
+### 🔊 Others
+
+  * 🔇 Remove useless error log (!36) by Romain Deville ([`f1d039f`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/f1d039f7791d1dd3b61f7be2ae91813fa013dc0f))
+  * 🔇 Remove useless error log by Romain Deville ([`4c22264`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/4c2226433560aac7b6aaa94e64018773e6b58552)) 🔏
+  * 🔥 Remove useless code and useless flakes inputs by Romain Deville ([`8a54e20`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/8a54e20577e8fee57198354107a6b00845edc7c6)) 🔏
+  * 🚨 Fix python linter warning by Romain Deville ([`6802886`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/6802886ce994c21259d8e1627899f40b0ffb36fa)) 🔏
+
 ## v0.8.1 (2024-12-08)
 
 ### 🩹 Patch
@@ -33,7 +51,6 @@
   * ✅ Update logger related tests by Romain Deville ([`fa5105d`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/fa5105d2ed55f10c230a1b8a484d26ee58c1bec4)) 🔏
   * 📄 Update template license due to schema update by Romain Deville ([`4e943c8`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/4e943c8184ca5dd6aa589769141326b222391c3e)) 🔏
   * 🔀 Add migration mecanism and minor fixes (!34) by Romain Deville ([`3b906cd`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/3b906cd2630c8e4a5c656fa00ac66621471780e5))
-  * 🔖 v0.8.0 (NO-CI) by Python Semantic Release [bot] ([`e781a86`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/e781a865fe769c2966eb4b6cbe536631b1549ac6))
   * 🔨 Add ruff pkg to devbox by Romain Deville ([`3945943`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/394594393a3312894e5fcb0f90b63104dad00628)) 🔏
   * 🚨 Fix ruff linter warning by Romain Deville ([`e4587f7`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/e4587f73711c384d669e7e17ddd3ba8fd31e84e5)) 🔏
 
@@ -55,7 +72,6 @@
 ### 🔊 Others
 
   * ✅ Update already passing tests with new feature by Romain Deville ([`c8e6cd6`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/c8e6cd60b46a5e3dbb7d9d96a7f2983792602ff9)) 🔏
-  * 🔖 v0.7.0 (NO-CI) by Python Semantic Release [bot] ([`bc21bb3`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/bc21bb3ce2bba4226ebd85520338f9f28dd76d30))
   * 🚨 Fix linters warnings by Romain Deville ([`73ff25d`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/73ff25db9f8613b42991b05e32627d00ca5eac2e)) 🔏
 
 ## v0.6.6 (2024-11-23)
@@ -65,20 +81,12 @@
   * ⬆️ Update templated files from dotgit-sync (!32) by Romain Deville ([`0b5eada`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/0b5eada23cd637b92a501b17b036e76aeb8065cc))
   * ⬆️ Upgrade templated files from DGS by Romain Deville ([`d8b481b`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/d8b481bc938922cf589f656c69127887b73d4beb)) 🔏
 
-### 🔊 Others
-
-  * 🔖 v0.6.6 (NO-CI) by Python Semantic Release [bot] ([`b59e060`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/b59e0608ba4cba67673fa169d9ef1559fe521eb3))
-
 ## v0.6.5 (2024-09-08)
 
 ### 🩹 Patch
 
   * ⬆️ Update flake.lock (!31) by Romain Deville ([`6945920`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/6945920fc0960a1c7acd8b2c0a09849b21f596e0))
   * ⬆️ Update flake.lock by Romain Deville ([`90c4283`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/90c428365353928b4f48a206ad62907155f3f6e5)) 🔏
-
-### 🔊 Others
-
-  * 🔖 v0.6.5 (NO-CI) by Python Semantic Release [bot] ([`f7ff64c`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/f7ff64c112c507378cfc72cb7351da36d6f37c42))
 
 ## v0.6.4 (2024-09-07)
 
@@ -87,20 +95,12 @@
   * ⬆️ Update templated files from dotgit-sync (!30) by Romain Deville ([`ddd4aef`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/ddd4aef7be0bb1be49c4ee00ab41a9b8987de6e8))
   * ⬆️ Update templated files from dotgit-sync by Dotgit Sync [bot] ([`3f4465e`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/3f4465e20ad73664b416604c1472d1ddb83b3218))
 
-### 🔊 Others
-
-  * 🔖 v0.6.4 (NO-CI) by Python Semantic Release [bot] ([`b5d6bb5`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/b5d6bb5ce9fe8b542191a91114ad6afd684266dd))
-
 ## v0.6.3 (2024-08-27)
 
 ### 🩹 Patch
 
   * ⬆️ Update templated files from dotgit-sync (!29) by Romain Deville ([`17d87f9`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/17d87f9f92485b9799efcd969fc68ae6e1f675ac))
   * ⬆️ Update templated files from dotgit-sync by Dotgit Sync [bot] ([`e1825e3`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/e1825e37b09633ba8639b11547ebac49fd0bc6cd)) 🔏
-
-### 🔊 Others
-
-  * 🔖 v0.6.3 (NO-CI) by Python Semantic Release [bot] ([`82d07c1`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/82d07c1276baf8eef85cea266898a58cc816ca92))
 
 ## v0.6.2 (2024-08-26)
 
@@ -113,7 +113,6 @@
 
   * 👷 Update Gitlab CI from DGS (!27) by Romain Deville ([`3c31e61`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/3c31e61d0ead9a5247ad40156ecb7d2562a6f009))
   * 👷 Update all Gitlab-CI from DGS by Romain Deville ([`e2c5851`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/e2c5851c77194f8eb3f2ef4ba4be206d1218443a))
-  * 🔖 v0.6.2 (NO-CI) by Python Semantic Release [bot] ([`7a8250a`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/7a8250af3681800ab09e973bf1b2e33d8612a2c3))
 
 ## v0.6.1 (2024-08-23)
 
@@ -122,20 +121,12 @@
   * ⬆️ Update templated files from dotgit-sync (!26) by Romain Deville ([`efad349`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/efad349ecd3ad36df8767d5f8ed6f5d17f2c0ee4))
   * ⬆️ Update templated files from dotgit-sync by Dotgit Sync [bot] ([`3858e85`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/3858e859c8ab5740e613698d1843879392cc8211))
 
-### 🔊 Others
-
-  * 🔖 v0.6.1 (NO-CI) by Python Semantic Release [bot] ([`058587f`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/058587f2b212b69d4e51f306e798dad07d868e15))
-
 ## v0.6.0 (2024-07-08)
 
 ### ✨ Minor
 
   * ✨ Add option to enable package in HM module (!25) by Romain Deville ([`593b193`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/593b19358c20bf06e6deddf29e51dca2f8521cd0))
   * ✨ Add option to enable package in HM module by Romain Deville ([`93e2fd6`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/93e2fd6235729ce22c13134d3ce6ed3e1d26c7ee)) 🔏
-
-### 🔊 Others
-
-  * 🔖 v0.6.0 (NO-CI) by Python Semantic Release [bot] ([`2b712bb`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/2b712bbe5054b4da317bf92cd72be0638d836281))
 
 ## v0.5.1 (2024-07-06)
 
@@ -144,10 +135,6 @@
   * 🐛 Fix flake.nix with HM Module from DGS (!23) by Romain Deville ([`2f2f019`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/2f2f019194f137dc1660a1e7d32668c36d669b32))
   * 🐛 Add HM Module in flake.nix from DGS template by Romain Deville ([`fe728aa`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/fe728aac9043e2359113dd03dde6605598361f84)) 🔏
   * 🔧 Update .dotgit.yaml with HM-module tpl by Romain Deville ([`84b6dcd`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/84b6dcd7658d6df268c528ff35e1498bc8f33796)) 🔏
-
-### 🔊 Others
-
-  * 🔖 v0.5.1 (NO-CI) by Python Semantic Release [bot] ([`567dccd`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/567dccda68de8bc79bd6961020247c22e592404f))
 
 ## v0.5.0 (2024-07-06)
 
@@ -167,7 +154,6 @@
   * 🎨 Update flake format by Romain Deville ([`f8d0aed`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/f8d0aeddbb16e2f1c897634f9feaa98c229e6a64)) 🔏
   * 💚 Update CI no python on source pipeline (!21) by Romain Deville ([`06a9cf2`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/06a9cf26c873b4ca5415d8925c71df7a39ca5726))
   * 💚 Update CI no python on source pipeline by Romain Deville ([`273a4f6`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/273a4f61a735ee9fb6d65522f8c87ac19eaeb874)) 🔏
-  * 🔖 v0.5.0 (NO-CI) by Python Semantic Release [bot] ([`9520684`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/9520684df98f28fcc73dba14cf492851c6b83e94))
   * 🔨 Add nix build to Makefile build step by Romain Deville ([`0e9495d`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/0e9495da0191d8ff73bcfee887b9222c4500abbb)) 🔏
   * 🔨 Update devbox init_hook from DGS template by Romain Deville ([`d2503fc`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/d2503fcb721cd5f2428a1f82247d977a1599439e)) 🔏
   * 🔨 Update envrc from DGS template by Romain Deville ([`ace6402`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/ace6402dd78d8d6c72807259e5bc2a70fe54fed0)) 🔏
@@ -203,7 +189,6 @@
   * 💚 Update CI from DGS template by Romain Deville ([`1368f9f`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/1368f9ff95d44bf5c90b698542c758e2f776cafd)) 🔏
   * 📄 Update license from DGS templates by Romain Deville ([`e62e903`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/e62e903566dcdbbd09c81f5900d16990e1495ba2)) 🔏
   * 📝 Update README from DGS templates by Romain Deville ([`dd2400f`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/dd2400fbb15cdbf84082f7c917f27358988700af)) 🔏
-  * 🔖 v0.4.0 (NO-CI) by Python Semantic Release [bot] ([`5cc5af3`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/5cc5af3c0992124e6e71f3c565879d79d44bac23))
   * 🙈 Update gitignore by Romain Deville ([`ffc2b61`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/ffc2b61e7bad87265cbad9d42605568080a1462e)) 🔏
   * 🙈 Add .devenv to gitignore by Romain Deville ([`3c62e57`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/3c62e57c365621cdcb33da619b6e0e84a90a1ed9)) 🔏
 
@@ -217,7 +202,6 @@
 ### 🔊 Others
 
   * 💚 Update CIs from templates by Romain Deville ([`9ca9eab`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/9ca9eab84a5c48d6baaca13e598fc9a9186f9c04)) 🔏
-  * 🔖 v0.3.5 (NO-CI) by Python Semantic Release [bot] ([`0d9454a`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/0d9454a218fb1a1fa41b5a7b51d35819d1c7ed41))
   * 🔨 Make main.py executable by Romain Deville ([`0e83bb9`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/0e83bb99873f4fbbd62d254adbcbfc36bba80178)) 🔏
   * 🔨 Update pre-commit from templates by Romain Deville ([`2c19072`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/2c19072c8366411d32d3eb3b2d9b6f6c7ebf71f1)) 🔏
 
@@ -270,7 +254,6 @@
   * 💚 Fix typo in CI (!13) by Romain Deville ([`f1733c6`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/f1733c6af17f08993b3173d5b23c9828428d3378))
   * 💚 Fix typo in CI by Romain Deville ([`c0ff94d`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/c0ff94d83cb31a92993a8fef115deb6914e8b975)) 🔏
   * 📝 Update README.md by Romain Deville ([`6a839fd`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/6a839fdd5d47b9384b00119484571a9344a70936)) 🔏
-  * 🔖 v0.3.4 (NO-CI) by Python Semantic Release [bot] ([`ec41c4e`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/ec41c4ec751a0e1ec82f4e9ef7401bfabdfdd041))
   * 🔥 Remove dependency to git repo by Romain Deville ([`d9d8b62`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/d9d8b620ecf05c4b009c11746794e506d3982466)) 🔏
   * 🔨 Update makefile by Romain Deville ([`40cbab5`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/40cbab53ec6162d0ee4f1e7309c99c1fa15e25da)) 🔏
   * 🔨 Add root main.py to run package without installing by Romain Deville ([`c38e43c`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/c38e43c5c4e4cde7b3068682f6b0e94948e1cc3c)) 🔏
@@ -296,7 +279,6 @@
 
   * 👷 Add markdownlint CI by Romain Deville ([`84d0610`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/84d0610d6db21c822b95b361b19defaaaefdae05)) 🔏
   * 👷 Allow source pipelines to be trigger or upstream by Romain Deville ([`d27488f`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/d27488f389ab1143cebc8a40aad57971e0091c91)) 🔏
-  * 🔖 v0.3.3 (NO-CI) by Python Semantic Release [bot] ([`86e1c5c`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/86e1c5c633805d96094d6d03232b472f162f985b))
   * 🔨 Add markdownlint to pre-commit by Romain Deville ([`c9f1eaf`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/c9f1eafa1a5368951f2cc45f782ef9209a7c8b3b)) 🔏
   * 🚨 Disable some markdownlint error by Romain Deville ([`3e2bbbe`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/3e2bbbee029d4ac5718ef13bfee6ec7f199b1b32)) 🔏
 
@@ -322,7 +304,6 @@
   * 🎨 Format code using ruff by Romain Deville ([`9aead89`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/9aead89091e80782c3cd48ff28174b55bd4211fe)) 🔏
   * 👷 Update Base CI to new structure to merge YAML by Romain Deville ([`317b8b0`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/317b8b08f7aaf47ffd61c30d012671bc013d2d67)) 🔏
   * 👷 Update gitlab root CI with new stages by Romain Deville ([`556070b`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/556070b66875542a9c5308585e76b637a7be53ed)) 🔏
-  * 🔖 v0.3.2 (NO-CI) by Python Semantic Release [bot] ([`b33d75d`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/b33d75d2453afbcf96ad1133da8edb09e45d3bef))
   * 🔥 Remove now useless requirements files by Romain Deville ([`7f4808f`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/7f4808f65936a5323c49c9a115e0f4f0449e941c)) 🔏
   * 🔥 Remove now useless in packages templates by Romain Deville ([`39cdab8`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/39cdab856a13b2b0599829baf0e59a2461de1e40)) 🔏
   * 🔨 Update devbox configuration by Romain Deville ([`e127819`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/e12781903e9400077700f4c9eb9f961ecf1f41b5)) 🔏
@@ -347,7 +328,6 @@
 ### 🔊 Others
 
   * 🔊 Update default verbosity to warning by Romain Deville ([`ac302dd`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/ac302dddba9916716754fda6627d851e48a0ba39)) 🔏
-  * 🔖 v0.3.1 (NO-CI) by Python Semantic Release [bot] ([`31666d5`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/31666d5325318c4ac61604a249264b93238fd6fa))
 
 ## v0.3.0 (2024-06-07)
 
@@ -360,10 +340,6 @@
 
   * ➕ Add json5 dependency by Romain Deville ([`6e1b292`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/6e1b2923499464512acf2418991b27ac7f52d4fc)) 🔏
 
-### 🔊 Others
-
-  * 🔖 v0.3.0 (NO-CI) by Python Semantic Release [bot] ([`c1a8a75`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/c1a8a759f0ba08d6b5df1c2b150a4dacef497b01))
-
 ## v0.2.0 (2024-06-06)
 
 ### ✨ Minor
@@ -373,7 +349,6 @@
 
 ### 🔊 Others
 
-  * 🔖 v0.2.0 (NO-CI) by Python Semantic Release [bot] ([`9ea8e5b`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/9ea8e5b559e5c8503918c7525caeed3387fc981b))
   * 🔥 Remove useless old semantic release template by Romain Deville ([`819dea7`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/819dea79e82f7f8e261b0461a7cef8074e872d03)) 🔏
 
 ## v0.1.0 (2024-06-05)
@@ -434,7 +409,6 @@
   * 📝 Add Code of Conduct by Romain Deville ([`2c9df9b`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/2c9df9b7bd25ef54dd58573950b3a850c03be3e5)) 🔏
   * 🔇 remove useless print (!4) by Romain Deville ([`2bcd5da`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/2bcd5da0a36379822cea0ea467dab95a0e7c97c2))
   * 🔇 remove useless print by Romain Deville ([`99bec74`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/99bec741b6ceaaa4c6fe35ff4611c43ea9d2fd55))
-  * 🔖 v0.1.0 (NO-CI) by Python Semantic Release [bot] ([`02e0416`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/02e04169bb30d98c0b9d53d464a0c1a7cf019837))
   * 🔨 add pylintrc by Romain Deville ([`204c53b`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/204c53b8ca052e362c41e2d8e2627789ca7cbf87)) 🔏
   * 🔨 Add devbox.json and devbox.lock by Romain Deville ([`29e74fa`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/29e74fa4c72566f30fc8971dc50a8f73392869e0)) 🔏
   * 🙈 Update gitignore from template by Romain Deville ([`eded07d`](https://framagit.org/rdeville-public/programs/dotgit-sync/-/commit/eded07d89ff1bc3af7f4da4ac262f2099f93adf3)) 🔏
