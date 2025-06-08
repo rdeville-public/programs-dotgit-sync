@@ -49,7 +49,7 @@ FILETYPES = {
     TOML: [".toml"],
     TS: [".ts"],
     PLAIN: [".txt", ".in", ".envrc"],
-    YAML: [".yml", ".yaml"],
+    YAML: [".yml", ".yaml", ".yamllint"],
 }
 
 # COMMENT TYPE NAME
