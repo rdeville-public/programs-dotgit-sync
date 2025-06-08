@@ -8,9 +8,7 @@
   },
   "shell": {
     "init_hook": [
-      "./.devbox/init_hook/pre-commit.sh",
-      "source \"${VENV_DIR}/bin/activate\"",
-      "./.devbox/init_hook/python.sh"
+      "chmod +x ./.devbox/init_hook/pre-commit.sh && ./.devbox/init_hook/pre-commit.sh"
     ]
   }
 }
