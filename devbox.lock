@@ -1,6 +1,10 @@
 {
   "lockfile_version": "1",
   "packages": {
+    "github:NixOS/nixpkgs/nixpkgs-unstable": {
+      "last_modified": "2025-05-25T15:24:27Z",
+      "resolved": "github:NixOS/nixpkgs/bdac72d387dca7f836f6ef1fe547755fb0e9df61?lastModified=1748186667&narHash=sha256-UQubDNIQ%2FZ42R8tPCIpY%2BBOhlxO8t8ZojwC9o2FW3c8%3D"
+    },
     "poetry@latest": {
       "last_modified": "2024-05-28T16:41:07Z",
       "plugin_version": "0.0.4",
