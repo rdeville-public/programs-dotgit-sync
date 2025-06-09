@@ -93,6 +93,12 @@ class TestUtilsTemplate:
             pathlib.Path(".gitignore"): [
                 pathlib.Path(path / "all_types" / ".gitignore").resolve(),
             ],
+            pathlib.Path(".yamllint"): [
+                pathlib.Path(path / "all_types" / ".yamllint").resolve(),
+            ],
+            pathlib.Path(".yamlignore"): [
+                pathlib.Path(path / "all_types" / ".yamlignore").resolve(),
+            ],
             pathlib.Path("fake.bash"): [
                 pathlib.Path(path / "all_types" / "fake.bash").resolve(),
             ],
