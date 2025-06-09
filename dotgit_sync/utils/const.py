@@ -35,7 +35,7 @@ YAML = "yaml"
 
 # FILETYPES WITH EXTS
 FILETYPES = {
-    GITIGNORE: [".gitignore", ".markdownlintignore"],
+    GITIGNORE: [".gitignore", ".markdownlintignore", ".yamlignore"],
     EDITORCFG: [".editorconfig"],
     HBS: [".hbs"],
     J2: [".j2"],
